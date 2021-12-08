@@ -29,7 +29,7 @@ for value in dict.copy().values():
 
 print(count)
 print(len(dict))
-
+loc = ("D:\\tuc\\exam10\\Thesis\Dataset\\cmu-mocap-master\\data")
 try:
     geeky_file = open('CMUclips.txt', 'wt')
     geeky_file.write(str(dict))
