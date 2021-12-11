@@ -146,7 +146,7 @@ class Bvh:
         raise LookupError('joint not found')
 
     def get_joint_channel_index(self, joint, channel):
-        channels = self.joint_channels(joint)
+        channels = self.joint_channels(joint)    
         if channel in channels:
             channel_index = channels.index(channel)
         else:
@@ -215,3 +215,16 @@ class Bvh:
             return float(next(self.root.filter('Frame')).value[2])
         except StopIteration:
             raise LookupError('frame time not found')
+
+with open('D:\\tuc\\exam10\\Thesis\\Dataset\\FIXED_CMU_BVH\\02_01.bvh') as f:
+    mocap = Bvh(f.read())
+    joints = mocap.get_joints_names()
+    dict = {}
+    for joint in joints:
+        positions = mocap.joint_channels(joint)
+        frame = []
+        for p in positions:
+            frame.append(mocap.frame_joint_channel(0,'Hips', p))
+        dict[joint] = frame
+    print(dict)
+       
