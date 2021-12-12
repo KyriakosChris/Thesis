@@ -12,8 +12,6 @@
 sysinfo.txt
 # Unity3D generated meta files
 *.pidb.meta
-*.json
-example/
 ###
 # VS/MD solution and project files
 ###
