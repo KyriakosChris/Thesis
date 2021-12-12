@@ -25,6 +25,7 @@ sysinfo.txt
 *.user
 *.userprefs
 *.pidb
+exampleJsonData/
 .DS_Store
 
 ###
