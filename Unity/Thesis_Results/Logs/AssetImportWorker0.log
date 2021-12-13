@@ -2652,3 +2652,796 @@ System memory in use after: 128.3 MB.
 Unloading 17 unused Assets to reduce memory usage. Loaded Objects now: 3621.
 Total: 4.095300 ms (FindLiveObjects: 0.609900 ms CreateObjectMapping: 0.264800 ms MarkObjects: 3.182500 ms  DeleteObjects: 0.036200 ms)
 
+========================================================================
+Received Import Request.
+  Time since last request: 1193.211452 seconds.
+  path: Assets/HDRPFurniturePack
+  artifactKey: Guid(87a28e58bcd8365469d9a38d109be7b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HDRPFurniturePack using Guid(87a28e58bcd8365469d9a38d109be7b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'caf21bf4f98ae05bbfd57485ebde8427') in 0.015863 seconds
+  Import took 0.022486 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.904974 seconds.
+  path: Assets/HDRPFurniturePack/Curtain
+  artifactKey: Guid(d6e07b43eb3c9da4c9993de64af722da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HDRPFurniturePack/Curtain using Guid(d6e07b43eb3c9da4c9993de64af722da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f912df7b1ff03e420c13f786efdf17af') in 0.009393 seconds
+  Import took 0.016076 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000760 seconds.
+  path: Assets/HDRPFurniturePack/Curtain
+  artifactKey: Guid(d6e07b43eb3c9da4c9993de64af722da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HDRPFurniturePack/Curtain using Guid(d6e07b43eb3c9da4c9993de64af722da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f912df7b1ff03e420c13f786efdf17af') in 0.017202 seconds
+  Import took 0.027939 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.049412 seconds.
+  path: Assets/HDRPFurniturePack/Curtain/Curtain_240x140.prefab
+  artifactKey: Guid(fdc1059a7ab76be4f9ded8df239e51c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HDRPFurniturePack/Curtain/Curtain_240x140.prefab using Guid(fdc1059a7ab76be4f9ded8df239e51c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '31fa7e591812579f6055e588f07efaca') in 0.075856 seconds
+  Import took 0.081604 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.614526 seconds.
+  path: Assets/HDRPFurniturePack/TridifyFurnitureDemoScene.unity
+  artifactKey: Guid(84c9a744319da794192e925128346254) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HDRPFurniturePack/TridifyFurnitureDemoScene.unity using Guid(84c9a744319da794192e925128346254) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd3df41e4f30fe855de9497f5b95a9884') in 0.010299 seconds
+  Import took 0.018217 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001004 seconds.
+  path: Assets/HDRPFurniturePack/TridifyFurnitureDemoScene.unity
+  artifactKey: Guid(84c9a744319da794192e925128346254) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/HDRPFurniturePack/TridifyFurnitureDemoScene.unity using Guid(84c9a744319da794192e925128346254) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd3df41e4f30fe855de9497f5b95a9884') in 0.008529 seconds
+  Import took 0.015215 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 14.369702 seconds.
+  path: Assets/Scenes/SampleScene.unity
+  artifactKey: Guid(9fc0d4010bbf28b4594072e72b8655ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/SampleScene.unity using Guid(9fc0d4010bbf28b4594072e72b8655ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5d411486000d3f7518dc25390896716c') in 0.011541 seconds
+  Import took 0.020582 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 32.895923 seconds.
+  path: Assets/Aliosa
+  artifactKey: Guid(786077f779d6cdb4986e88ee3698d029) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa using Guid(786077f779d6cdb4986e88ee3698d029) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3d424603dfa1e0ed57b5081155cbe3ef') in 0.011807 seconds
+  Import took 0.017972 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.530826 seconds.
+  path: Assets/Aliosa/DublinChair
+  artifactKey: Guid(125b33f8a95803946b95074458bbf64f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair using Guid(125b33f8a95803946b95074458bbf64f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd928e5145dd095368f019d54b0b3a4c2') in 0.014160 seconds
+  Import took 0.022077 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001078 seconds.
+  path: Assets/Aliosa/DublinChair
+  artifactKey: Guid(125b33f8a95803946b95074458bbf64f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair using Guid(125b33f8a95803946b95074458bbf64f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd928e5145dd095368f019d54b0b3a4c2') in 0.008573 seconds
+  Import took 0.014681 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.458908 seconds.
+  path: Assets/Aliosa/DublinChair/Prefabs
+  artifactKey: Guid(66737b3f1b042e64d98774757f46b63b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Prefabs using Guid(66737b3f1b042e64d98774757f46b63b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8c9db6dc46a9d36ab34dfb88860aaab7') in 0.011022 seconds
+  Import took 0.017489 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000389 seconds.
+  path: Assets/Aliosa/DublinChair/Prefabs
+  artifactKey: Guid(66737b3f1b042e64d98774757f46b63b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Prefabs using Guid(66737b3f1b042e64d98774757f46b63b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8c9db6dc46a9d36ab34dfb88860aaab7') in 0.011258 seconds
+  Import took 0.017838 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.057358 seconds.
+  path: Assets/Aliosa/DublinChair/Prefabs/DublinChair_Dark.prefab
+  artifactKey: Guid(8012f9c437de4c945b4e459d2c53e341) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Prefabs/DublinChair_Dark.prefab using Guid(8012f9c437de4c945b4e459d2c53e341) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '12ecdf7d7810da4c312ca4720e306205') in 0.021163 seconds
+  Import took 0.026559 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000300 seconds.
+  path: Assets/Aliosa/DublinChair/Prefabs/DublinChair_White.prefab
+  artifactKey: Guid(0dd7b6be9402212409eac4505b399353) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Prefabs/DublinChair_White.prefab using Guid(0dd7b6be9402212409eac4505b399353) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '731f6ddf9a98e7fb5ca063b8e6a768d8') in 0.022673 seconds
+  Import took 0.029104 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.038760 seconds.
+  path: Assets/Aliosa/DublinChair/Documentation
+  artifactKey: Guid(91e6d9785c823df4aad62b80ae17b733) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Documentation using Guid(91e6d9785c823df4aad62b80ae17b733) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '73294061bcfcf4e17463c5786b74f71f') in 0.012232 seconds
+  Import took 0.019297 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.686776 seconds.
+  path: Assets/Aliosa/DublinChair/Demo
+  artifactKey: Guid(59ee1e1d3cdec07408190031fa952be1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Demo using Guid(59ee1e1d3cdec07408190031fa952be1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4e9c2689c8109d55d4bc3f8735bff51') in 0.011003 seconds
+  Import took 0.017446 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000795 seconds.
+  path: Assets/Aliosa/DublinChair/Demo
+  artifactKey: Guid(59ee1e1d3cdec07408190031fa952be1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Demo using Guid(59ee1e1d3cdec07408190031fa952be1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4e9c2689c8109d55d4bc3f8735bff51') in 0.010135 seconds
+  Import took 0.015953 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.823364 seconds.
+  path: Assets/Aliosa/DublinChair/Demo/DublinChair_Preview
+  artifactKey: Guid(96194d4c672270648a663d096029d846) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Demo/DublinChair_Preview using Guid(96194d4c672270648a663d096029d846) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c2375fce4e23283ea3523785e4b74051') in 0.009589 seconds
+  Import took 0.016063 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.080493 seconds.
+  path: Assets/Aliosa/DublinChair/Demo/DublinChair_Preview/Sky and Fog Settings Profile.asset
+  artifactKey: Guid(04fe153f15cde2b46b278e71b481f7fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Demo/DublinChair_Preview/Sky and Fog Settings Profile.asset using Guid(04fe153f15cde2b46b278e71b481f7fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1204a4a386a1cacf8dcdde567f877333') in 0.012184 seconds
+  Import took 0.018928 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.563926 seconds.
+  path: Assets/Aliosa/DublinChair/Art
+  artifactKey: Guid(e759910cb3fb8244d93f5f8663d03f2c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art using Guid(e759910cb3fb8244d93f5f8663d03f2c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '51b8915462225d7ac0f4da51220391da') in 0.010916 seconds
+  Import took 0.017682 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000446 seconds.
+  path: Assets/Aliosa/DublinChair/Art
+  artifactKey: Guid(e759910cb3fb8244d93f5f8663d03f2c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art using Guid(e759910cb3fb8244d93f5f8663d03f2c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '51b8915462225d7ac0f4da51220391da') in 0.010217 seconds
+  Import took 0.016552 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.759384 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Materials
+  artifactKey: Guid(2ef9d6904eb623944bcaa27a6010fa90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Materials using Guid(2ef9d6904eb623944bcaa27a6010fa90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f45097c2df747798b8bbfea0915b166c') in 0.018214 seconds
+  Import took 0.025430 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.571496 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Materials/leather_dark.mat
+  artifactKey: Guid(1deaf0273622ddd419bad4ff29d39aed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Materials/leather_dark.mat using Guid(1deaf0273622ddd419bad4ff29d39aed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd4a3eae3285436a7be9cbfbac5034f67') in 0.050644 seconds
+  Import took 0.056353 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000274 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Materials/leather_white.mat
+  artifactKey: Guid(88eed028ee2ea1c469b9de750753b9a3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Materials/leather_white.mat using Guid(88eed028ee2ea1c469b9de750753b9a3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd9caae3c4263e1de00b2fe05abc7c33a') in 0.018794 seconds
+  Import took 0.026134 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000387 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Materials/metal_Leg.mat
+  artifactKey: Guid(bc14470aee81c9447ba35b831c9ae128) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Materials/metal_Leg.mat using Guid(bc14470aee81c9447ba35b831c9ae128) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7f692ee67356dd9579a66fc4ca5ca009') in 0.019051 seconds
+  Import took 0.026213 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.334573 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Meshes
+  artifactKey: Guid(bde53d22d2351304ebdc29c54fc55a4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Meshes using Guid(bde53d22d2351304ebdc29c54fc55a4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '93b1c405d968e276ab0652120c9f6296') in 0.011733 seconds
+  Import took 0.018827 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001417 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Meshes
+  artifactKey: Guid(bde53d22d2351304ebdc29c54fc55a4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Meshes using Guid(bde53d22d2351304ebdc29c54fc55a4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '93b1c405d968e276ab0652120c9f6296') in 0.008603 seconds
+  Import took 0.016999 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.045925 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Meshes/dublinChair_Model.FBX
+  artifactKey: Guid(fb22caea804b2c644b93fc54aaa347f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Meshes/dublinChair_Model.FBX using Guid(fb22caea804b2c644b93fc54aaa347f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9bb987d38f2bf9be6d39e6ae7960ccdd') in 0.067931 seconds
+  Import took 0.076911 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 29.545019 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures
+  artifactKey: Guid(17c5faa4338d02247af113d813379ef9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures using Guid(17c5faa4338d02247af113d813379ef9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b8c0d61d7dda45dd04af4b8df278b4e8') in 0.011351 seconds
+  Import took 0.017896 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000963 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures
+  artifactKey: Guid(17c5faa4338d02247af113d813379ef9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures using Guid(17c5faa4338d02247af113d813379ef9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b8c0d61d7dda45dd04af4b8df278b4e8') in 0.009301 seconds
+  Import took 0.015178 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.631000 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white
+  artifactKey: Guid(5fd2266b3878d6c42a56df0c5b7efad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white using Guid(5fd2266b3878d6c42a56df0c5b7efad6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '507ad7ec8ee59cb77e385f7cb8cdb28a') in 0.009537 seconds
+  Import took 0.015437 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.080091 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_leather_BaseColor.png
+  artifactKey: Guid(a80b9b301d3744446bf782f7a66d54f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_leather_BaseColor.png using Guid(a80b9b301d3744446bf782f7a66d54f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b8bc1b3e74ab34a9b2c85c439ab44c9') in 0.045787 seconds
+  Import took 0.052126 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000309 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_leather_MaskMap.png
+  artifactKey: Guid(7c6c98f71f3f3644f9307b52695a00e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_leather_MaskMap.png using Guid(7c6c98f71f3f3644f9307b52695a00e0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'be43c8ca2ca9c5c9a2965d6e35a42da2') in 0.034749 seconds
+  Import took 0.039981 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000440 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_BaseColor.png
+  artifactKey: Guid(274b81a46e83ba745a9467de57b34046) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_BaseColor.png using Guid(274b81a46e83ba745a9467de57b34046) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fb1d6fc5f99b4d0927de66659da4a952') in 0.023972 seconds
+  Import took 0.030101 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000335 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_leather_Normal.png
+  artifactKey: Guid(8842aa74d6e7fe54ab44e7770705b3b3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_leather_Normal.png using Guid(8842aa74d6e7fe54ab44e7770705b3b3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f73bdd94085207e472ecdde07fd2ee36') in 0.032187 seconds
+  Import took 0.038925 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000505 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_MaskMap.png
+  artifactKey: Guid(123a885e3264fef488122d4e2683ce55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_MaskMap.png using Guid(123a885e3264fef488122d4e2683ce55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '123a3bb6282c57694c46f694216eb5fe') in 0.029642 seconds
+  Import took 0.036263 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000338 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_Normal.png
+  artifactKey: Guid(d4cf8ac147d255f44a3ce1d2e318880e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_Normal.png using Guid(d4cf8ac147d255f44a3ce1d2e318880e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7d6b6e56fa67fd4cba4e6a72e53c2975') in 0.025423 seconds
+  Import took 0.031675 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001759 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_Normal.png
+  artifactKey: Guid(d4cf8ac147d255f44a3ce1d2e318880e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/white/dublinChairSeparated_legs_Normal.png using Guid(d4cf8ac147d255f44a3ce1d2e318880e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7d6b6e56fa67fd4cba4e6a72e53c2975') in 0.020922 seconds
+  Import took 0.027495 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.953918 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black
+  artifactKey: Guid(9691684b2eda0044b89a2f5697c2c4a9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black using Guid(9691684b2eda0044b89a2f5697c2c4a9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c7649f10a03cf798f4d54d66515a1197') in 0.012509 seconds
+  Import took 0.018590 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.068978 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_leather-black_BaseColor.png
+  artifactKey: Guid(d32436a2acec972499e1da1803af0531) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_leather-black_BaseColor.png using Guid(d32436a2acec972499e1da1803af0531) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0da5b21745900bbf0fb2912a067663ab') in 0.039511 seconds
+  Import took 0.045373 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000329 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_leather-black_Normal.png
+  artifactKey: Guid(8858db94f8271154ab0fd35b1f70fc1d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_leather-black_Normal.png using Guid(8858db94f8271154ab0fd35b1f70fc1d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7decf249df07fefd907ee3f9b0ca15c4') in 0.061261 seconds
+  Import took 0.067739 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000340 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_MaskMap.png
+  artifactKey: Guid(7188ba5a023a11f4b8ddae5f9628c85a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_MaskMap.png using Guid(7188ba5a023a11f4b8ddae5f9628c85a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fe38688cc997f62c03617344e30edd3d') in 0.017507 seconds
+  Import took 0.022929 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000289 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_leather-black_MaskMap.png
+  artifactKey: Guid(5a3f850ddec2f614d9c431f57f2ab194) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_leather-black_MaskMap.png using Guid(5a3f850ddec2f614d9c431f57f2ab194) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fae5ff031eb624303015024be88ec859') in 0.047491 seconds
+  Import took 0.055145 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000358 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_BaseColor.png
+  artifactKey: Guid(ed094d21521ac5d49845d9b70ca51928) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_BaseColor.png using Guid(ed094d21521ac5d49845d9b70ca51928) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2e13e667aac9770ae8db57d67e43a8a1') in 0.019359 seconds
+  Import took 0.026898 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000381 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_Normal.png
+  artifactKey: Guid(9135d45a60ea5c940870168af2a4f02d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_Normal.png using Guid(9135d45a60ea5c940870168af2a4f02d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '63ec55ea2e3249d3a65248bf3a00696e') in 0.020109 seconds
+  Import took 0.026302 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001399 seconds.
+  path: Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_Normal.png
+  artifactKey: Guid(9135d45a60ea5c940870168af2a4f02d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Aliosa/DublinChair/Art/Textures/black/dublinChairSeparated_legs_Normal.png using Guid(9135d45a60ea5c940870168af2a4f02d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '63ec55ea2e3249d3a65248bf3a00696e') in 0.024163 seconds
+  Import took 0.031646 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 32.650813 seconds.
+  path: Assets/AssetStore/Pavement textures pack
+  artifactKey: Guid(e8c344ac1f2f21f46baa0199ada8afd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/Pavement textures pack using Guid(e8c344ac1f2f21f46baa0199ada8afd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9fcd872531c318920af21c560ae6eb08') in 0.011852 seconds
+  Import took 0.018630 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000609 seconds.
+  path: Assets/AssetStore/Pavement textures pack
+  artifactKey: Guid(e8c344ac1f2f21f46baa0199ada8afd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/Pavement textures pack using Guid(e8c344ac1f2f21f46baa0199ada8afd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9fcd872531c318920af21c560ae6eb08') in 0.009281 seconds
+  Import took 0.016152 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.587016 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials
+  artifactKey: Guid(25a3e4884eb11774bbce8c47423058ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials using Guid(25a3e4884eb11774bbce8c47423058ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4403207dc3977a5b0326325aa4bb01f3') in 0.008141 seconds
+  Import took 0.015974 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001499 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials
+  artifactKey: Guid(25a3e4884eb11774bbce8c47423058ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials using Guid(25a3e4884eb11774bbce8c47423058ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4403207dc3977a5b0326325aa4bb01f3') in 0.007889 seconds
+  Import took 0.014839 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.067366 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Day.mat
+  artifactKey: Guid(dfd5fe4561034804291bb92fffe808d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Day.mat using Guid(dfd5fe4561034804291bb92fffe808d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '51b07e051252813c1202919ab3b59109') in 0.024897 seconds
+  Import took 0.030480 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000371 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Night.mat
+  artifactKey: Guid(2693a75b9cc71fb4bae0674a2e512e59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Night.mat using Guid(2693a75b9cc71fb4bae0674a2e512e59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e7a238079d5bcdfc0093313879c3eb0f') in 0.023239 seconds
+  Import took 0.028905 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.649870 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings
+  artifactKey: Guid(bf61a2997700b9e449a9c2898e7dbb81) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings using Guid(bf61a2997700b9e449a9c2898e7dbb81) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a1ec8d9549d61c4eabacf45ee053dce6') in 0.013036 seconds
+  Import took 0.019490 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.051440 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A.mat
+  artifactKey: Guid(3c98c150d6196ef419f666d71cf7d13f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A.mat using Guid(3c98c150d6196ef419f666d71cf7d13f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8a4ad9fadfd905684a87daa20db6721a') in 0.021395 seconds
+  Import took 0.028072 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000318 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A2.mat
+  artifactKey: Guid(5188c7492ef51d143a7128aa9700788a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A2.mat using Guid(5188c7492ef51d143a7128aa9700788a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0f11d7bcf07e96f404f47110ee13780e') in 0.029556 seconds
+  Import took 0.035756 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000300 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K7.mat
+  artifactKey: Guid(2100b85841ac32940a50ec36409b49c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K7.mat using Guid(2100b85841ac32940a50ec36409b49c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '667fea54b69ca8822b3998e259db35af') in 0.027293 seconds
+  Import took 0.034607 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000317 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/C2.mat
+  artifactKey: Guid(0510da7b3809d94478e8a6a4f562366e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/C2.mat using Guid(0510da7b3809d94478e8a6a4f562366e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'eb2622edaafcabfd08216f2f4c402bc3') in 0.027501 seconds
+  Import took 0.034772 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000457 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/I3.mat
+  artifactKey: Guid(ce22e4b8667c6c4498256004a51def48) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/I3.mat using Guid(ce22e4b8667c6c4498256004a51def48) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00ecd8e58582153c64c836c0abd7c781') in 0.023638 seconds
+  Import took 0.031913 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000444 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/E3.mat
+  artifactKey: Guid(4e806bb1fdee85a44aca49978bc274e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/E3.mat using Guid(4e806bb1fdee85a44aca49978bc274e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ad7bf22eb3d243dbf84cc2e18d96e154') in 0.041371 seconds
+  Import took 0.049006 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000279 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/y_2.mat
+  artifactKey: Guid(3f6105d90f7e5cc419dc8e03de25c34c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/y_2.mat using Guid(3f6105d90f7e5cc419dc8e03de25c34c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5250d4d769ef75c4899ef083dfe11d1') in 0.138672 seconds
+  Import took 0.145461 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000253 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/H2.mat
+  artifactKey: Guid(6f227c8592ad80a41be32efd278da65a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/H2.mat using Guid(6f227c8592ad80a41be32efd278da65a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '239b12c1c477d5de5d80b137e31ec0d8') in 0.028066 seconds
+  Import took 0.035352 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000276 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/k12.mat
+  artifactKey: Guid(8d50894cec04b584c99d0e15c717bf2e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/k12.mat using Guid(8d50894cec04b584c99d0e15c717bf2e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4f14775bac956a36f7e8d86dd64516de') in 0.023429 seconds
+  Import took 0.030624 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000379 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/D2.mat
+  artifactKey: Guid(527a2f1bf2a8e6b44a73711edbc69733) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/D2.mat using Guid(527a2f1bf2a8e6b44a73711edbc69733) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fb3114a4fd534511aea3ccfa0c437bcd') in 0.023533 seconds
+  Import took 0.030445 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000246 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/C1.mat
+  artifactKey: Guid(b46491bf8bcc7974e9c5b185ed3a64df) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/C1.mat using Guid(b46491bf8bcc7974e9c5b185ed3a64df) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '10e36d91ecddb59e8d13791a7e9d2c40') in 0.026333 seconds
+  Import took 0.031580 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000293 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/D1.mat
+  artifactKey: Guid(be3dd0dbeba4e0e44b4a036604ec5247) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/D1.mat using Guid(be3dd0dbeba4e0e44b4a036604ec5247) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e38c439a0dd2374b309cf3b57075106e') in 0.024653 seconds
+  Import took 0.030003 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000316 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/D3.mat
+  artifactKey: Guid(08e170aeffe61fd49b962982cf27cd52) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/D3.mat using Guid(08e170aeffe61fd49b962982cf27cd52) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8de785fcaa3a284a15b0327465f431cb') in 0.023465 seconds
+  Import took 0.030673 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000296 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/E2.mat
+  artifactKey: Guid(04ea80a7b7a8f25419eec6649973eba0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/E2.mat using Guid(04ea80a7b7a8f25419eec6649973eba0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1269f4eac87ff3ccee00fad63b3f0752') in 0.022494 seconds
+  Import took 0.031509 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000244 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K13.mat
+  artifactKey: Guid(385015333524c4947bf237c08e46d007) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K13.mat using Guid(385015333524c4947bf237c08e46d007) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4ab908d7f93a6ef380bb89026026982f') in 0.022654 seconds
+  Import took 0.031140 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000411 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/F2.mat
+  artifactKey: Guid(125b8e3d7d52f1a4a9341372677b8015) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/F2.mat using Guid(125b8e3d7d52f1a4a9341372677b8015) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '99e2b5b12ec4d31418ca7fb1d10d43b0') in 0.027260 seconds
+  Import took 0.034053 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000254 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/I2.mat
+  artifactKey: Guid(cea0c4191eb5cb440aa5355d44958681) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/I2.mat using Guid(cea0c4191eb5cb440aa5355d44958681) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1305d4be2ca3c8083d3b430c3204c348') in 0.030646 seconds
+  Import took 0.037551 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000307 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K2.mat
+  artifactKey: Guid(0b5ab4b8a0e43004ba5e294fbe6cf73a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K2.mat using Guid(0b5ab4b8a0e43004ba5e294fbe6cf73a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '04f3d28b4dad4de3cf08ddd144cc7e1f') in 0.021446 seconds
+  Import took 0.028585 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000361 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/B1.mat
+  artifactKey: Guid(b1aa805cd8c03914ea529c0d11595111) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/B1.mat using Guid(b1aa805cd8c03914ea529c0d11595111) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '62b54cf548dc965b2743dce45f82c069') in 0.020771 seconds
+  Import took 0.028966 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000235 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K4.mat
+  artifactKey: Guid(711bad159df31524ca17958a0c56fbf5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K4.mat using Guid(711bad159df31524ca17958a0c56fbf5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8eecf78fec22ff2e7d63e880ab737f6a') in 0.021007 seconds
+  Import took 0.027386 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000268 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/J2.mat
+  artifactKey: Guid(fe6ba248f97095d49869fcb5611b50d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/J2.mat using Guid(fe6ba248f97095d49869fcb5611b50d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a36832e23bfd59349a8630adefb6b065') in 0.023152 seconds
+  Import took 0.032650 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000340 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/B3.mat
+  artifactKey: Guid(6654366d45d22054abd260171b0f7c04) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/B3.mat using Guid(6654366d45d22054abd260171b0f7c04) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '245c5f8bce2c6b54228be38c9bfe3ea6') in 0.034002 seconds
+  Import took 0.041222 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000393 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/C3.mat
+  artifactKey: Guid(91155d9f14bc7c24885accb7c3b9025f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/C3.mat using Guid(91155d9f14bc7c24885accb7c3b9025f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a92da08d3062ef89671dca2601073f05') in 0.020672 seconds
+  Import took 0.026362 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000247 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/J1.mat
+  artifactKey: Guid(8bf8e8eb3c4ec9c4e9f79488c39bff59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/J1.mat using Guid(8bf8e8eb3c4ec9c4e9f79488c39bff59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7ce70f9e387355679f8a1a93f1ebdf27') in 0.029511 seconds
+  Import took 0.036192 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000239 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/G3.mat
+  artifactKey: Guid(ed6309fcf2465f8459ee0d575167c0ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/G3.mat using Guid(ed6309fcf2465f8459ee0d575167c0ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aa2281821cca35023063ebf056662db3') in 0.028020 seconds
+  Import took 0.034656 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000417 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/E1.mat
+  artifactKey: Guid(76d6265878226dc409ce872e24203b86) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/E1.mat using Guid(76d6265878226dc409ce872e24203b86) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cc4427ef12ac2195b36fd403787a6dd3') in 0.021012 seconds
+  Import took 0.026810 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000283 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A3.mat
+  artifactKey: Guid(c4d3a0c81c5ffb34889379e1a1cf85bb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A3.mat using Guid(c4d3a0c81c5ffb34889379e1a1cf85bb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '932e8f878fc27853eb60f7928d03d531') in 0.023578 seconds
+  Import took 0.030869 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000288 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K1.mat
+  artifactKey: Guid(1a0dec1fa084e1b4abd7c6cf33e568ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K1.mat using Guid(1a0dec1fa084e1b4abd7c6cf33e568ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '24f3d90469c3b53535bcabb6d0d12d3b') in 0.021862 seconds
+  Import took 0.028173 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000257 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A1.mat
+  artifactKey: Guid(1af4b0d855a4f694baba51a55f5c6cc9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/A1.mat using Guid(1af4b0d855a4f694baba51a55f5c6cc9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '38dfcd3ed3327614e8a647d42728bacb') in 0.020699 seconds
+  Import took 0.026864 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000288 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K8.mat
+  artifactKey: Guid(4a68a0cfc4d91c447b2fe408cb8e7dca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K8.mat using Guid(4a68a0cfc4d91c447b2fe408cb8e7dca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3ec827284ff9faa5c539f60b48ccfbeb') in 0.021877 seconds
+  Import took 0.028314 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000213 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/B2.mat
+  artifactKey: Guid(792fa418de0281e4bab622f9a60c88b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/B2.mat using Guid(792fa418de0281e4bab622f9a60c88b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8277421aedbfb15ce2b680176071db15') in 0.022281 seconds
+  Import took 0.029096 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000252 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/F1.mat
+  artifactKey: Guid(0bce4c2bd5151644a8ec6f537140cbd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/F1.mat using Guid(0bce4c2bd5151644a8ec6f537140cbd6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6395885ba989e500ecb7716de8777ac4') in 0.022226 seconds
+  Import took 0.029580 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000253 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K10.mat
+  artifactKey: Guid(bdcbb625d2db6d344907f63d3439281d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K10.mat using Guid(bdcbb625d2db6d344907f63d3439281d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '06ec06cdf2d69557f77588083d309423') in 0.021686 seconds
+  Import took 0.029984 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000253 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/G1.mat
+  artifactKey: Guid(73daffab7784ec040ba2d4d7302527f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/G1.mat using Guid(73daffab7784ec040ba2d4d7302527f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '80f63ccbb08d9b20168d683e3ce1fee4') in 0.022457 seconds
+  Import took 0.029313 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000245 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/k5.mat
+  artifactKey: Guid(e495abf6588a1b944a3620fd1fee2b07) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/k5.mat using Guid(e495abf6588a1b944a3620fd1fee2b07) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bc2b1915ec8d9a7ab7b6b805ee0afd97') in 0.021838 seconds
+  Import took 0.028007 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000294 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/y_1.mat
+  artifactKey: Guid(7314353addec573408094319e8e9dc05) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/y_1.mat using Guid(7314353addec573408094319e8e9dc05) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd25e2b4ddbdbe7729d5207d17d4cd5c4') in 0.025897 seconds
+  Import took 0.032879 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000318 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K9.mat
+  artifactKey: Guid(8d368d2c617522b4f8385162f26cacfa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K9.mat using Guid(8d368d2c617522b4f8385162f26cacfa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'eb8ffa8635db9a4f0f922d52766acb42') in 0.023281 seconds
+  Import took 0.031723 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000241 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K6.mat
+  artifactKey: Guid(ee406a0d2cd53e046b9c7bcfdcc189a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K6.mat using Guid(ee406a0d2cd53e046b9c7bcfdcc189a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd4ce0bfa47c7f67542524927c2242e40') in 0.021680 seconds
+  Import took 0.027942 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000415 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/H1.mat
+  artifactKey: Guid(764481942b4df2a40857026c71dfae1f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/H1.mat using Guid(764481942b4df2a40857026c71dfae1f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6eb8f53423ea0b4a7ead7c4d8f29dfa6') in 0.021539 seconds
+  Import took 0.027520 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000274 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/J3.mat
+  artifactKey: Guid(5fd1fed63457bc14abea612957703653) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/J3.mat using Guid(5fd1fed63457bc14abea612957703653) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '321c01911b48abae85a0fbf656c1c324') in 0.022826 seconds
+  Import took 0.030680 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000253 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/H3.mat
+  artifactKey: Guid(9db90062b4af0004b94c5754b65e4379) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/H3.mat using Guid(9db90062b4af0004b94c5754b65e4379) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '558116a7751d08d6d496042d3012b4ae') in 0.021271 seconds
+  Import took 0.027685 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000241 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/k11.mat
+  artifactKey: Guid(a7f2d3722f408d146b37cba315bc996f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/k11.mat using Guid(a7f2d3722f408d146b37cba315bc996f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e92dd8e78c611a70921ceb4a2f62657e') in 0.025313 seconds
+  Import took 0.033162 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000289 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/I1.mat
+  artifactKey: Guid(09bb7389d12b7fe4cb01b4d2afb6b0a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/I1.mat using Guid(09bb7389d12b7fe4cb01b4d2afb6b0a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '640a50c795f3c6e9bf2ed7a933b5e118') in 0.026533 seconds
+  Import took 0.033248 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000229 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K3.mat
+  artifactKey: Guid(623f2cfcc0ce09149a6f467ad4256295) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/K3.mat using Guid(623f2cfcc0ce09149a6f467ad4256295) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5823d5657b4ee9f60f36cc3114178d45') in 0.025712 seconds
+  Import took 0.031781 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000334 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/G2.mat
+  artifactKey: Guid(8a92d92c33dbd87489558551e9ce75ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/G2.mat using Guid(8a92d92c33dbd87489558551e9ce75ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '52b3970f3c91aa71155b567461489adc') in 0.022105 seconds
+  Import took 0.029187 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000279 seconds.
+  path: Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/F3.mat
+  artifactKey: Guid(2d6209e982156604ea6d7c513bc7b774) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AssetStore/POLYGON city pack/Materials/Colors_buildings/F3.mat using Guid(2d6209e982156604ea6d7c513bc7b774) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aa1471d7a8c8a38ef9611b497bd8f603') in 0.019441 seconds
+  Import took 0.025686 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
