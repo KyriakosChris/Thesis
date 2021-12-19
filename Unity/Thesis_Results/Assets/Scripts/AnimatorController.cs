@@ -18,9 +18,10 @@ public class AnimatorController : MonoBehaviour
     void Update()
     {
 
-        if (ColliderScript.ChangeAnim)
+        if (ColliderScript.ChangeAnim || Input.GetKeyDown("space"))
         {
             ColliderScript.ChangeAnim = false;
+            ColliderScript.RestartBot();
             anime.Play(animationClips[count].name);
             count++;
             if (animationClips.Length == count)

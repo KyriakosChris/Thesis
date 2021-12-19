@@ -24,15 +24,17 @@ for file in tqdm(list):
     data = open(file, 'r')
     Lines = data.readlines()
     Edited = []
+    total = 0
     for n,line in enumerate(Lines) :
         if n == 1 or n == 2 or n == 3 or n == 4 or n == 188:
             continue
         if n== 5:
-            line = "  ROOT Hips \n"
+            line = "  ROOT Hips\n"
         if n<188 and n>1:
            line = line[2:]
         if n==190 :
-            line = 'Frames: ' + str(round(int(line[8:])/4)) + '\n'
+            total = str(round(int(line[8:])/4))
+            line = 'Frames: ' + total + '\n'
         if n>191 :
             line = line[13:]
             Edited.append(str(line))
@@ -47,9 +49,9 @@ for file in tqdm(list):
         for n,line in enumerate(Edited):
             if n<187:
                 geeky_file.write(str(line))
-            if n>186:
+            if n>186 and round(frame/4) < int(total):
                 if(frame%4==0):
-                    geeky_file.write(str(line))
+                        geeky_file.write(str(line))
                 frame+=1
         geeky_file.close()
     except:
