@@ -33,16 +33,18 @@ path = "D:\\tuc\\exam10\\Thesis\\Dataset\\CMU_clips_no_zip.npy"
 
 X = load(path, allow_pickle=True)
 print(X.shape)
-y = []
-X_train,X_test,y_train,y_test = train_test_split(X,y,test_size = 0.1)
-nNeurons = 186
 
+#"""
+y = []
+nNeurons = 186
+output_layers = 1
+X_train,X_test,y_train,y_test = train_test_split(X,X,test_size = 0.2, random_state = 42)
 # creating the NN model
 model = Sequential()
-model.add( LSTM( nNeurons, return_sequences = True, input_shape = X.shape ) )
+model.add( LSTM( nNeurons, return_sequences = True, input_shape = (3198, 186) ) )
 model.add( LSTM( nNeurons ) )
-model.add( Dense( 3, activation = 'softmax' ) )
-model.compile( loss = 'mse', optimizer = Adam( lr = 0.001 ), metrics = ['accuracy'] )
+model.add( Dense( output_layers, activation = 'softmax' ) )
+model.compile( loss = 'mse',  optimizer = 'adam', metrics = ['accuracy'] )
 model.summary()
 
 probability_model = tf.keras.Sequential([model, 
@@ -50,8 +52,6 @@ probability_model = tf.keras.Sequential([model,
 filepath = "weights-improvement-{epoch:02d}-{loss:.4f}-biggeer.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose = 1, save_best_only=True, mode = 'min')
 callbacks_list = [checkpoint]
-
-model.fit(X_train, y_train, epochs = 30, batch_size=32, callbacks=callbacks_list)
 model.save('cmuclassifier.model')
 
 y_pred = model.predict(X_test)
@@ -86,3 +86,5 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch') 
 plt.legend(['Train', 'Test'], loc='upper left') 
 plt.show()
+
+#"""
