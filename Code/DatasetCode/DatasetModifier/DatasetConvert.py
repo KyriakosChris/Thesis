@@ -17,16 +17,16 @@ for i in range(12,sheet.nrows):
     v = {sheet.cell_value(i, 0): l}
     dict.update(v)
 
-list_search = ["walk","run","navigate", "jog", ]
+list_search = ["walk","run","navigate", "jog" ]
 count=0
-
+"""
 for value in dict.copy().values():
     key = list(dict.keys())[list(dict.values()).index(value)]
     if any(i in value[0].lower() for i in list_search) or any(i in value[1].lower() for i in list_search) :
         count+=1
     else :
         dict.pop(key, None)
-
+"""
 print(count)
 print(len(dict))
 loc = ("D:\\tuc\\exam10\\Thesis\Dataset\\cmu-mocap-master\\data")
