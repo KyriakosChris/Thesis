@@ -39,10 +39,7 @@ out = "/home/kyriakos/Desktop/Projects/Dataset/CMU_test/"
 with open("/home/kyriakos/Desktop/Projects/Thesis/Code/DatasetCode/MotioNet-master/data/CMUclips.txt") as f:
     data = f.read()
 cmuClips = ast.literal_eval(data)
-count = 0
 for file in tqdm(bvh_files):
-    if count== 20000:
-        break
     count = count +1
     original_anim, name, frametime = BVH.load(file, rotate=True)
     sampling = 1
@@ -63,9 +60,6 @@ for file in tqdm(bvh_files):
     #path = out + file.split('.bvh')[0].split("/")[7]
     #np.savez_compressed(path, coordinates=concat)
 
-#res = []
-#[res.append(x) for x in y if x not in res]
-
 shape = []
 for file in (bvh):
     shape.append(file.shape[0])
@@ -75,7 +69,7 @@ print(m)
 bvh_resized = []
 for file in (bvh):
     bvh_resized.append(np.resize(file,(m,file.shape[1],file.shape[2])))
-del bvh
+
 shape = []
 for file in (bvh_resized):
     shape.append(file.shape[0])
