@@ -5,7 +5,6 @@ from tensorflow.keras.layers import *
 from keras.layers import CuDNNLSTM
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from tensorflow.keras.optimizers import Adam
@@ -28,13 +27,13 @@ class GAN:
     file = '/home/kyriakos/Desktop/Projects/Dataset/y.npy'
     Y = np.load(file, allow_pickle=True)
     self.Y = Y
-
-  def build_discriminator(self,img_shape):
+    self.image_shape = (self.X.shape[1], self.X.shape[2])
+  def build_discriminator(self):
 
     model = Sequential()
 
     # Flatten the input image
-    model.add(Flatten(input_shape=img_shape))
+    model.add(Flatten(input_shape=self.image_shape))
 
     # Fully connected layer
     model.add(Dense(128))
@@ -44,10 +43,10 @@ class GAN:
 
     # Output layer with sigmoid activation
     model.add(Dense(1, activation='sigmoid'))
-
+    model.summary()
     self.discriminator = model
 
-  def build_generator(self,img_shape, z_dim):
+  def build_generator(self, z_dim):
 
     model = Sequential()
 
@@ -58,10 +57,11 @@ class GAN:
     model.add(LeakyReLU(alpha=0.01))
 
     # Output layer with tanh activation
-    model.add(Dense(3198 * 186 * 1, activation='tanh'))
+    model.add(Dense(self.X.shape[1] * self.X.shape[2] * 1, activation='tanh'))
 
     # Reshape the Generator output to image dimensions
-    model.add(Reshape(img_shape))
+    model.add(Reshape(self.image_shape))
+    model.summary()
     self.gen_size = z_dim
     self.generator = model
 
@@ -72,7 +72,7 @@ class GAN:
     # Combined Generator -> Discriminator model
     model.add(self.generator)
     model.add(self.discriminator)
-
+    model.summary()
     self.gan = model
   
   def compile(self):
