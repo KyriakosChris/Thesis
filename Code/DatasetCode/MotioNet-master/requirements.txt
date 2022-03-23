@@ -1,6 +1,0 @@
-scipy
-matplotlib
-h5py==2.8.0
-tensorboardX
-tensorflow-tensorboard==0.4.0
-
