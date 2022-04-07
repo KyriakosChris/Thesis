@@ -59,7 +59,9 @@ def Tkinder():
     window = Tk()       
     window.configure(background="white")
     # Open window having dimension 100x100
-    window.geometry('900x900')
+    canvas = Canvas(window, width= 1700 , height= 900)
+    canvas.grid(columnspan=3)
+    #window.geometry('900x900')
     window.title("Video To BVH Estimator")
     photo = PhotoImage(file = "TUC.gif")
     tuc = Label(window, image = photo, bg = "white")
