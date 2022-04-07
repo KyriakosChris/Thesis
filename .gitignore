@@ -40,6 +40,10 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
+#executables
+exe/
+*.exe
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
