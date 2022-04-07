@@ -115,6 +115,53 @@ class CMUSkeleton(object):
             'RightFootEndSite': [0, -1, 0]
         }
 
+                # T-pose
+        self.normal_Pose = {
+            'Hips': [0, 0, 0],
+            'LeftHipJoint': [0.1, 0, 0],
+            'LeftUpLeg': [14.46761417388916, 0, 0],
+            'LeftLeg': [0, 0, -45.8013916015625],
+            'LeftFoot': [0, 0, -44.579383850097656],
+            'LeftFootEndSite': [0, -0.1, 0],
+            'LowerBack': [0, 0, 0.1],
+            'Spine': [0, 0, 24.38321304321289],
+            'Spine1': [0, 0, 24.166622161865234],
+            'LeftShoulder': [0.1, 0, 0],
+            'LeftArm': [15.442316055297852, 0, 0],
+            'LeftForeArm': [28.792964935302734, 0, 0],
+            'LeftHand': [23.485233306884766, 0, 0],
+            'LeftHandEndSite': [0.1, 0, 0],
+            'Neck': [0, 0, 0.1],
+            'Neck1': [0, 0, 12.17811393737793],
+            'HeadEndSite': [0, 0, 0.1],
+            'RightShoulder': [-0.1, 0, 0],
+            'RightArm': [-15.442316055297852, 0, 0],
+            'RightForeArm': [-28.792964935302734, 0, 0],
+            'RightHand': [-23.485233306884766, 0, 0],
+            'RightHandEndSite': [-0.1, 0, 0],
+            'RightHipJoint': [-0.1, 0, 0],
+            'RightUpLeg': [-14.46761417388916, 0, 0],
+            'RightLeg': [0, 0, -45.8013916015625],
+            'RightFoot': [0, 0, -44.579383850097656],
+            'RightFootEndSite': [0, -0.1, 0]
+        }
+    def keypoint2index(self):
+        return self.keypoint2index
+        
+    def root(self):
+        return self.root
+
+    def children(self):
+        return self.children
+
+    def parents(self):
+        return self.parent
+
+    def joints_right(self):
+        return self.right_joints
+
+    def joints_left(self):
+        return self.left_joints
 
     def get_initial_offset(self, poses_3d):
         # TODO: RANSAC
@@ -154,13 +201,14 @@ class CMUSkeleton(object):
         for joint, direction in self.initial_directions.items():
             direction = np.array(direction) / max(np.linalg.norm(direction), 1e-12)
             initial_offset[joint] = direction * bone_len[joint]
-
+        # for joint in self.keypoint2index:
+        #     initial_offset[joint] = self.initial_directions[joint]
         return initial_offset
 
 
     def get_bvh_header(self, poses_3d):
-        initial_offset = self.get_initial_offset(poses_3d)
-
+        #initial_offset = self.get_initial_offset(poses_3d)
+        initial_offset = self.normal_Pose
         nodes = {}
         for joint in self.keypoint2index:
             is_root = joint == self.root
@@ -176,7 +224,6 @@ class CMUSkeleton(object):
             nodes[joint].children = [nodes[child] for child in children]
             for child in children:
                 nodes[child].parent = nodes[joint]
-
         header = bvh_helper.BvhHeader(root=nodes[self.root], nodes=nodes)
         return header
 

@@ -168,7 +168,7 @@ def split_video(video_path):
     return saved_path
 
 
-def evaluate(test_generator, model_pos, action=None, return_predictions=False):
+def evaluate(test_generator, model_pos, action=None, return_predictions=True):
     """
     Inference the 3d positions from 2d position.
     :type test_generator: UnchunkedGenerator
@@ -185,6 +185,8 @@ def evaluate(test_generator, model_pos, action=None, return_predictions=False):
             inputs_2d = torch.from_numpy(batch_2d.astype('float32'))
             if torch.cuda.is_available():
                 inputs_2d = inputs_2d.cuda()
+            else:
+                inputs_2d = inputs_2d.cpu()
             # Positional model
             predicted_3d_pos = model_pos(inputs_2d)
             if test_generator.augment_enabled():

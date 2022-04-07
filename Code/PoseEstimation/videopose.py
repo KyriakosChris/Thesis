@@ -3,7 +3,7 @@ import time
 
 from common.arguments import parse_args
 from common.camera import *
-from common.generators import UnchunkedGenerator
+from common.generators import UnchunkedGenerator,ChunkedGenerator
 from common.loss import *
 from common.model import *
 from common.utils import Timer, evaluate, add_path
@@ -11,8 +11,10 @@ import cv2
 from numpy import *
 import numpy as np
 from bvh_skeleton import openpose_skeleton,h36m_skeleton,cmu_skeleton,smartbody_skeleton
-
-
+from IPython.display import HTML
+from Bvh2Gif import *
+import sys
+from Model import *
 # from joints_detectors.openpose.main import generate_kpts as open_pose
 
 
@@ -44,10 +46,14 @@ def get_detector_2d(detector_name):
         from joints_detectors.hrnet.pose_estimation.video import generate_kpts as hr_pose
         return hr_pose
 
+    def open_pose():
+        from joints_detectors.openpose.main import generate_kpts as op_pose
+        return op_pose
+
     detector_map = {
         'alpha_pose': get_alpha_pose,
         'hr_pose': get_hr_pose,
-        # 'open_pose': open_pose
+        'open_pose': open_pose
     }
 
     assert detector_name in detector_map, f'2D detector: {detector_name} not implemented yet!'
@@ -65,7 +71,6 @@ class Skeleton:
 def main(args):
     # 第一步：检测2D关键点
     detector_2d = get_detector_2d(args.detector_2d)
-
     assert detector_2d, 'detector_2d should be in ({alpha, hr, open}_pose)'
 
     # 2D kpts loads or generate
@@ -75,8 +80,23 @@ def main(args):
     else:
         npz = np.load(args.input_npz)
         keypoints = npz['kpts']  # (N, 17, 2)
-
+    #keypoints = np.load('keypoints.npy')
     # 第二步：将2D关键点转换为3D关键点
+    XYZ = []
+    poly = []
+    for frame in keypoints:
+        Xavg = np.average(frame[:,0])
+        Yavg = np.average(frame[:,1])
+        xmin = min(frame[:,0])
+        ymin = min(frame[:,1])
+        xmax = max(frame[:,0])
+        ymax = max(frame[:,1])
+        poly.append((xmin,ymin , xmax , ymax))
+        A = (xmax - xmin)*(ymax - ymin)
+        Zestimate = np.log2(A)
+        XYZ.append((Xavg,Zestimate,Yavg))
+    #saveVideo(args,poly,XYZ)
+    np.save('keypoints',keypoints)
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
     joints_left, joints_right = list([4, 5, 6, 11, 12, 13]), list([1, 2, 3, 14, 15, 16])
@@ -89,7 +109,8 @@ def main(args):
 
     if torch.cuda.is_available():
         model_pos = model_pos.cuda()
-
+    else:
+        model_pos = model_pos.cpu()
     ckpt, time1 = ckpt_time(time0)
     print('-------------- load data spends {:.2f} seconds'.format(ckpt))
 
@@ -112,60 +133,64 @@ def main(args):
     gen = UnchunkedGenerator(None, None, [input_keypoints],
                              pad=pad, causal_shift=causal_shift, augment=args.test_time_augmentation,
                              kps_left=kps_left, kps_right=kps_right, joints_left=joints_left, joints_right=joints_right)
-    prediction = evaluate(gen, model_pos, return_predictions=True)
+    prediction = evaluate(gen, model_pos, return_predictions=True, )
 
-    # save 3D joint points 保存三维关节点
-    np.save('outputs/test_3d_output.npy', prediction, allow_pickle=True)
+    # save 3D joint points 
+    #np.save('outputs/test_3d_output.npy', prediction, allow_pickle=True)
 
-    # 第三步：将预测的三维点从相机坐标系转换到世界坐标系
-    # （1）第一种转换方法
     rot = np.array([0.14070565, -0.15007018, -0.7552408, 0.62232804], dtype=np.float32)
     prediction = camera_to_world(prediction, R=rot, t=0)
-    # We don't have the trajectory, but at least we can rebase the height将预测的三维点的Z值减去预测的三维点中Z的最小值，得到正向的Z值
+    # We don't have the trajectory, but at least we can rebase the height
     prediction[:, :, 2] -= np.min(prediction[:, :, 2])
 
-    # （2）第二种转换方法
-    # subject = 'S1'
-    # cam_id = '55011271'
-    # cam_params = load_camera_params('./camera/cameras.h5')[subject][cam_id]
+    # （2）Camera
+    subject = 'S1'
+    cam_id = '55011271'
+    cam_params = load_camera_params('./camera/cameras.h5')[subject][cam_id]
     # R = cam_params['R']
     # T = 0
-    # azimuth = cam_params['azimuth']
+    azimuth = cam_params['azimuth']
     #
     # prediction = camera2world(pose=prediction, R=R, T=T)
     # prediction[:, :, 2] -= np.min(prediction[:, :, 2])  # rebase the height
 
-    # 第四步：将3D关键点输出并将预测的3D点转换为bvh骨骼
-    # 将三维预测点输出
-    write_3d_point( args.viz_output,prediction)
-
-    # 将预测的三维骨骼点转换为bvh骨骼
+    #write_3d_point( args.viz_output,prediction)
     prediction_copy = np.copy(prediction)
-    write_standard_bvh(args.viz_output,prediction_copy) #转为标准bvh骨骼
-    write_smartbody_bvh(args.viz_output,prediction_copy) #转为SmartBody所需的bvh骨骼
+    write_standard_bvh(args.viz_output,prediction_copy) 
+    bvh_file = write_smartbody_bvh(args.viz_output,prediction_copy)
 
-    anim_output = {'Reconstruction': prediction}
-    input_keypoints = image_coordinates(input_keypoints[..., :2], w=1000, h=1002)
+
+    
+    gif_file = os.path.join( args.new_folder,"3d_pose.mp4")
+    ani = vis_3d_keypoints_sequence(
+        keypoints_sequence=prediction,
+        skeleton=h36m_skeleton.H36mSkeleton(),
+        azimuth=np.array(70., dtype=np.float32),
+        fps=60,
+        output_file=gif_file
+    )
+    
+    #HTML(ani.to_jshtml())
+    XYZ = np.array(XYZ)
+    x0 = XYZ[0][0]
+    z0 = XYZ[0][1]
+    y0 = prediction[0,0,2] + XYZ[0][2]
+    # for frame in range(prediction.shape[0]):
+    #     prediction[frame][0][0] = x0-XYZ[frame][0]   # X
+    #     prediction[frame][0][1] = z0-XYZ[frame][1]   # Z
+    #     prediction[frame][0][2] = y0-XYZ[frame][2]   # Y
+    base_Y = Calculate_Height(bvh_file)
+    #prediction[:, 0, 2] -= np.min(prediction[:, 0, 2]) - 90.0
+    # PositionsEdit(bvh_file,prediction, False)
 
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
-    if not args.viz_output:
-        args.viz_output = 'outputs/outputvideo/alpha_result.mp4'
-
-    # 第五步：生成输出视频
-    # from common.visualization import render_animation
-    # render_animation(input_keypoints, anim_output,
-    #                  Skeleton(), 25, args.viz_bitrate, np.array(70., dtype=np.float32), args.viz_output,
-    #                  limit=args.viz_limit, downsample=args.viz_downsample, size=args.viz_size,
-    #                  input_video_path=args.viz_video, viewport=(1000, 1002),
-    #                  input_video_skip=args.viz_skip)
-
     ckpt, time4 = ckpt_time(time3)
     print('total spend {:2f} second'.format(ckpt))
 
-
-def inference_video(video_path, detector_2d):
+    
+def inference_video(video_path, output_path, detector_2d):
     """
     Do image -> 2d points -> 3d points to video.
     :param detector_2d: used 2d joints detector. Can be {alpha_pose, hr_pose}
@@ -175,16 +200,17 @@ def inference_video(video_path, detector_2d):
     args = parse_args()
 
     args.detector_2d = detector_2d
-    dir_name = os.path.dirname(video_path)
-    dir_name_split = dir_name[:dir_name.rfind('/')]
-    new_dir_name = os.path.join(dir_name_split,'outputvideo')
-
+    # dir_name = os.path.dirname(video_path)
+    # dir_name_split = dir_name[:dir_name.rfind('/')]
+    # new_dir_name = os.path.join(dir_name_split,'outputvideo')
+    new_dir_name = output_path
     basename = os.path.basename(video_path)
     video_name = basename[:basename.rfind('.')]
-
+    
     args.viz_video = video_path
     #args.viz_output = f'{dir_name}/{args.detector_2d}_{video_name}.mp4'
     args.viz_output = f'{new_dir_name}/{args.detector_2d}_{video_name}.mp4'
+    args.new_folder = f'{new_dir_name}/{args.detector_2d}_{video_name}'
 
     # args.viz_limit = 20
     # args.input_npz = 'outputs/alpha_pose_dance/dance.npz'
@@ -194,72 +220,40 @@ def inference_video(video_path, detector_2d):
     with Timer(video_path):
         main(args)
 
-# 修改视频帧率为50帧，分辨率保持不变
-def modify_video_frame_rate(videoPath,destFps):
-    dir_name = os.path.dirname(videoPath)
-    basename = os.path.basename(videoPath)
-    video_name = basename[:basename.rfind('.')]
-    video_name = video_name + "modify_frame_rate"
-    resultVideoPath = f'{dir_name}/{video_name}.mp4'
 
-    videoCapture = cv2.VideoCapture(videoPath)
-
-    fps = videoCapture.get(cv2.CAP_PROP_FPS)
-    if fps != destFps:
-        frameSize = (int(videoCapture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(videoCapture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-
-        videoWriter = cv2.VideoWriter(resultVideoPath,cv2.VideoWriter_fourcc('m','p','4','v'),destFps,frameSize)
-
-        i = 0;
-        print('开始转换视频帧率')
-        while True:
-            success,frame = videoCapture.read()
-            if success:
-                i+=1
-                print('转换到第%d帧'% i)
-                videoWriter.write(frame)
-            else:
-                print('视频帧转换结束')
+def saveVideo(args,poly,xyz):
+    cap = cv2.VideoCapture(args.viz_video)
+    # Check if video opened successfully
+    if (cap.isOpened()== False): 
+        print("Error opening video  file")
+    images = []
+    count = 0
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        if ret == True:
+            image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=4, color=(0, 0, 255), thickness=-1)
+            image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =1)
+            # Display the resulting frame
+            images.append(image)
+            count+=1
+            height, width, layers = frame.shape
+            size = (width,height)
+            cv2.imshow('Frame', image)
+            # Press Q on keyboard to  exit
+            if cv2.waitKey(16) & 0xFF == ord('q'):
                 break
-    return resultVideoPath
 
-# 将预测3d关键点输出到outputs/outputvideo/alpha_pose_视频名/3dpoint下
-def write_3d_point(outvideopath,prediction3dpoint):
-    '''
-    :param prediction3dpoint: 预测的三维字典
-    :param outfilepath: 输出的三维点的文件
-    :return:
-    '''
-    dir_name = os.path.dirname(outvideopath)
-    basename = os.path.basename(outvideopath)
-    video_name = basename[:basename.rfind('.')]
+        # Break the loop
+        else: 
+            break
+    cap.release()
+    path = f'{args.new_folder}/Positionsvideo.mp4'
+    out = cv2.VideoWriter(path,cv2.VideoWriter_fourcc(*'DIVX'), 60, size)
+    for i in range(len(images)):
+        out.write(images[i])
+    out.release()
 
-    frameNum = 1
 
-    for frame in prediction3dpoint:
-        outfileDirectory = os.path.join(dir_name,video_name,"3dpoint");
-        if not os.path.exists(outfileDirectory):
-            os.makedirs(outfileDirectory)
-        outfilename = os.path.join(dir_name,video_name,"3dpoint","3dpoint{}.txt".format(frameNum))
-        file = open(outfilename, 'w')
-        frameNum += 1
-        for point3d in frame:
-            # （1）转换成SmartBody和Meshlab的坐标系，Y轴向上，X向右，Z轴向前
-            # X = point3d[0]
-            # Y = point3d[1]
-            # Z = point3d[2]
-            #
-            # X_1 = -X
-            # Y_1 = Z
-            # Z_1 = Y
-            # str = '{},{},{}\n'.format(X_1, Y_1, Z_1)
-
-            #（2）未转换任何坐标系的输出，Z轴向上，X向右，Y向前
-            str = '{},{},{}\n'.format(point3d[0],point3d[1],point3d[2])
-            file.write(str)
-        file.close()
-
-# 将3dpoint转换为标准的bvh格式并输出到outputs/outputvideo/alpha_pose_视频名/bvh下
 def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     '''
     :param outbvhfilepath: 输出bvh动作文件路径
@@ -286,12 +280,14 @@ def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     dir_name = os.path.dirname(outbvhfilepath)
     basename = os.path.basename(outbvhfilepath)
     video_name = basename[:basename.rfind('.')]
-    bvhfileDirectory = os.path.join(dir_name,video_name,"bvh")
+    bvhfileDirectory = os.path.join(dir_name,video_name)
     if not os.path.exists(bvhfileDirectory):
         os.makedirs(bvhfileDirectory)
-    bvhfileName = os.path.join(dir_name,video_name,"bvh","{}.bvh".format(video_name))
-    human36m_skeleton = h36m_skeleton.H36mSkeleton()
-    human36m_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    bvhfileName = os.path.join(dir_name,video_name,"{}.bvh".format(video_name))
+    cmuskeleton = h36m_skeleton.H36mSkeleton()
+    cmuskeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    # human36m_skeleton = h36m_skeleton.H36mSkeleton()
+    # human36m_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
 
 # 将3dpoint转换为SmartBody的bvh格式并输出到outputs/outputvideo/alpha_pose_视频名/bvh下
 def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
@@ -320,13 +316,16 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     dir_name = os.path.dirname(outbvhfilepath)
     basename = os.path.basename(outbvhfilepath)
     video_name = basename[:basename.rfind('.')]
-    bvhfileDirectory = os.path.join(dir_name,video_name,"bvh")
+    bvhfileDirectory = os.path.join(dir_name,video_name)
     if not os.path.exists(bvhfileDirectory):
         os.makedirs(bvhfileDirectory)
-    bvhfileName = os.path.join(dir_name,video_name,"bvh","{}.bvh".format(video_name))
-
-    SmartBody_skeleton = smartbody_skeleton.SmartBodySkeleton()
-    SmartBody_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    bvhfileName = os.path.join(dir_name,video_name,"{}.bvh".format(video_name))
+    cmuskeleton = h36m_skeleton.H36mSkeleton()
+    cmuskeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    # SmartBody_skeleton = smartbody_skeleton.SmartBodySkeleton()
+    # SmartBody_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    return bvhfileName
 
 if __name__ == '__main__':
-    inference_video('outputs/inputvideo/kunkun_cut_one_second.mp4', 'alpha_pose')
+    inference_video('outputs/inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
+

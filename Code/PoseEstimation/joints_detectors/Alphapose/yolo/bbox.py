@@ -66,8 +66,9 @@ def bbox_iou(box1, box2):
     
     #Intersection area
     
+    #inter_area = torch.max(inter_rect_x2 - inter_rect_x1 + 1,torch.zeros(inter_rect_x2.shape).cpu())*torch.max(inter_rect_y2 - inter_rect_y1 + 1, torch.zeros(inter_rect_x2.shape).cpu())
     inter_area = torch.max(inter_rect_x2 - inter_rect_x1 + 1,torch.zeros(inter_rect_x2.shape).cuda())*torch.max(inter_rect_y2 - inter_rect_y1 + 1, torch.zeros(inter_rect_x2.shape).cuda())
-    
+
     #Union Area
     b1_area = (b1_x2 - b1_x1 + 1)*(b1_y2 - b1_y1 + 1)
     b2_area = (b2_x2 - b2_x1 + 1)*(b2_y2 - b2_y1 + 1)

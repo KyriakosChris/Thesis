@@ -5,7 +5,7 @@ import shutil
 import numpy as np
 import torch.utils.data
 from tqdm import tqdm
-
+from progress_Bar.bar import *
 from SPPE.src.main_fast_inference import *
 from common.utils import calculate_area
 from dataloader import DetectionLoader, DetectionProcessor, DataWriter, Mscoco, VideoLoader
@@ -128,6 +128,7 @@ def handle_video(video_file):
         pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
     else:
         pose_model = InferenNet(4 * 1 + 1, pose_dataset)
+    #pose_model.cpu()
     pose_model.cuda()
     pose_model.eval()
     runtime_profile = {
@@ -140,9 +141,13 @@ def handle_video(video_file):
     # writer = DataWriter(args.save_video, save_path, cv2.VideoWriter_fourcc(*'XVID'), fps, frameSize).start()
     writer = DataWriter(args.save_video).start()
     print('Start pose estimation...')
-    im_names_desc = tqdm(range(data_loader.length()))
+    #im_names_desc = tqdm(range(data_loader.length()))
     batchSize = args.posebatch
-    for i in im_names_desc:
+    #bar = Bar('Processing', max=data_loader.length())
+    #bar = Bar('Processing', fill='@', suffix='%(percent)d%%')
+    n = data_loader.length()  # or however many loading slots you want to have
+    loading = '.' * n  # for strings, * is the repeat operator
+    for i in IncrementalBar('Processing').iter(range(data_loader.length())):
 
         start_time = getTime()
         with torch.no_grad():
@@ -165,6 +170,7 @@ def handle_video(video_file):
             num_batches = datalen // batchSize + leftover
             hm = []
             for j in range(num_batches):
+                #inps_j = inps[j * batchSize:min((j + 1) * batchSize, datalen)].cpu()
                 inps_j = inps[j * batchSize:min((j + 1) * batchSize, datalen)].cuda()
                 hm_j = pose_model(inps_j)
                 hm.append(hm_j)
@@ -173,22 +179,20 @@ def handle_video(video_file):
             runtime_profile['pt'].append(pose_time)
 
             hm = hm.cpu().data
+            #hm = hm.cuda().data
             writer.save(boxes, scores, hm, pt1, pt2, orig_img, im_name.split('/')[-1])
 
             ckpt_time, post_time = getTime(ckpt_time)
             runtime_profile['pn'].append(post_time)
+            #bar.next()
+        #bar.finish()
 
-        if args.profile:
-            # TQDM
-            im_names_desc.set_description(
-                'det time: {dt:.4f} | pose time: {pt:.4f} | post processing: {pn:.4f}'.format(
-                    dt=np.mean(runtime_profile['dt']), pt=np.mean(runtime_profile['pt']), pn=np.mean(runtime_profile['pn']))
-            )
+
     if (args.save_img or args.save_video) and not args.vis_fast:
         print('===========================> Rendering remaining images in the queue...')
         print('===========================> If this step takes too long, you can enable the --vis_fast flag to use fast rendering (real-time).')
     while writer.running():
-        pass
+        pass            
     writer.stop()
     final_result = writer.results()
     write_json(final_result, args.outputpath)

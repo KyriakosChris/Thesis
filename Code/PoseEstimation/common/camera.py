@@ -121,7 +121,11 @@ def load_camera_params(file):
             cam_params[f'S{s}'] = {}
             for _, params in f[f'subject{s}'].items():
                 name = params['Name']
-                name = ''.join([chr(c) for c in name])
+                l = list(name)
+                for i in range(0, len(name)):
+                    l[i] = int(l[i])
+                name = "".join( [chr(item) for item in l] )
+                #name = ''.join([chr(c) for c in name])
                 val = {}
                 val['R'] = np.array(params['R'])
                 val['T'] = np.array(params['T'])

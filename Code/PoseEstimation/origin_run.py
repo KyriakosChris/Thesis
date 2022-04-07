@@ -39,10 +39,10 @@ elif args.dataset.startswith('humaneva'):
     from common.humaneva_dataset import HumanEvaDataset
 
     dataset = HumanEvaDataset(dataset_path)
-elif args.dataset.startswith('custom'):
-    from common.custom_dataset import CustomDataset
+# elif args.dataset.startswith('custom'):
+#     from common.custom_dataset import CustomDataset
 
-    dataset = CustomDataset('data/data_2d_' + args.dataset + '_' + args.keypoints + '.npz')
+#     dataset = CustomDataset('data/data_2d_' + args.dataset + '_' + args.keypoints + '.npz')
 else:
     raise KeyError('Invalid dataset')
 

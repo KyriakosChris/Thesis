@@ -77,7 +77,7 @@ def model_load(config):
     #     config, is_train=False
     # )
     model_file_name = 'joints_detectors/hrnet/models/pytorch/pose_coco/pose_hrnet_w48_384x288.pth'
-    state_dict = torch.load(model_file_name)
+    state_dict = torch.load(model_file_name, map_location=torch.device('cpu'))
     from collections import OrderedDict
     new_state_dict = OrderedDict()
     for k, v in state_dict.items():
@@ -112,7 +112,7 @@ def generate_kpts(video_name, smooth=False):
     # input_fps = cam.get(cv2.CAP_PROP_FPS)
 
     pose_model = model_load(cfg)
-    pose_model.cuda()
+    pose_model.cpu()
 
     # collect keypoints coordinate
     kpts_result = []
@@ -131,7 +131,7 @@ def generate_kpts(video_name, smooth=False):
         with torch.no_grad():
             # compute output heatmap
             inputs = inputs[:, [2, 1, 0]]
-            output = pose_model(inputs.cuda())
+            output = pose_model(inputs.cpu())
             # compute coordinate
             preds, maxvals = get_final_preds(
                 cfg, output.clone().cpu().numpy(), np.asarray(center), np.asarray(scale))
@@ -153,7 +153,7 @@ def generate_kpts(video_name, smooth=False):
 def getTwoModel():
     #### load pose-hrnet MODEL
     pose_model = model_load(cfg)
-    pose_model.cuda()
+    pose_model.cpu()
 
     # load YoloV3 Model
     bbox_model = yolo_model()

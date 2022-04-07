@@ -68,7 +68,7 @@ def render_animation(keypoints, poses, skeleton, fps, bitrate, azim, output, vie
     ax_in.get_yaxis().set_visible(False)
     ax_in.set_axis_off()
     ax_in.set_title('Input')
-
+    
     # prevent wired error
     _ = Axes3D.__class__.__name__
 
@@ -125,7 +125,63 @@ def render_animation(keypoints, poses, skeleton, fps, bitrate, azim, output, vie
         limit = min(limit, len(all_frames))
 
     parents = skeleton.parents()
+    parent_values = parents.values()
     pbar = tqdm(total=limit)
+
+    def update(frame):
+        nonlocal initialized
+        print(frame)
+        if not initialized:
+            root = skeleton.root
+            stack = [root]
+            while stack:
+                parent = stack.pop()
+                p_idx = skeleton.keypoint2index[parent]
+                p_pos = keypoints[0, p_idx]
+                for child in skeleton.children[parent]:
+                    if skeleton.keypoint2index.get(child, -1) == -1:
+                        continue
+                    stack.append(child)
+                    c_idx = skeleton.keypoint2index[child]
+                    c_pos = keypoints[0, c_idx]
+                    if child in skeleton.left_joints:
+                        color = 'b'
+                    elif child in skeleton.right_joints:
+                        color = 'r'
+                    else:
+                        color = 'k'
+                    line = ax.plot(
+                        xs=[p_pos[0], c_pos[0]],
+                        ys=[p_pos[1], c_pos[1]],
+                        zs=[p_pos[2], c_pos[2]],
+                        c=color, marker='.', zdir='z'
+                    )
+                    lines.append(line)
+            initialized = True
+        else:
+            line_idx = 0
+            root = skeleton.root
+            stack = [root]
+            while stack:
+                parent = stack.pop()
+                p_idx = skeleton.keypoint2index[parent]
+                p_pos = keypoints[frame, p_idx]
+                for child in skeleton.children[parent]:
+                    if skeleton.keypoint2index.get(child, -1) == -1:
+                        continue
+                    stack.append(child)
+                    c_idx = skeleton.keypoint2index[child]
+                    c_pos = keypoints[frame, c_idx]
+                    if child in skeleton.left_joints:
+                        color = 'b'
+                    elif child in skeleton.right_joints:
+                        color = 'r'
+                    else:
+                        color = 'k'
+                    lines[line_idx][0].set_xdata([p_pos[0], c_pos[0]])
+                    lines[line_idx][0].set_ydata([p_pos[1], c_pos[1]])
+                    lines[line_idx][0].set_3d_properties( [p_pos[2], c_pos[2]]) 
+                    line_idx += 1
 
     def update_video(i):
         nonlocal initialized, image, lines, points
@@ -138,49 +194,66 @@ def render_animation(keypoints, poses, skeleton, fps, bitrate, azim, output, vie
         if not initialized:
             image = ax_in.imshow(all_frames[i], aspect='equal')
 
+            count = 0
             for j, j_parent in enumerate(parents):
                 if j_parent == -1:
                     continue
 
+                if count > 16:
+                    break
                 # if len(parents) == keypoints.shape[1] and 1 == 2:
                 #     # Draw skeleton only if keypoints match (otherwise we don't have the parents definition)
                 #     lines.append(ax_in.plot([keypoints[i, j, 0], keypoints[i, j_parent, 0]],
                 #                             [keypoints[i, j, 1], keypoints[i, j_parent, 1]], color='pink'))
 
-                col = 'red' if j in skeleton.joints_right() else 'black'
+                col = 'red' if j_parent in skeleton.joints_right() else 'black'
                 for n, ax in enumerate(ax_3d):
                     pos = poses[n][i]
-                    lines_3d[n].append(ax.plot([pos[j, 0], pos[j_parent, 0]],
-                                               [pos[j, 1], pos[j_parent, 1]],
-                                               [pos[j, 2], pos[j_parent, 2]], zdir='z', c=col))
+                    p = skeleton.keypoint2index[j_parent]
+                    if p == -1:
+                        continue
+                        
+                    plot = ax.plot([int(pos[count, 0]), int(pos[p, 0])],
+                                               [int(pos[count, 1]), int(pos[p, 1])],
+                                               [int(pos[count, 2]), int(pos[p, 2])], zdir='z', c=col) 
+                    lines_3d[n].append(plot)
+                    count+=1
 
             points = ax_in.scatter(*keypoints[i].T, 5, color='red', edgecolors='white', zorder=10)
 
             initialized = True
         else:
             image.set_data(all_frames[i])
-
+            count = 0
             for j, j_parent in enumerate(parents):
                 if j_parent == -1:
                     continue
 
+                if count > 16:
+                    break
                 # if len(parents) == keypoints.shape[1] and 1 == 2:
                 #     lines[j - 1][0].set_data([keypoints[i, j, 0], keypoints[i, j_parent, 0]],
                 #                              [keypoints[i, j, 1], keypoints[i, j_parent, 1]])
 
                 for n, ax in enumerate(ax_3d):
                     pos = poses[n][i]
-                    lines_3d[n][j - 1][0].set_xdata([pos[j, 0], pos[j_parent, 0]])
-                    lines_3d[n][j - 1][0].set_ydata([pos[j, 1], pos[j_parent, 1]])
-                    lines_3d[n][j - 1][0].set_3d_properties([pos[j, 2], pos[j_parent, 2]], zdir='z')
+                    p = skeleton.keypoint2index[j_parent]
+
+                    if p == -1:
+                        continue
+                    
+                    lines_3d[n][count - 1][0].set_xdata([pos[count, 0], pos[p, 0]])
+                    lines_3d[n][count - 1][0].set_ydata([pos[count, 1], pos[p, 1]])
+                    lines_3d[n][count - 1][0].set_3d_properties([pos[count, 2], pos[p, 2]],  zdir='z')
+                    count+=1
 
             points.set_offsets(keypoints[i])
 
         pbar.update()
 
     fig.tight_layout()
-
-    anim = FuncAnimation(fig, update_video, frames=limit, interval=1000.0 / fps, repeat=False)
+    print(output)
+    anim = FuncAnimation(fig, update, frames=limit, interval=1000.0 / fps, repeat=False)
     if output.endswith('.mp4'):
         Writer = writers['ffmpeg']
         writer = Writer(fps=fps, metadata={}, bitrate=bitrate)

@@ -31,7 +31,6 @@ class H36mSkeleton(object):
             'LeftWristEndSite': -1,
             'RightWristEndSite': -1
         }
-
         self.index2keypoint = {v: k for k, v in self.keypoint2index.items()}
         self.keypoint_num = len(self.keypoint2index)
 
@@ -58,7 +57,6 @@ class H36mSkeleton(object):
             'RightWrist': ['RightWristEndSite'],
             'RightWristEndSite': []
         }
-
         self.parent = {self.root: None}
         for parent, children in self.children.items():
             for child in children:
@@ -73,7 +71,7 @@ class H36mSkeleton(object):
             if 'Right' in joint
         ]
 
-        # human3.6m坐标系(Z向上，Y向前，X向左)下的T-pose
+        # T-pose
         self.initial_directions = {
             'Hip': [0, 0, 0],
             'RightHip': [-1, 0, 0],
@@ -98,54 +96,6 @@ class H36mSkeleton(object):
             'RightWristEndSite': [-1, 0, 0]
         }
 
-        # SmartBody坐标系(Y向上，Z向前，X向右)下的T-pose
-        # self.initial_directions = {
-        #     'Hip': [0, 0, 0],
-        #     'RightHip': [-1, 0, 0],
-        #     'RightKnee': [0, -1, 0],
-        #     'RightAnkle': [0, -1, 0],
-        #     'RightAnkleEndSite': [0, 0, -1],
-        #     'LeftHip': [1, 0, 0],
-        #     'LeftKnee': [0, -1, 0],
-        #     'LeftAnkle': [0, -1, 0],
-        #     'LeftAnkleEndSite': [0, 0, -1],
-        #     'Spine': [0, 1, 0],
-        #     'Thorax': [0, 1, 0],
-        #     'Neck': [0, 1, 0],
-        #     'HeadEndSite': [0, 1, 0],
-        #     'LeftShoulder': [1, 0, 0],
-        #     'LeftElbow': [1, 0, 0],
-        #     'LeftWrist': [1, 0, 0],
-        #     'LeftWristEndSite': [1, 0, 0],
-        #     'RightShoulder': [-1, 0, 0],
-        #     'RightElbow': [-1, 0, 0],
-        #     'RightWrist': [-1, 0, 0],
-        #     'RightWristEndSite': [-1, 0, 0]
-        # }
-
-        # self.initial_directions = {
-        #     'Hips': [0, 0, 0],
-        #     'RightUpLeg': [-1, 0, 0],
-        #     'RightLeg': [0, -1, 0],
-        #     'RightFoot': [0, -1, 0],
-        #     'RightFoot_End': [0, 0, 1],
-        #     'LeftUpLeg': [1, 0, 0],
-        #     'LeftLeg': [0, -1, 0],
-        #     'LeftFoot': [0, -1, 0],
-        #     'LeftFoot_End': [0, 0, 1],
-        #     'Spine': [0, 1, 0],
-        #     'Spine3': [0, 1, 0],
-        #     'Neck': [0, 1, 0],
-        #     'Head': [0, 1, 0],
-        #     'LeftArm': [1, 0, 0],
-        #     'LeftForeArm': [1, 0, 0],
-        #     'LeftHand': [1, 0, 0],
-        #     'LeftWristEndSite': [1, 0, 0],
-        #     'RightArm': [-1, 0, 0],
-        #     'RightForeArm': [-1, 0, 0],
-        #     'RightHand': [-1, 0, 0],
-        #     'RightWristEndSite': [-1, 0, 0]
-        # }
 
     def get_initial_offset(self, poses_3d):
         # TODO: RANSAC
@@ -300,193 +250,6 @@ class H36mSkeleton(object):
 
         return channel
 
-    def pose2euler_SmartBody(self, pose, header):
-        channel = []
-        quats = {}
-        eulers = {}
-        stack = [header.root]
-        while stack:
-            node = stack.pop()
-            joint = node.name
-            joint_idx = self.keypoint2index[joint]
-
-            if node.is_root:
-                channel.extend(pose[joint_idx])
-
-            index = self.keypoint2index
-            order = None
-            if joint == 'Hip':
-                x_dir = pose[index['LeftHip']] - pose[index['RightHip']]
-                z_dir = None
-                y_dir = pose[index['Spine']] - pose[joint_idx]
-                order = 'yzx'
-            elif joint in ['RightHip', 'RightKnee']:
-                child_idx = self.keypoint2index[node.children[0].name]
-                x_dir = pose[index['Hip']] - pose[index['RightHip']]
-                z_dir = None
-                y_dir = pose[joint_idx] - pose[child_idx]
-                order = 'yzx'
-            elif joint in ['LeftHip', 'LeftKnee']:
-                child_idx = self.keypoint2index[node.children[0].name]
-                x_dir = pose[index['LeftHip']] - pose[index['Hip']]
-                z_dir = None
-                y_dir = pose[joint_idx] - pose[child_idx]
-                order = 'yzx'
-            elif joint == 'Spine':
-                x_dir = pose[index['LeftHip']] - pose[index['RightHip']]
-                z_dir = None
-                y_dir = pose[index['Thorax']] - pose[joint_idx]
-                order = 'yzx'
-            elif joint == 'Thorax':
-                x_dir = pose[index['LeftShoulder']] - \
-                        pose[index['RightShoulder']]
-                z_dir = None
-                y_dir = pose[joint_idx] - pose[index['Spine']]
-                order = 'yzx'
-            elif joint == 'Neck':
-                x_dir = None
-                z_dir = pose[index['Thorax']] - pose[joint_idx]
-                y_dir = pose[index['HeadEndSite']] - pose[index['Thorax']]
-                order = 'yxz'
-            elif joint == 'LeftShoulder':
-                x_dir = pose[index['LeftElbow']] - pose[joint_idx]
-                z_dir = pose[index['LeftElbow']] - pose[index['LeftWrist']]
-                y_dir = None
-                order = 'xyz'
-            elif joint == 'LeftElbow':
-                x_dir = pose[index['LeftWrist']] - pose[joint_idx]
-                z_dir = pose[joint_idx] - pose[index['LeftShoulder']]
-                y_dir = None
-                order = 'xyz'
-            elif joint == 'RightShoulder':
-                x_dir = pose[joint_idx] - pose[index['RightElbow']]
-                z_dir = pose[index['RightElbow']] - pose[index['RightWrist']]
-                y_dir = None
-                order = 'xyz'
-            elif joint == 'RightElbow':
-                x_dir = pose[joint_idx] - pose[index['RightWrist']]
-                z_dir = pose[joint_idx] - pose[index['RightShoulder']]
-                y_dir = None
-                order = 'xyz'
-            if order:
-                dcm = math3d.dcm_from_axis(x_dir, y_dir, z_dir, order)
-                quats[joint] = math3d.dcm2quat(dcm)
-            else:
-                quats[joint] = quats[self.parent[joint]].copy()
-
-            local_quat = quats[joint].copy()
-            if node.parent:
-                local_quat = math3d.quat_divide(
-                    q=quats[joint], r=quats[node.parent.name]
-                )
-
-            euler = math3d.quat2euler(
-                q=local_quat, order=node.rotation_order
-            )
-            euler = np.rad2deg(euler)
-            eulers[joint] = euler
-            channel.extend(euler)
-
-            for child in node.children[::-1]:
-                if not child.is_end_site:
-                    stack.append(child)
-
-        return channel
-
-    def pose2euler_SmartBody_Modify(self, pose, header):
-        channel = []
-        quats = {}
-        eulers = {}
-        stack = [header.root]
-        while stack:
-            node = stack.pop()
-            joint = node.name
-            joint_idx = self.keypoint2index[joint]
-
-            if node.is_root:
-                channel.extend(pose[joint_idx])
-
-            index = self.keypoint2index
-            order = None
-            if joint == 'Hips':
-                x_dir = pose[index['LeftUpLeg']] - pose[index['RightUpLeg']]
-                z_dir = None
-                y_dir = pose[index['Spine']] - pose[joint_idx]
-                order = 'yzx'
-            elif joint in ['LeftUpLeg', 'RightLeg']:
-                child_idx = self.keypoint2index[node.children[0].name]
-                x_dir = pose[index['Hips']] - pose[index['RightUpLeg']]
-                z_dir = None
-                y_dir = pose[joint_idx] - pose[child_idx]
-                order = 'yzx'
-            elif joint in ['LeftUpLeg', 'LeftLeg']:
-                child_idx = self.keypoint2index[node.children[0].name]
-                x_dir = pose[index['LeftUpLeg']] - pose[index['Hips']]
-                z_dir = None
-                y_dir = pose[joint_idx] - pose[child_idx]
-                order = 'yzx'
-            elif joint == 'Spine':
-                x_dir = pose[index['LeftUpLeg']] - pose[index['RightUpLeg']]
-                z_dir = None
-                y_dir = pose[index['Spine3']] - pose[joint_idx]
-                order = 'yzx'
-            elif joint == 'Spine3':
-                x_dir = pose[index['LeftArm']] - \
-                        pose[index['RightArm']]
-                z_dir = None
-                y_dir = pose[joint_idx] - pose[index['Spine']]
-                order = 'yzx'
-            elif joint == 'Neck':
-                x_dir = None
-                z_dir = pose[index['Spine3']] - pose[joint_idx]
-                y_dir = pose[index['Head']] - pose[index['Spine3']]
-                order = 'yxz'
-            elif joint == 'LeftArm':
-                x_dir = pose[index['LeftForeArm']] - pose[joint_idx]
-                z_dir = pose[index['LeftForeArm']] - pose[index['LeftHand']]
-                y_dir = None
-                order = 'xyz'
-            elif joint == 'LeftForeArm':
-                x_dir = pose[index['LeftHand']] - pose[joint_idx]
-                z_dir = pose[joint_idx] - pose[index['LeftArm']]
-                y_dir = None
-                order = 'xyz'
-            elif joint == 'RightArm':
-                x_dir = pose[joint_idx] - pose[index['RightForeArm']]
-                z_dir = pose[index['RightForeArm']] - pose[index['RightHand']]
-                y_dir = None
-                order = 'xyz'
-            elif joint == 'RightForeArm':
-                x_dir = pose[joint_idx] - pose[index['RightHand']]
-                z_dir = pose[joint_idx] - pose[index['RightArm']]
-                y_dir = None
-                order = 'xyz'
-            if order:
-                dcm = math3d.dcm_from_axis(x_dir, y_dir, z_dir, order)
-                quats[joint] = math3d.dcm2quat(dcm)
-            else:
-                quats[joint] = quats[self.parent[joint]].copy()
-
-            local_quat = quats[joint].copy()
-            if node.parent:
-                local_quat = math3d.quat_divide(
-                    q=quats[joint], r=quats[node.parent.name]
-                )
-
-            euler = math3d.quat2euler(
-                q=local_quat, order=node.rotation_order
-            )
-            euler = np.rad2deg(euler)
-            eulers[joint] = euler
-            channel.extend(euler)
-
-            for child in node.children[::-1]:
-                if not child.is_end_site:
-                    stack.append(child)
-
-        return channel
-
-
 
     def poses2bvh(self, poses_3d, header=None, output_file=None):
         if not header:
@@ -495,8 +258,6 @@ class H36mSkeleton(object):
         channels = []
         for frame, pose in enumerate(poses_3d):
             channels.append(self.pose2euler(pose, header))
-            #channels.append(self.pose2euler_SmartBody(pose, header))
-            #channels.append(self.pose2euler_SmartBody_Modify(pose, header))
 
         if output_file:
             bvh_helper.write_bvh(output_file, header, channels)

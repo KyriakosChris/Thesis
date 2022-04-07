@@ -6,6 +6,7 @@ from fn import getTime
 from opt import opt
 from pPose_nms import write_json
 from tqdm import tqdm
+import numpy as np
 
 
 def main(args):
@@ -38,6 +39,7 @@ def main(args):
         pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
     else:
         pose_model = InferenNet(4 * 1 + 1, pose_dataset)
+    #pose_model.cpu()
     pose_model.cuda()
     pose_model.eval()
 
