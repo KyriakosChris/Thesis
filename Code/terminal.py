@@ -15,8 +15,8 @@ class Redirect():
         if self.autoscroll:
             self.widget.see("end")  # autoscroll
         
-    #def flush(self):
-    #    pass
+    def flush(self):
+        pass
 
 # --- functions ---
 

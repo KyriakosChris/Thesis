@@ -96,7 +96,6 @@ def main(args):
         Zestimate = np.log2(A)
         XYZ.append((Xavg,Zestimate,Yavg))
     #saveVideo(args,poly,XYZ)
-    np.save('keypoints',keypoints)
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
     joints_left, joints_right = list([4, 5, 6, 11, 12, 13]), list([1, 2, 3, 14, 15, 16])
@@ -209,8 +208,8 @@ def inference_video(video_path, output_path, detector_2d):
     
     args.viz_video = video_path
     #args.viz_output = f'{dir_name}/{args.detector_2d}_{video_name}.mp4'
-    args.viz_output = f'{new_dir_name}/{args.detector_2d}_{video_name}.mp4'
-    args.new_folder = f'{new_dir_name}/{args.detector_2d}_{video_name}'
+    args.viz_output = f'{new_dir_name}/{video_name}.mp4'
+    args.new_folder = f'{new_dir_name}/{video_name}'
 
     # args.viz_limit = 20
     # args.input_npz = 'outputs/alpha_pose_dance/dance.npz'
