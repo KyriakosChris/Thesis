@@ -4,7 +4,16 @@ import os
 from PIL import Image,ImageTk
 from tkinter import filedialog as fd
 from tkVideoPlayer import TkinterVideo
+from BVHsmoother.smooth import smooth
 
+def fastsmooth(filename):
+    filter = 'butterworth'
+    border = 100 
+    u0 = 60
+    order = 2
+    median = None
+    sigma = None
+    smooth(filename,filename,filter,order,border,u0, median , sigma)
 def PositionEdit(file,positions):
 
     data = open(file, 'r')
@@ -138,3 +147,6 @@ def Tkinder(self):
 
 # file = "D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\kunkun_cut_one_second.bvh"
 # PositionEdit(file,(5,3,7))
+
+
+

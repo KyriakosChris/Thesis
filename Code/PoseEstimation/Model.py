@@ -12,22 +12,18 @@ def Calculate_Height(file):
     found = False
     for n,line in enumerate(Lines) :
 
-        if "RightUpLeg" in line or "RightLeg" in line:
+        if "RightKnee" in line or "RightAnkle" in line:
             found = True
         if found and "OFFSET" in line:
             found = False
             base = line.split(' ')
-            base.pop(-1)
-            base.pop(-1)
 
             base = float(base[-1])
 
             height+=abs(base)
-            
 
         if "Motion" in line :
             break
-    #print(height)
     return height
 
 def PositionsEdit(file,positions, scale):

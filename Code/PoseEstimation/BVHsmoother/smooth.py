@@ -1,10 +1,10 @@
 import numpy as np
 
-import code_bvh.freqfilter as freqfilter
-import code_bvh.bvh as bvh
-import code_bvh.args as args
-import code_bvh.spacefilter as spacefilter
-import code_bvh.angle as angle
+import BVHsmoother.code_bvh.freqfilter as freqfilter
+import BVHsmoother.code_bvh.bvh as bvh
+import BVHsmoother.code_bvh.args as args
+import BVHsmoother.code_bvh.spacefilter as spacefilter
+import BVHsmoother.code_bvh.angle as angle
 
 class smooth:
 

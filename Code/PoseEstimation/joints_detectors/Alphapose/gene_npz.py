@@ -4,7 +4,6 @@ import shutil
 
 import numpy as np
 import torch.utils.data
-from tqdm import tqdm
 from progress_Bar.bar import *
 from SPPE.src.main_fast_inference import *
 from common.utils import calculate_area
@@ -59,10 +58,10 @@ def generate_kpts(video_file):
 
     # ============ Changing End ++++++++++
 
-    name = f'{args.outputpath}/{video_name}.npz'
+    # name = f'{args.outputpath}/{video_name}.npz'
     kpts = np.array(kpts).astype(np.float32)
-    print('kpts npz save in ', name)
-    np.savez_compressed(name, kpts=kpts)
+    # print('kpts npz save in ', name)
+    # np.savez_compressed(name, kpts=kpts)
 
     return kpts
 
@@ -141,10 +140,7 @@ def handle_video(video_file):
     # writer = DataWriter(args.save_video, save_path, cv2.VideoWriter_fourcc(*'XVID'), fps, frameSize).start()
     writer = DataWriter(args.save_video).start()
     print('Start pose estimation...')
-    #im_names_desc = tqdm(range(data_loader.length()))
     batchSize = args.posebatch
-    #bar = Bar('Processing', max=data_loader.length())
-    #bar = Bar('Processing', fill='@', suffix='%(percent)d%%')
     n = data_loader.length()  # or however many loading slots you want to have
     loading = '.' * n  # for strings, * is the repeat operator
     for i in IncrementalBar('Processing').iter(range(data_loader.length())):
@@ -188,9 +184,8 @@ def handle_video(video_file):
         #bar.finish()
 
 
-    if (args.save_img or args.save_video) and not args.vis_fast:
-        print('===========================> Rendering remaining images in the queue...')
-        print('===========================> If this step takes too long, you can enable the --vis_fast flag to use fast rendering (real-time).')
+    # if (args.save_img or args.save_video) and not args.vis_fast:
+    #     print('===========================> Rendering remaining images in the queue...')
     while writer.running():
         pass            
     writer.stop()
@@ -200,9 +195,3 @@ def handle_video(video_file):
     return final_result, video_name
 
 
-if __name__ == "__main__":
-    os.chdir('../..')
-    print(os.getcwd())
-
-    # handle_video(img_path='outputs/image/kobe')
-    generate_kpts('outputs/dance.mp4')

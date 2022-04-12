@@ -8,8 +8,7 @@ from PIL import Image,ImageTk
 from tkVideoPlayer import TkinterVideo
 import os
 from tkinter import messagebox
-from functions import PositionEdit
-
+from functions import PositionEdit, fastsmooth
 
 class Redirect():
 
@@ -72,72 +71,88 @@ class MainMenu():
                 return True
             except ValueError:
                 return False
-        def open_file():
+                
+        def open_file(offsetx,offsety):
             global videoplayer
+            openbtn.config(state="disabled")
             videoplayer = TkinterVideo(master=window, scaled=True, pre_load=False)
             videoplayer.load(r"{}".format(file))
-            videoplayer.place(x=0, y=600, height=480, width=700)
+            videoplayer.place(x=0+offsetx, y=600, height=480, width=700)
             videoplayer.play()
 
         def playAgain():
             videoplayer.play()
         
-        def Reset():
+        def Reset(offsetx,offsety):
 
             videoplayer.destroy()
-            open_file()
+            open_file(offsetx,offsety)
 
         def PauseVideo():
             videoplayer.pause()
-
+            
+        def buttonSmooth(file):
+            Smoothbutton.config(state="disabled")
+            fastsmooth(file)
+            messagebox.showinfo(title="Filter Info", message="Filtering more than once may not improve further the results")
+            Smoothbutton.config(state="normal")
+            
         window = self.replace_window(self.root)
         basename = os.path.basename(self.file_name)
         video_name = basename[:basename.rfind('.')] 
         file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'
-
+        bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
         window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
         window.title("BVH Editor")
-        photo = PhotoImage(file = "TUC.gif")
-        tuc = Label(window, image = photo)
+        #window.resizable(0, 0)
+        offsetx = window.winfo_screenwidth()/3
+        offsety = window.winfo_screenheight()/16
+        im = Image.open(r"TUC.jpg")
+        width, height = im.size
+        im1 = im.resize((window.winfo_screenwidth() ,300), Image.ANTIALIAS)
+        new_img = ImageTk.PhotoImage(im1)
+        tuc = Label(window, image = new_img)
         tuc.place(x=-2, y=-2)
-        
+
         label0 = Label(window, text = "Give the XYZ thresholds (3 float numbers): ", fg = "black", font= "none 12 bold")
-        label0.place(x=0, y=290)
+        label0.place(x=0+offsetx, y=290+offsety)
 
         label1 = Label(window, text = "Give X threshold: ", fg = "black", font= "none 12 bold")
-        label1.place(x=0, y=310)
+        label1.place(x=0+offsetx, y=310+offsety)
         Xinput = Entry(window,width=5)
-        Xinput.place(x=150, y=312.5)
+        Xinput.place(x=150+offsetx, y=312.5+offsety)
         
         label2 = Label(window, text = "Give Y threshold: ", fg = "black", font= "none 12 bold")
-        label2.place(x=200, y=310)
+        label2.place(x=200+offsetx, y=310+offsety)
         Yinput = Entry(window,width=5)
-        Yinput.place(x=350, y=312.5)
+        Yinput.place(x=350+offsetx, y=312.5+offsety)
 
         label3 = Label(window, text = "Give Z threshold: ", fg = "black", font= "none 12 bold")
-        label3.place(x=400, y=310)
+        label3.place(x=400+offsetx, y=310+offsety)
         Zinput = Entry(window,width=5)
-        Zinput.place(x=550, y=312.5)
+        Zinput.place(x=550+offsetx, y=312.5+offsety)
 
         submit = Button(window, text = 'Submit', width = 30,command=click)
-        submit.place(x=0, y=390)
+        submit.place(x=0+offsetx, y=390+offsety)
+        Smoothbutton = Button(window, text = "Fast bvh Smoothing: ",width = 30, command=lambda: buttonSmooth(bvhName))
+        Smoothbutton.place(x=250+offsetx, y=390+offsety)
         ChangeMenu = Button(window, text = "Animate Another Video: ",width = 30, command=self.Model)
-        ChangeMenu.place(x=300, y=390)
+        ChangeMenu.place(x=500+offsetx, y=390+offsety)
         done = Label(window, text="")
-        done.place(x=0, y=425)
+        done.place(x=0+offsetx, y=425+offsety)
         lbl1 = Label(window, text="BVH Video Player", font="none 12 bold")
-        lbl1.place(x=0, y=465)
-        openbtn = Button(window, text='Open Video', command=lambda: open_file())
-        openbtn.place(x=10, y=500)
+        lbl1.place(x=0+offsetx, y=465+offsety)
+        openbtn = Button(window, text='Open Video', command=lambda: open_file(offsetx,offsety))
+        openbtn.place(x=10+offsetx, y=500+offsety)
 
         playbtn = Button(window, text='Play Video', command=lambda: playAgain())
-        playbtn.place(x=110, y=500)
+        playbtn.place(x=210+offsetx, y=500+offsety)
         
-        stopbtn = Button(window, text='Reset Video', command=lambda: Reset())
-        stopbtn.place(x=210, y=500)
+        stopbtn = Button(window, text='Reset Video', command=lambda: Reset(offsetx,offsety))
+        stopbtn.place(x=410+offsetx, y=500+offsety)
         
         pausebtn = Button(window, text='Pause Video', command=lambda: PauseVideo())
-        pausebtn.place(x=310, y=500)
+        pausebtn.place(x=610+offsetx, y=500+offsety)
 
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
@@ -157,9 +172,12 @@ class MainMenu():
 
 
         def click():
-            disable_buttons()
-            inference_video(self.file_name,self.folder_name,'alpha_pose')
-            enable_buttons()
+            if len(self.file_name) == 0 or len(self.folder_name) == 0:
+                messagebox.showwarning("Input Warning", "The folder or the file failed to be browsed")
+            else:
+                disable_buttons()
+                inference_video(self.file_name,self.folder_name,'alpha_pose')
+                enable_buttons()
 
         def threading():
             t1=Thread(target=click)
@@ -175,6 +193,7 @@ class MainMenu():
                 print('File ', self.file_name, ' ,was loaded successfully!')
 
         def select_folder():
+            window.update()
             self.folder_name = fd.askdirectory(title='Browse a folder',initialdir='/')
             if len(self.folder_name) == 0:
                 messagebox.showwarning("Folder Warning", "The folder failed to be browsed")
@@ -184,43 +203,58 @@ class MainMenu():
         # create a tkinter window
         window = self.replace_window(self.root)     
 
+
+        # myframe = Frame(window)
+
+        # myframe.pack(fill=BOTH, expand=YES)
+
+        # mycanvas = ResizingCanvas(myframe,width=window.winfo_screenwidth(), height=window.winfo_screenheight(), highlightthickness=0)
+
+        # mycanvas.pack(fill=BOTH, expand=YES)
         
         #setting tkinter window size
         window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
         window.title("Video To BVH Estimator")
-        photo = PhotoImage(file = "TUC.gif")
-        tuc = Label(window, image = photo)
+        #window.resizable(0, 0)
+        #window.resizable(True, True)
+        offsetx = window.winfo_screenwidth()/3
+        offsety = window.winfo_screenheight()/16
+        im = Image.open(r"TUC.jpg")
+        width, height = im.size
+        im1 = im.resize((window.winfo_screenwidth() ,300), Image.ANTIALIAS)
+        new_img = ImageTk.PhotoImage(im1)
+        tuc = Label(window, image = new_img)
         tuc.place(x=-2, y=-2)
 
         # Create a Button
         button1 = Label(window, text = "Enter video file: ", fg = "black", font= "none 12 bold")
-        button1.place(x=0, y=290)
+        button1.place(x=0+offsetx, y=290+offsety)
         file_button = Button(window,text='Browse a File',command=select_file)
-        file_button.place(x=150, y=290)
+        file_button.place(x=150+offsetx, y=290+offsety)
         button2 = Label(window, text = "Output folder: ", fg = "black", font= "none 12 bold")
-        button2.place(x=250, y=290)
+        button2.place(x=250+offsetx, y=290+offsety)
         folder_button = Button(window,text='Browse a Folder',command=select_folder)
-        folder_button.place(x=400, y=290)
+        folder_button.place(x=400+offsetx, y=290+offsety)
 
-        submit = Button(window, text = 'Submit', width = 30,command=click)
-        submit.place(x=0, y=330)
+        submit = Button(window, text = 'Submit', width = 30,command=threading)
+        submit.place(x=0+offsetx, y=330+offsety)
         ChangeMenu = Button(window, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
-        ChangeMenu.place(x=300, y=330)
+        ChangeMenu.place(x=300+offsetx, y=330+offsety)
         ChangeMenu.config(state="disabled")
 
-        # label = Label(window, text = "Console Redirected: ", fg = "black", font= "none 12 bold")
-        # label.place(x=0, y=360)
-        # frame = Frame(window)
-        # frame.place(x = 0 , y = 390)
-        # text = Text(frame)
-        # #text.place(x=0, y=390, height=30, width=200)
-        # text.pack(side='left',fill='both', expand=True)
-        # scrollbar = Scrollbar(frame)
-        # scrollbar.pack(side='right', fill='y')
-        # text['yscrollcommand'] = scrollbar.set
-        # scrollbar['command'] = text.yview
-        # sys.stdout = Redirect(text)
-   
+        label = Label(window, text = "Console Redirected: ", fg = "black", font= "none 12 bold")
+        label.place(x=0+offsetx, y=360+offsety)
+        frame = Frame(window)
+        frame.place(x = 0+offsetx , y = 390+offsety)
+        text = Text(frame)
+        #text.place(x=0, y=390, height=30, width=200)
+        text.pack(side='left',fill='both', expand=True)
+        scrollbar = Scrollbar(frame)
+        scrollbar.pack(side='right', fill='y')
+        text['yscrollcommand'] = scrollbar.set
+        scrollbar['command'] = text.yview
+        sys.stdout = Redirect(text)
+        # mycanvas.addtag_all("all")
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
 

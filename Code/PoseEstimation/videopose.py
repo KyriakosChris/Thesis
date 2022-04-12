@@ -3,7 +3,7 @@ import time
 
 from common.arguments import parse_args
 from common.camera import *
-from common.generators import UnchunkedGenerator,ChunkedGenerator
+from common.generators import UnchunkedGenerator
 from common.loss import *
 from common.model import *
 from common.utils import Timer, evaluate, add_path
@@ -11,11 +11,9 @@ import cv2
 from numpy import *
 import numpy as np
 from bvh_skeleton import openpose_skeleton,h36m_skeleton,cmu_skeleton,smartbody_skeleton
-from IPython.display import HTML
 from Bvh2Gif import *
 import sys
 from Model import *
-# from joints_detectors.openpose.main import generate_kpts as open_pose
 
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
@@ -42,18 +40,18 @@ def get_detector_2d(detector_name):
         from joints_detectors.Alphapose.gene_npz import generate_kpts as alpha_pose
         return alpha_pose
 
-    def get_hr_pose():
-        from joints_detectors.hrnet.pose_estimation.video import generate_kpts as hr_pose
-        return hr_pose
+    # def get_hr_pose():
+    #     from joints_detectors.hrnet.pose_estimation.video import generate_kpts as hr_pose
+    #     return hr_pose
 
-    def open_pose():
-        from joints_detectors.openpose.main import generate_kpts as op_pose
-        return op_pose
+    # def open_pose():
+    #     from joints_detectors.openpose.main import generate_kpts as op_pose
+    #     return op_pose
 
     detector_map = {
         'alpha_pose': get_alpha_pose,
-        'hr_pose': get_hr_pose,
-        'open_pose': open_pose
+        # 'hr_pose': get_hr_pose,
+        # 'open_pose': open_pose
     }
 
     assert detector_name in detector_map, f'2D detector: {detector_name} not implemented yet!'
@@ -81,7 +79,6 @@ def main(args):
         npz = np.load(args.input_npz)
         keypoints = npz['kpts']  # (N, 17, 2)
     #keypoints = np.load('keypoints.npy')
-    # 第二步：将2D关键点转换为3D关键点
     XYZ = []
     poly = []
     for frame in keypoints:
@@ -142,18 +139,6 @@ def main(args):
     # We don't have the trajectory, but at least we can rebase the height
     prediction[:, :, 2] -= np.min(prediction[:, :, 2])
 
-    # （2）Camera
-    subject = 'S1'
-    cam_id = '55011271'
-    cam_params = load_camera_params('./camera/cameras.h5')[subject][cam_id]
-    # R = cam_params['R']
-    # T = 0
-    azimuth = cam_params['azimuth']
-    #
-    # prediction = camera2world(pose=prediction, R=R, T=T)
-    # prediction[:, :, 2] -= np.min(prediction[:, :, 2])  # rebase the height
-
-    #write_3d_point( args.viz_output,prediction)
     prediction_copy = np.copy(prediction)
     write_standard_bvh(args.viz_output,prediction_copy) 
     bvh_file = write_smartbody_bvh(args.viz_output,prediction_copy)
@@ -164,7 +149,7 @@ def main(args):
     ani = vis_3d_keypoints_sequence(
         keypoints_sequence=prediction,
         skeleton=h36m_skeleton.H36mSkeleton(),
-        azimuth=np.array(70., dtype=np.float32),
+        azimuth=np.array(45., dtype=np.float32),
         fps=60,
         output_file=gif_file
     )
@@ -174,19 +159,20 @@ def main(args):
     x0 = XYZ[0][0]
     z0 = XYZ[0][1]
     y0 = prediction[0,0,2] + XYZ[0][2]
-    # for frame in range(prediction.shape[0]):
-    #     prediction[frame][0][0] = x0-XYZ[frame][0]   # X
-    #     prediction[frame][0][1] = z0-XYZ[frame][1]   # Z
-    #     prediction[frame][0][2] = y0-XYZ[frame][2]   # Y
+    for frame in range(prediction.shape[0]):
+        prediction[frame][0][0] = x0-XYZ[frame][0]   # X
+        prediction[frame][0][1] = z0-XYZ[frame][1]   # Z
+        prediction[frame][0][2] = y0-XYZ[frame][2]   # Y
     base_Y = Calculate_Height(bvh_file)
-    #prediction[:, 0, 2] -= np.min(prediction[:, 0, 2]) - 90.0
-    # PositionsEdit(bvh_file,prediction, False)
+    # rebase the height
+    prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
+    PositionsEdit(bvh_file,prediction, False)
 
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
-    ckpt, time4 = ckpt_time(time3)
-    print('total spend {:2f} second'.format(ckpt))
+    # ckpt, time4 = ckpt_time(time3)
+    # print('total spend {:2f} second'.format(ckpt))
 
     
 def inference_video(video_path, output_path, detector_2d):
@@ -199,20 +185,13 @@ def inference_video(video_path, output_path, detector_2d):
     args = parse_args()
 
     args.detector_2d = detector_2d
-    # dir_name = os.path.dirname(video_path)
-    # dir_name_split = dir_name[:dir_name.rfind('/')]
-    # new_dir_name = os.path.join(dir_name_split,'outputvideo')
     new_dir_name = output_path
     basename = os.path.basename(video_path)
     video_name = basename[:basename.rfind('.')]
     
     args.viz_video = video_path
-    #args.viz_output = f'{dir_name}/{args.detector_2d}_{video_name}.mp4'
     args.viz_output = f'{new_dir_name}/{video_name}.mp4'
     args.new_folder = f'{new_dir_name}/{video_name}'
-
-    # args.viz_limit = 20
-    # args.input_npz = 'outputs/alpha_pose_dance/dance.npz'
 
     args.evaluate = 'pretrained_h36m_detectron_coco.bin'
 
