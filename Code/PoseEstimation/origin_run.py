@@ -28,7 +28,7 @@ for i in range(8):
     frame_size_label.configure(text = 'frame size {}x{}'.format(expanding_frame.winfo_width(), expanding_frame.winfo_height())) 
     print('{}x{}'.format(expanding_frame.winfo_width(), expanding_frame.winfo_height())) 
     root.update() 
-    time.sleep(i) 
+    #time.sleep(i) 
  
  
 root.mainloop() 

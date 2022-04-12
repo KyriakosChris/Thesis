@@ -21,14 +21,6 @@ if not args.sp:
     torch.multiprocessing.set_sharing_strategy('file_system')
 
 
-def model_load():
-    model = None
-    return model
-
-
-def image_interface(model, image):
-    pass
-
 
 def generate_kpts(video_file):
     final_result, video_name = handle_video(video_file)

@@ -1,19 +1,17 @@
 import os
 import time
-
 from common.arguments import parse_args
 from common.camera import *
 from common.generators import UnchunkedGenerator
 from common.loss import *
 from common.model import *
 from common.utils import Timer, evaluate, add_path
+from common.Bvh2Gif import *
 import cv2
 from numpy import *
 import numpy as np
 from bvh_skeleton import h36m_skeleton,cmu_skeleton
-from Bvh2Gif import *
 from Model import *
-
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -21,7 +19,6 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 metadata = {'layout_name': 'coco', 'num_joints': 17, 'keypoints_symmetry': [[1, 3, 5, 7, 9, 11, 13, 15], [2, 4, 6, 8, 10, 12, 14, 16]]}
 
 add_path()
-
 
 # record time
 def ckpt_time(ckpt=None):
@@ -32,7 +29,6 @@ def ckpt_time(ckpt=None):
 
 
 time0 = ckpt_time()
-
 
 def get_detector_2d(detector_name):
     def get_alpha_pose():
@@ -47,14 +43,6 @@ def get_detector_2d(detector_name):
 
     return detector_map[detector_name]()
 
-
-class Skeleton:
-    def parents(self):
-        return np.array([-1, 0, 1, 2, 0, 4, 5, 0, 7, 8, 9, 8, 11, 12, 8, 14, 15])
-
-    def joints_right(self):
-        return [1, 2, 3, 9, 10]
-
 def main(args):
     # 第一步：检测2D关键点
     detector_2d = get_detector_2d(args.detector_2d)
@@ -67,7 +55,6 @@ def main(args):
     else:
         npz = np.load(args.input_npz)
         keypoints = npz['kpts']  # (N, 17, 2)
-    #keypoints = np.load('keypoints.npy')
     XYZ = []
     poly = []
     for frame in keypoints:
@@ -198,10 +185,6 @@ def saveVideo(args,poly,xyz):
             count+=1
             height, width, layers = frame.shape
             size = (width,height)
-            cv2.imshow('Frame', image)
-            # Press Q on keyboard to  exit
-            if cv2.waitKey(16) & 0xFF == ord('q'):
-                break
 
         # Break the loop
         else: 

@@ -6,21 +6,15 @@
 #
 import hashlib
 import os
-import pathlib
-import shutil
 import sys
 import time
-
-import cv2
 import numpy as np
 import torch
 
 
 def add_path():
     Alphapose_path = os.path.abspath('joints_detectors/Alphapose')
-    hrnet_path = os.path.abspath('joints_detectors/hrnet')
-    trackers_path = os.path.abspath('pose_trackers')
-    paths = filter(lambda p: p not in sys.path, [Alphapose_path, hrnet_path, trackers_path])
+    paths = filter(lambda p: p not in sys.path, [Alphapose_path])
 
     sys.path.extend(paths)
 
@@ -94,7 +88,7 @@ class Timer:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.show:
-            print(f'{self.message} --- elapsed time: {time.perf_counter() - self.start} s')
+            print(f'Total time: {time.perf_counter() - self.start} s')
 
 
 def calculate_area(data):
@@ -114,58 +108,7 @@ def calculate_area(data):
     return np.abs(width * height)
 
 
-def read_video(filename, fps=None, skip=0, limit=-1):
-    stream = cv2.VideoCapture(filename)
 
-    i = 0
-    while True:
-        grabbed, frame = stream.read()
-        # if the `grabbed` boolean is `False`, then we have
-        # reached the end of the video file
-        if not grabbed:
-            print('===========================> This video get ' + str(i) + ' frames in total.')
-            sys.stdout.flush()
-            break
-
-        i += 1
-        if i > skip:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            yield np.array(frame)
-        if i == limit:
-            break
-
-
-def split_video(video_path):
-    stream = cv2.VideoCapture(video_path)
-
-    output_dir = os.path.dirname(video_path)
-    video_name = os.path.basename(video_path)
-    video_name = video_name[:video_name.rfind('.')]
-
-    save_folder = pathlib.Path(f'./{output_dir}/alpha_pose_{video_name}/split_image/')
-    shutil.rmtree(str(save_folder), ignore_errors=True)
-    save_folder.mkdir(parents=True, exist_ok=True)
-
-    total_frames = int(stream.get(cv2.CAP_PROP_FRAME_COUNT))
-    length = len(str(total_frames)) + 1
-
-    i = 1
-    while True:
-        grabbed, frame = stream.read()
-
-        if not grabbed:
-            print(f'Split totally {i + 1} images from video.')
-            break
-
-        save_path = f'{save_folder}/output{str(i).zfill(length)}.png'
-        cv2.imwrite(save_path, frame)
-
-        i += 1
-
-    saved_path = os.path.dirname(save_path)
-    print(f'Split images saved in {saved_path}')
-
-    return saved_path
 
 
 def evaluate(test_generator, model_pos, action=None, return_predictions=True):
@@ -196,9 +139,3 @@ def evaluate(test_generator, model_pos, action=None, return_predictions=True):
                 predicted_3d_pos = torch.mean(predicted_3d_pos, dim=0, keepdim=True)
             if return_predictions:
                 return predicted_3d_pos.squeeze(0).cpu().numpy()
-
-
-if __name__ == '__main__':
-    os.chdir('..')
-
-    split_video('outputs/kobe.mp4')
