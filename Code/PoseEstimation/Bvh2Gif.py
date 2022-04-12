@@ -1,11 +1,7 @@
-from common import camera
-import cv2
 import numpy as np
 import os
 from pathlib import Path
-
 import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d.axes3d
 from matplotlib.animation import FuncAnimation, writers
 
 def vis_3d_keypoints_sequence(

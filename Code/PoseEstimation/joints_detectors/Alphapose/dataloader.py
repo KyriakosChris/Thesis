@@ -9,8 +9,6 @@ import numpy as np
 import torch
 import torch.multiprocessing as mp
 import torch.utils.data as data
-import torchvision.transforms as transforms
-from PIL import Image
 from torch.autograd import Variable
 
 from SPPE.src.utils.eval import getPrediction, getMultiPeakPrediction
@@ -35,146 +33,8 @@ else:
     from fn import vis_frame
 
 
-class Image_loader(data.Dataset):
-    def __init__(self, im_names, format='yolo'):
-        super(Image_loader, self).__init__()
-        self.img_dir = opt.inputpath
-        self.imglist = im_names
-        self.transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
-        ])
-        self.format = format
-
-    def getitem_ssd(self, index):
-        im_name = self.imglist[index].rstrip('\n').rstrip('\r')
-        im_name = os.path.join(self.img_dir, im_name)
-        im = Image.open(im_name)
-        inp = load_image(im_name)
-        if im.mode == 'L':
-            im = im.convert('RGB')
-
-        ow = oh = 512
-        im = im.resize((ow, oh))
-        im = self.transform(im)
-        return im, inp, im_name
-
-    def getitem_yolo(self, index):
-        inp_dim = int(opt.inp_dim)
-        im_name = self.imglist[index].rstrip('\n').rstrip('\r')
-        im_name = os.path.join(self.img_dir, im_name)
-        im, orig_img, im_dim = prep_image(im_name, inp_dim)
-        # im_dim = torch.FloatTensor([im_dim]).repeat(1, 2)
-
-        inp = load_image(im_name)
-        return im, inp, orig_img, im_name, im_dim
-
-    def __getitem__(self, index):
-        if self.format == 'ssd':
-            return self.getitem_ssd(index)
-        elif self.format == 'yolo':
-            return self.getitem_yolo(index)
-        else:
-            raise NotImplementedError
-
-    def __len__(self):
-        return len(self.imglist)
 
 
-class ImageLoader:
-    def __init__(self, im_names, batchSize=1, format='yolo', queueSize=50):
-        self.img_dir = opt.inputpath
-        self.imglist = im_names
-        self.transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
-        ])
-        self.format = format
-
-        self.batchSize = batchSize
-        self.datalen = len(self.imglist)
-        leftover = 0
-        if (self.datalen) % batchSize:
-            leftover = 1
-        self.num_batches = self.datalen // batchSize + leftover
-
-        # initialize the queue used to store data
-        if opt.sp:
-            self.Q = Queue(maxsize=queueSize)
-        else:
-            self.Q = mp.Queue(maxsize=queueSize)
-
-    def start(self):
-        # start a thread to read frames from the file video stream
-        if self.format == 'ssd':
-            if opt.sp:
-                p = Thread(target=self.getitem_ssd, args=())
-            else:
-                p = mp.Process(target=self.getitem_ssd, args=())
-        elif self.format == 'yolo':
-            if opt.sp:
-                p = Thread(target=self.getitem_yolo, args=())
-            else:
-                p = mp.Process(target=self.getitem_yolo, args=())
-        else:
-            raise NotImplementedError
-        p.daemon = True
-        p.start()
-        return self
-
-    def getitem_ssd(self):
-        length = len(self.imglist)
-        for index in range(length):
-            im_name = self.imglist[index].rstrip('\n').rstrip('\r')
-            im_name = os.path.join(self.img_dir, im_name)
-            im = Image.open(im_name)
-            inp = load_image(im_name)
-            if im.mode == 'L':
-                im = im.convert('RGB')
-
-            ow = oh = 512
-            im = im.resize((ow, oh))
-            im = self.transform(im)
-            while self.Q.full():
-                time.sleep(2)
-            self.Q.put((im, inp, im_name))
-
-    def getitem_yolo(self):
-        for i in range(self.num_batches):
-            img = []
-            orig_img = []
-            im_name = []
-            im_dim_list = []
-            for k in range(i * self.batchSize, min((i + 1) * self.batchSize, self.datalen)):
-                inp_dim = int(opt.inp_dim)
-                im_name_k = self.imglist[k].rstrip('\n').rstrip('\r')
-                im_name_k = os.path.join(self.img_dir, im_name_k)
-                img_k, orig_img_k, im_dim_list_k = prep_image(im_name_k, inp_dim)
-
-                img.append(img_k)
-                orig_img.append(orig_img_k)
-                im_name.append(im_name_k)
-                im_dim_list.append(im_dim_list_k)
-
-            with torch.no_grad():
-                # Human Detection
-                img = torch.cat(img)
-                im_dim_list = torch.FloatTensor(im_dim_list).repeat(1, 2)
-                im_dim_list_ = im_dim_list
-
-            while self.Q.full():
-                time.sleep(2)
-
-            self.Q.put((img, orig_img, im_name, im_dim_list))
-
-    def getitem(self):
-        return self.Q.get()
-
-    def length(self):
-        return len(self.imglist)
-
-    def len(self):
-        return self.Q.qsize()
 
 
 class VideoLoader:
@@ -550,66 +410,6 @@ class VideoDetectionLoader:
         self.stopped = True
 
 
-class WebcamLoader:
-    def __init__(self, webcam, queueSize=256):
-        # initialize the file video stream along with the boolean
-        # used to indicate if the thread should be stopped or not
-        self.stream = cv2.VideoCapture(int(webcam))
-        assert self.stream.isOpened(), 'Cannot capture source'
-        self.stopped = False
-        # initialize the queue used to store frames read from
-        # the video file
-        self.Q = LifoQueue(maxsize=queueSize)
-
-    def start(self):
-        # start a thread to read frames from the file video stream
-        t = Thread(target=self.update, args=())
-        t.daemon = True
-        t.start()
-        return self
-
-    def update(self):
-        # keep looping infinitely
-        while True:
-            # otherwise, ensure the queue has room in it
-            if not self.Q.full():
-                # read the next frame from the file
-                (grabbed, frame) = self.stream.read()
-                # if the `grabbed` boolean is `False`, then we have
-                # reached the end of the video file
-                if not grabbed:
-                    self.stop()
-                    return
-                # process and add the frame to the queue
-                inp_dim = int(opt.inp_dim)
-                img, orig_img, dim = prep_frame(frame, inp_dim)
-                inp = im_to_torch(orig_img)
-                im_dim_list = torch.FloatTensor([dim]).repeat(1, 2)
-
-                self.Q.put((img, orig_img, inp, im_dim_list))
-            else:
-                with self.Q.mutex:
-                    self.Q.queue.clear()
-
-    def videoinfo(self):
-        # indicate the video info
-        fourcc = int(self.stream.get(cv2.CAP_PROP_FOURCC))
-        fps = self.stream.get(cv2.CAP_PROP_FPS)
-        frameSize = (int(self.stream.get(cv2.CAP_PROP_FRAME_WIDTH)), int(self.stream.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-        return (fourcc, fps, frameSize)
-
-    def read(self):
-        # return next frame in the queue
-        return self.Q.get()
-
-    def len(self):
-        # return queue size
-        return self.Q.qsize()
-
-    def stop(self):
-        # indicate that the thread should be stopped
-        self.stopped = True
-
 
 class DataWriter:
     def __init__(self, save_video=False,
@@ -626,9 +426,6 @@ class DataWriter:
         # initialize the queue used to store frames read from
         # the video file
         self.Q = Queue(maxsize=queueSize)
-        if opt.save_img:
-            if not os.path.exists(opt.outputpath + '/vis'):
-                os.mkdir(opt.outputpath + '/vis')
 
     def start(self):
         # start a thread to read frames from the file video stream

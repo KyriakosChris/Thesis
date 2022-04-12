@@ -39,18 +39,8 @@ def get_detector_2d(detector_name):
         from joints_detectors.Alphapose.gene_npz import generate_kpts as alpha_pose
         return alpha_pose
 
-    # def get_hr_pose():
-    #     from joints_detectors.hrnet.pose_estimation.video import generate_kpts as hr_pose
-    #     return hr_pose
-
-    # def open_pose():
-    #     from joints_detectors.openpose.main import generate_kpts as op_pose
-    #     return op_pose
-
     detector_map = {
-        'alpha_pose': get_alpha_pose,
-        # 'hr_pose': get_hr_pose,
-        # 'open_pose': open_pose
+        'alpha_pose': get_alpha_pose
     }
 
     assert detector_name in detector_map, f'2D detector: {detector_name} not implemented yet!'
@@ -68,7 +58,7 @@ class Skeleton:
 def main(args):
     # 第一步：检测2D关键点
     detector_2d = get_detector_2d(args.detector_2d)
-    assert detector_2d, 'detector_2d should be in ({alpha, hr, open}_pose)'
+    assert detector_2d, 'detector_2d should be alpha_pose'
 
     # 2D kpts loads or generate
     if not args.input_npz:
@@ -131,7 +121,6 @@ def main(args):
     prediction = evaluate(gen, model_pos, return_predictions=True, )
 
     # save 3D joint points 
-    #np.save('outputs/test_3d_output.npy', prediction, allow_pickle=True)
 
     rot = np.array([0.14070565, -0.15007018, -0.7552408, 0.62232804], dtype=np.float32)
     prediction = camera_to_world(prediction, R=rot, t=0)
@@ -142,8 +131,6 @@ def main(args):
     write_standard_bvh(args.viz_output,prediction_copy) 
     bvh_file = write_smartbody_bvh(args.viz_output,prediction_copy)
 
-
-    
     gif_file = os.path.join( args.new_folder,"3d_pose.mp4")
     ani = vis_3d_keypoints_sequence(
         keypoints_sequence=prediction,
@@ -152,8 +139,6 @@ def main(args):
         fps=60,
         output_file=gif_file
     )
-    
-    #HTML(ani.to_jshtml())
     XYZ = np.array(XYZ)
     x0 = XYZ[0][0]
     z0 = XYZ[0][1]
@@ -170,8 +155,6 @@ def main(args):
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
-    # ckpt, time4 = ckpt_time(time3)
-    # print('total spend {:2f} second'.format(ckpt))
 
     
 def inference_video(video_path, output_path, detector_2d):

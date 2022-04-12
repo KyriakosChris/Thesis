@@ -10,7 +10,6 @@ from common.utils import calculate_area
 from dataloader import DetectionLoader, DetectionProcessor, DataWriter, Mscoco, VideoLoader
 from fn import getTime
 from opt import opt
-from pPose_nms import write_json
 
 args = opt
 args.dataset = 'coco'
@@ -57,11 +56,8 @@ def generate_kpts(video_file):
         kpts[n] = kpts[-1]
 
     # ============ Changing End ++++++++++
-
-    # name = f'{args.outputpath}/{video_name}.npz'
     kpts = np.array(kpts).astype(np.float32)
-    # print('kpts npz save in ', name)
-    # np.savez_compressed(name, kpts=kpts)
+
 
     return kpts
 
@@ -72,28 +68,7 @@ def handle_video(video_file):
     base_name = os.path.basename(args.video)
     video_name = base_name[:base_name.rfind('.')]
     # =========== end common ===============
-    # =========== image ===============
-    # img_path = f'outputs/alpha_pose_{video_name}/split_image/'
-    # args.inputpath = img_path
-    # args.outputpath = f'outputs/alpha_pose_{video_name}'
-    # if os.path.exists(args.outputpath):
-    #     shutil.rmtree(f'{args.outputpath}/vis', ignore_errors=True)
-    # else:
-    #     os.mkdir(args.outputpath)
-    #
-    # # if not len(video_file):
-    # #     raise IOError('Error: must contain --video')
-    #
-    # if len(img_path) and img_path != '/':
-    #     for root, dirs, files in os.walk(img_path):
-    #         im_names = sorted([f for f in files if 'png' in f or 'jpg' in f])
-    # else:
-    #     raise IOError('Error: must contain either --indir/--list')
-    #
-    # # Load input images
-    # data_loader = ImageLoader(im_names, batchSize=args.detbatch, format='yolo').start()
-    # print(f'Totally {data_loader.datalen} images')
-    # =========== end image ===============
+
     # =========== video ===============
     dir_name = os.path.dirname(video_file)
     dir_name_split = dir_name[:dir_name.rfind('/')]
@@ -102,10 +77,10 @@ def handle_video(video_file):
     #args.outputpath = f'outputs/alpha_pose_{video_name}'
     args.outputpath = new_dir_name + f'/alpha_pose_{video_name}'
 
-    if os.path.exists(args.outputpath):
-        shutil.rmtree(f'{args.outputpath}/vis', ignore_errors=True)
-    else:
-        os.mkdir(args.outputpath)
+    # if os.path.exists(args.outputpath):
+    #     shutil.rmtree(f'{args.outputpath}/vis', ignore_errors=True)
+    # else:
+    #     os.mkdir(args.outputpath)
     videofile = args.video
     mode = args.mode
     if not len(videofile):
@@ -137,7 +112,7 @@ def handle_video(video_file):
     }
     # Data writer
     save_path = os.path.join(args.outputpath, 'AlphaPose_' + ntpath.basename(video_file).split('.')[0] + '.avi')
-    # writer = DataWriter(args.save_video, save_path, cv2.VideoWriter_fourcc(*'XVID'), fps, frameSize).start()
+
     writer = DataWriter(args.save_video).start()
     print('Start pose estimation...')
     batchSize = args.posebatch
@@ -180,17 +155,11 @@ def handle_video(video_file):
 
             ckpt_time, post_time = getTime(ckpt_time)
             runtime_profile['pn'].append(post_time)
-            #bar.next()
-        #bar.finish()
 
-
-    # if (args.save_img or args.save_video) and not args.vis_fast:
-    #     print('===========================> Rendering remaining images in the queue...')
     while writer.running():
         pass            
     writer.stop()
     final_result = writer.results()
-    write_json(final_result, args.outputpath)
 
     return final_result, video_name
 
