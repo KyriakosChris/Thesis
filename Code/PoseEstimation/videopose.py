@@ -10,9 +10,8 @@ from common.utils import Timer, evaluate, add_path
 import cv2
 from numpy import *
 import numpy as np
-from bvh_skeleton import openpose_skeleton,h36m_skeleton,cmu_skeleton,smartbody_skeleton
+from bvh_skeleton import h36m_skeleton,cmu_skeleton
 from Bvh2Gif import *
-import sys
 from Model import *
 
 
