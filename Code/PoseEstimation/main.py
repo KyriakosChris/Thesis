@@ -1,11 +1,9 @@
-import filecmp
 from videopose import inference_video
 from threading import *
 from tkinter import *   
 import sys
 from tkinter import filedialog as fd
 from PIL import Image,ImageTk
-from tkVideoPlayer import TkinterVideo
 import os
 from tkinter import messagebox
 from functions import PositionEdit, fastsmooth
@@ -61,9 +59,8 @@ class MainMenu():
                 basename = os.path.basename(self.file_name)
                 video_name = basename[:basename.rfind('.')]
                 bvhpath = f'{self.folder_name}/{video_name}/{video_name}.bvh'
-                videoplayer.destroy()
                 PositionEdit(bvhpath,positions)
-                done.config(text ="Edit completed successfully")
+                messagebox.showinfo(title="Edit Info", message="Edit completed successfully")
                 
         def is_float(element):
             try:
@@ -72,38 +69,25 @@ class MainMenu():
             except ValueError:
                 return False
                 
-        # def open_file():
-        #     global videoplayer
-        #     frame10 = Frame(window)
-        #     frame10.pack(side=TOP)
-        #     openbtn.config(state="disabled")
-        #     video_label = Label(frame10)
-        #     video_label.pack(side=LEFT)
-        #     # read video to display on label
-        #     videoplayer = tkvideo("D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\3d_pose.mp4", video_label,loop = 1, size = (480, 700))
-        #     videoplayer.play()
-        #     videoplayer = TkinterVideo(master=frame10, scaled=True, pre_load=False)
-        #     videoplayer.load(r"{}".format(file))
-        #     videoplayer.pack(side=BOTTOM)
-        #     videoplayer.play()
         def open_file():
             global videoplayer
-            openbtn.config(state="disabled")
-            videoplayer = TkinterVideo(master=window, scaled=True, pre_load=False)
-            videoplayer.load(r"{}".format(file))
-            videoplayer.place(x=600, y=600, height=480, width=700)
+            global frame10
+            frame10 = Frame(window)
+            frame10.pack(side=TOP)
+            video_label = Label(frame10)
+            video_label.pack(side=LEFT)
+            videoplayer = tkvideo(file, video_label, loop = 0 ,size = (700, 480))
             videoplayer.play()
+            openbtn.config(state="disabled")
+            playbtn.config(state="normal")
+            stopbtn.config(state="normal")
 
         def playAgain():
             videoplayer.play()
         
         def Reset():
-
-            videoplayer.destroy()
+            frame10.destroy()
             open_file()
-
-        def PauseVideo():
-            videoplayer.pause()
             
         def buttonSmooth(file):
             Smoothbutton.config(state="disabled")
@@ -169,9 +153,6 @@ class MainMenu():
         frame6 = Frame(window)
         frame6.pack(side=TOP)
 
-        done = Label(window, text="")
-        done.pack(side=LEFT)
-
         frame7 = Frame(window)
         frame7.pack(side=TOP)
         temp = Label(frame7, text = "",height= 1, fg = "black", font= "none 12 bold")
@@ -193,20 +174,18 @@ class MainMenu():
 
         openbtn = Button(frame9, text='Open Video', command=lambda: open_file())
         openbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
+        temp = Label(frame9, text = "",width = 15, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT)
         playbtn = Button(frame9, text='Play Video', command=lambda: playAgain())
         playbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
+        temp = Label(frame9, text = "",width = 15, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT) 
         stopbtn = Button(frame9, text='Reset Video', command=lambda: Reset())
         stopbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-        pausebtn = Button(frame9, text='Pause Video', command=lambda: PauseVideo())
-        pausebtn.pack(side=LEFT)
 
 
+        playbtn.config(state="disabled")
+        stopbtn.config(state="disabled")
 
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
@@ -303,7 +282,7 @@ class MainMenu():
         temp.pack(side=LEFT)
         ChangeMenu = Button(frame4, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
         ChangeMenu.pack(side=LEFT)
-        #ChangeMenu.config(state="disabled")
+        ChangeMenu.config(state="disabled")
 
         frame5 = Frame(window)
         frame5.pack(side=TOP)
