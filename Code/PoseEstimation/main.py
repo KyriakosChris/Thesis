@@ -61,6 +61,8 @@ class MainMenu():
                 bvhpath = f'{self.folder_name}/{video_name}/{video_name}.bvh'
                 PositionEdit(bvhpath,positions)
                 messagebox.showinfo(title="Edit Info", message="Edit completed successfully")
+            else:
+                messagebox.showwarning(title="Edit Info", message="Wrong Input")
                 
         def is_float(element):
             try:
