@@ -1,11 +1,9 @@
 from tkinter import *
-from tkVideoPlayer import TkinterVideo
-import os
-from PIL import Image,ImageTk
-from tkinter import filedialog as fd
-from tkVideoPlayer import TkinterVideo
-from BVHsmoother.smooth import smooth
 
+from BVHsmoother.smooth import smooth
+import numpy as np
+from bvh_skeleton import h36m_skeleton
+from common.Bvh2Gif import *
 def fastsmooth(filename):
     filter = 'butterworth'
     border = 100 
@@ -20,9 +18,9 @@ def PositionEdit(file,positions):
     Lines = data.readlines()
     motion = False
     Edited = []
-    for n,line in enumerate(Lines) :
+    for line in Lines:
 
-        if ( line.__contains__('Frame Time:')):
+        if 'Frame Time:' in line:
             motion = True
             Edited.append(line)
             continue
@@ -50,103 +48,28 @@ def PositionEdit(file,positions):
         print("Unable to write to file")
             
 
-def Tkinder(self):
-
-    def click():
-        if is_float(Xinput.get()) and is_float(Yinput.get()) and is_float(Zinput.get()) and self.file_name != '' and self.folder_name != '':
-            X = float(Xinput.get())
-            Y = float(Yinput.get())
-            Z = float(Zinput.get())
-            print(Xinput.get(),Yinput.get(),Zinput.get())
-            print(self.file_name)
-            print(self.folder_name)
-            self.positions = (X,Y,Z)
-            self.PositionEdit()
-
-    def is_float(element):
-        try:
-            float(element)
-            return True
-        except ValueError:
-            return False
-
-    def open_file(filename):
-
-        global videoplayer
-        videoplayer = TkinterVideo(master=window, scaled=True, pre_load=False)
-        videoplayer.load(r"{}".format(filename))
-        videoplayer.place(x=0, y=600, height=400, width=700)
-        videoplayer.play()
+def new_animation(file, output):
+    prediction = motion(file)
+    vis_3d_keypoints_sequence(keypoints_sequence=prediction,skeleton=h36m_skeleton.H36mSkeleton(),
+    azimuth=np.array(45., dtype=np.float32),fps=60,output_file=output,b=False)
 
 
+def motion(file):
 
-    def playAgain():
-        videoplayer.play()
+    data = open(file, 'r')
+    Lines = data.readlines()
+    motion = False
+    mocap = []
+    for line in Lines:
 
-    
-    def Reset(file):
+        if 'Frame Time:' in line:
+            motion = True
+            continue
+        if motion :
+            pos = line.split(" ")
+            pos  = np.array([float(i) for i in pos])
+            pos = pos.reshape((17,3))
+            mocap.append(pos)
 
-        videoplayer.destroy()
-        open_file(file)
-
-    def PauseVideo():
-        videoplayer.pause()
-
-    # create a tkinter window
-    window = Tk()
-    file = "D:\\tuc\\Github\\Thesis\\BVH\\alpha_pose_kunkun_cut_one_second\\3d_pose.mp4"        
-    window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
-    window.title("BVH Editor")
-    logo_img = Image.open("TUC.gif")
-    logo_img.resize((window.winfo_screenwidth(), window.winfo_screenheight()),Image.ANTIALIAS)
-    logo_img = ImageTk.PhotoImage(logo_img, master = window)
-    #photo = PhotoImage(file = "TUC.gif")
-    tuc = Label(window, image = logo_img)
-    tuc.place(x=-2, y=-2)
-    # photo = PhotoImage(file = "TUC.gif")
-    # tuc = Label(window, image = photo)
-    # tuc.place(x=-2, y=-2)
-    
-    label0 = Label(window, text = "Give the XYZ thresholds (3 float numbers): ", fg = "black", font= "none 12 bold")
-    label0.place(x=0, y=290)
-
-    label1 = Label(window, text = "Give X threshold: ", fg = "black", font= "none 12 bold")
-    label1.place(x=0, y=310)
-    Xinput = Entry(window,width=5)
-    Xinput.place(x=150, y=312.5)
-    
-    label2 = Label(window, text = "Give Y threshold: ", fg = "black", font= "none 12 bold")
-    label2.place(x=200, y=310)
-    Yinput = Entry(window,width=5)
-    Yinput.place(x=350, y=312.5)
-
-    label3 = Label(window, text = "Give Z threshold: ", fg = "black", font= "none 12 bold")
-    label3.place(x=400, y=310)
-    Zinput = Entry(window,width=5)
-    Zinput.place(x=550, y=312.5)
-
-    submit = Button(window, text = 'Submit', width = 30,command=click)
-    submit.place(x=0, y=390)
-    # center this label
-    lbl1 = Label(window, text="Tkinter Video Player", font="none 24 bold")
-    lbl1.place(x=0, y=450)
-    file = "D:\\tuc\\Github\\Thesis\\BVH\\alpha_pose_kunkun_cut_one_second\\3d_pose.mp4" 
-    openbtn = Button(window, text='Open Video', command=lambda: open_file(file))
-    openbtn.place(x=10, y=550)
-
-    playbtn = Button(window, text='Play Video', command=lambda: playAgain())
-    playbtn.place(x=110, y=550)
-    
-    stopbtn = Button(window, text='Reset Video', command=lambda: Reset(file))
-    stopbtn.place(x=210, y=550)
-    
-    pausebtn = Button(window, text='Pause Video', command=lambda: PauseVideo())
-    pausebtn.place(x=310, y=550)
-    
-    window.mainloop()
-
-# file = "D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\kunkun_cut_one_second.bvh"
-# PositionEdit(file,(5,3,7))
-
-
+    return np.array(mocap)        
 

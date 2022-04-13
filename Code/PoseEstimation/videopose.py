@@ -100,13 +100,12 @@ def main(args):
     pad = (receptive_field - 1) // 2  # Padding on each side
     causal_shift = 0
 
-    print('Rendering...')
     input_keypoints = keypoints.copy()
     gen = UnchunkedGenerator(None, None, [input_keypoints],
                              pad=pad, causal_shift=causal_shift, augment=args.test_time_augmentation,
                              kps_left=kps_left, kps_right=kps_right, joints_left=joints_left, joints_right=joints_right)
     prediction = evaluate(gen, model_pos, return_predictions=True, )
-
+    
     # save 3D joint points 
 
     rot = np.array([0.14070565, -0.15007018, -0.7552408, 0.62232804], dtype=np.float32)
@@ -118,27 +117,26 @@ def main(args):
     write_standard_bvh(args.viz_output,prediction_copy) 
     bvh_file = write_smartbody_bvh(args.viz_output,prediction_copy)
 
-    gif_file = os.path.join( args.new_folder,"3d_pose.mp4")
-    ani = vis_3d_keypoints_sequence(
-        keypoints_sequence=prediction,
-        skeleton=h36m_skeleton.H36mSkeleton(),
-        azimuth=np.array(45., dtype=np.float32),
-        fps=60,
-        output_file=gif_file
-    )
-    XYZ = np.array(XYZ)
-    x0 = XYZ[0][0]
-    z0 = XYZ[0][1]
-    y0 = prediction[0,0,2] + XYZ[0][2]
-    for frame in range(prediction.shape[0]):
-        prediction[frame][0][0] = x0-XYZ[frame][0]   # X
-        prediction[frame][0][1] = z0-XYZ[frame][1]   # Z
-        prediction[frame][0][2] = y0-XYZ[frame][2]   # Y
-    base_Y = Calculate_Height(bvh_file)
-    # rebase the height
-    prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
-    PositionsEdit(bvh_file,prediction, False)
+    # XYZ = np.array(XYZ)
+    # x0 = XYZ[0][0]
+    # z0 = XYZ[0][1]
+    # y0 = prediction[0,0,2] + XYZ[0][2]
+    # for frame in range(prediction.shape[0]):
+    #     prediction[frame][0][0] = x0-XYZ[frame][0]   # X
+    #     prediction[frame][0][1] = z0-XYZ[frame][1]   # Z
+    #     prediction[frame][0][2] = y0-XYZ[frame][2]   # Y
+    # # rebase the height
+    # base_Y = Calculate_Height(bvh_file)
 
+    # # Adding some adjustments...
+    # prediction[:, 0, 0] /= (args.height + args.width)*0.1
+    # prediction[:, 0, 1] /= (args.height + args.width)*0.1
+    # prediction[:, 0, 2] /= (args.height + args.width)*0.1
+    # prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
+    # PositionsEdit(bvh_file,prediction, False)
+    video_file = os.path.join( args.new_folder,"3d_pose.mp4")
+    vis_3d_keypoints_sequence(keypoints_sequence=prediction,skeleton=h36m_skeleton.H36mSkeleton(),
+    azimuth=np.array(45., dtype=np.float32),fps=60,output_file=video_file,b=True)
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
@@ -152,7 +150,9 @@ def inference_video(video_path, output_path, detector_2d):
     :return: None
     """
     args = parse_args()
-
+    vid = cv2.VideoCapture(video_path)
+    args.height = vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    args.width = vid.get(cv2.CAP_PROP_FRAME_WIDTH)
     args.detector_2d = detector_2d
     new_dir_name = output_path
     basename = os.path.basename(video_path)

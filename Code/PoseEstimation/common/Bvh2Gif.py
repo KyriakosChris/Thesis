@@ -3,10 +3,10 @@ import os
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, writers
-
+from progress_Bar.bar import *
 def vis_3d_keypoints_sequence(
     keypoints_sequence, skeleton, azimuth,
-    fps=30, elev=15, output_file=None
+    fps=30, elev=15, output_file=None, b=False
 ):
     kps_sequence = keypoints_sequence
     x_max, x_min = np.max(kps_sequence[:, :, 0]), np.min(kps_sequence[:, :, 0])
@@ -23,18 +23,22 @@ def vis_3d_keypoints_sequence(
 
     initialized = False
     lines = []
-
+    if b:
+        bar = IncrementalBar('Rendering...', max=keypoints_sequence.shape[0])
     def update(frame):
         nonlocal initialized
 
         if not initialized:
             root = skeleton.root
             stack = [root]
+            
             while stack:
+                
                 parent = stack.pop()
                 p_idx = skeleton.keypoint2index[parent]
                 p_pos = kps_sequence[0, p_idx]
                 for child in skeleton.children[parent]:
+
                     if skeleton.keypoint2index.get(child, -1) == -1:
                         continue
                     stack.append(child)
@@ -55,10 +59,14 @@ def vis_3d_keypoints_sequence(
                     lines.append(line)
             initialized = True
         else:
+            if b:
+                bar.next()
             line_idx = 0
             root = skeleton.root
             stack = [root]
+
             while stack:
+                
                 parent = stack.pop()
                 p_idx = skeleton.keypoint2index[parent]
                 p_pos = kps_sequence[frame, p_idx]
@@ -78,7 +86,7 @@ def vis_3d_keypoints_sequence(
                     lines[line_idx][0].set_ydata([p_pos[1], c_pos[1]])
                     lines[line_idx][0].set_3d_properties( [p_pos[2], c_pos[2]]) 
                     line_idx += 1
-
+        
     anim = FuncAnimation(
         fig=fig, func=update, frames=kps_sequence.shape[0], interval=1000 / fps
     )
@@ -96,5 +104,6 @@ def vis_3d_keypoints_sequence(
         else:
             raise ValueError(f'Unsupported output format.'
                              f'Only mp4 and gif are supported.')
-
+    if b:
+        bar.finish()
     return anim

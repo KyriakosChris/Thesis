@@ -80,7 +80,7 @@ def handle_video(video_file):
     # Load input video
     data_loader = VideoLoader(videofile, batchSize=args.detbatch).start()
     (fourcc, fps, frameSize) = data_loader.videoinfo()
-    print('the video is {} f/s'.format(fps))
+    print('The video is {} f/s'.format(fps))
     # =========== end video ===============
     # Load detection loader
     print('Loading YOLO model..')
@@ -110,7 +110,7 @@ def handle_video(video_file):
     batchSize = args.posebatch
     n = data_loader.length()  # or however many loading slots you want to have
     loading = '.' * n  # for strings, * is the repeat operator
-    for i in IncrementalBar('Processing').iter(range(data_loader.length())):
+    for i in IncrementalBar('Processing...').iter(range(data_loader.length())):
 
         start_time = getTime()
         with torch.no_grad():

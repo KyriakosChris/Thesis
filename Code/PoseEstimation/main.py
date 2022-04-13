@@ -6,7 +6,7 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, fastsmooth
+from functions import PositionEdit, fastsmooth , new_animation
 from tkvideo import tkvideo
 class Redirect():
 
@@ -15,7 +15,7 @@ class Redirect():
         self.autoscroll = autoscroll
 
     def write(self, text):
-        if "Processing" in text:
+        if "Processing..." in text or "Rendering..." in text:
             self.widget.delete("end-1c linestart", "end")
             self.widget.insert('end', '\n')
         if "===========================>" in text or "--------------" in text:
@@ -82,13 +82,19 @@ class MainMenu():
             videoplayer.play()
             openbtn.config(state="disabled")
             playbtn.config(state="normal")
-            stopbtn.config(state="normal")
+            resetbtn.config(state="normal")
+            fastresetbtn.config(state="normal")
 
         def playAgain():
             videoplayer.play()
         
+        def Fast_Reset():
+            frame10.destroy()
+            open_file()
+
         def Reset():
             frame10.destroy()
+            new_animation(bvhName,file)
             open_file()
             
         def buttonSmooth(file):
@@ -176,24 +182,27 @@ class MainMenu():
 
         openbtn = Button(frame9, text='Open Video', command=lambda: open_file())
         openbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 15, fg = "black", font= "none 12 bold")
+        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT)
         playbtn = Button(frame9, text='Play Video', command=lambda: playAgain())
         playbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 15, fg = "black", font= "none 12 bold")
+        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT) 
-        stopbtn = Button(frame9, text='Reset Video', command=lambda: Reset())
-        stopbtn.pack(side=LEFT)
+        resetbtn = Button(frame9, text='Reset Video', command=lambda: Reset())
+        resetbtn.pack(side=LEFT)
+        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
+        temp.pack(side=LEFT) 
+        fastresetbtn = Button(frame9, text='Fast Reset Video', command=lambda: Fast_Reset())
+        fastresetbtn.pack(side=LEFT)
 
 
         playbtn.config(state="disabled")
-        stopbtn.config(state="disabled")
+        resetbtn.config(state="disabled")
+        fastresetbtn.config(state="disabled")
 
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
     def Model(self):
-
-
         def disable_buttons():
             file_button.config(state="disabled")
             folder_button.config(state="disabled")
