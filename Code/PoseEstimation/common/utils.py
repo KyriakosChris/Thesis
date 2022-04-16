@@ -10,7 +10,7 @@ import sys
 import time
 import numpy as np
 import torch
-
+import cv2
 
 def add_path():
     Alphapose_path = os.path.abspath('joints_detectors/Alphapose')
@@ -108,7 +108,25 @@ def calculate_area(data):
     return np.abs(width * height)
 
 
+def read_video(filename, fps=None, skip=0, limit=-1):
+    stream = cv2.VideoCapture(filename)
 
+    i = 0
+    while True:
+        grabbed, frame = stream.read()
+        # if the `grabbed` boolean is `False`, then we have
+        # reached the end of the video file
+        if not grabbed:
+            print('===========================> This video get ' + str(i) + ' frames in total.')
+            sys.stdout.flush()
+            break
+
+        i += 1
+        if i > skip:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            yield np.array(frame)
+        if i == limit:
+            break
 
 
 def evaluate(test_generator, model_pos, action=None, return_predictions=True):

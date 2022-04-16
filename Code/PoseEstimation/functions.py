@@ -48,8 +48,7 @@ def PositionEdit(file,positions):
         print("Unable to write to file")
             
 
-def new_animation(file, output):
-    prediction = motion(file)
+def new_animation(prediction, output):
     vis_3d_keypoints_sequence(keypoints_sequence=prediction,skeleton=h36m_skeleton.H36mSkeleton(),
     azimuth=np.array(45., dtype=np.float32),fps=60,output_file=output,b=False)
 
@@ -73,3 +72,5 @@ def motion(file):
 
     return np.array(mocap)        
 
+
+#new_animation("D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\kunkun_cut_one_second.bvh","D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\3d_pose.mp4")

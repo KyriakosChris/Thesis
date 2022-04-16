@@ -96,7 +96,24 @@ class H36mSkeleton(object):
             'RightWristEndSite': [-1, 0, 0]
         }
 
+    def keypoint2index(self):
+        return self.keypoint2index
+        
+    def root(self):
+        return self.root
 
+    def children(self):
+        return self.children
+
+    def parents(self):
+        return self.parent
+
+    def joints_right(self):
+        return self.right_joints
+
+    def joints_left(self):
+        return self.left_joints
+        
     def get_initial_offset(self, poses_3d):
         # TODO: RANSAC
         bone_lens = {self.root: [0]}

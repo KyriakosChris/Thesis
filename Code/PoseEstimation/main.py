@@ -8,6 +8,8 @@ import os
 from tkinter import messagebox
 from functions import PositionEdit, fastsmooth , new_animation
 from tkvideo import tkvideo
+from animate_bvh.bvh import *
+global  t1
 class Redirect():
 
     def __init__(self, widget, autoscroll=True):
@@ -32,6 +34,7 @@ class MainMenu():
         self.root = Tk()
         self.root.withdraw()
         self.current_window = None
+        self.prediction = None
         
 
     def getfile(self):
@@ -61,6 +64,9 @@ class MainMenu():
                 bvhpath = f'{self.folder_name}/{video_name}/{video_name}.bvh'
                 PositionEdit(bvhpath,positions)
                 messagebox.showinfo(title="Edit Info", message="Edit completed successfully")
+                self.prediction[:, 0, 0] /= X
+                self.prediction[:, 0, 1] /= Y
+                self.prediction[:, 0, 2] /= Z
             else:
                 messagebox.showwarning(title="Edit Info", message="Wrong Input")
                 
@@ -78,7 +84,7 @@ class MainMenu():
             frame10.pack(side=TOP)
             video_label = Label(frame10)
             video_label.pack(side=LEFT)
-            videoplayer = tkvideo(file, video_label, loop = 0 ,size = (700, 480))
+            videoplayer = tkvideo(self.file, video_label, loop = 0 ,size = (700, 480))
             videoplayer.play()
             openbtn.config(state="disabled")
             playbtn.config(state="normal")
@@ -94,23 +100,24 @@ class MainMenu():
 
         def Reset():
             frame10.destroy()
-            new_animation(bvhName,file)
+            create_video(self.bvhName , self.file, False)
+            #new_animation(self.prediction,file)
             open_file()
             
         def buttonSmooth(file):
             Smoothbutton.config(state="disabled")
             fastsmooth(file)
-            messagebox.showinfo(title="Filter Info", message="Filtering more than once may not improve further the results")
+            messagebox.showinfo(title="Filter Info", message="Filter was applied successfully")
             Smoothbutton.config(state="normal")
             
         window = self.replace_window(self.root)
         frame = Frame(window)
         frame.pack()
-
+        t1.join()
         basename = os.path.basename(self.file_name)
         video_name = basename[:basename.rfind('.')] 
-        file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'
-        bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
+        self.file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'
+        self.bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
         window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
         window.title("BVH Editor")
         window.resizable(True, True)
@@ -151,7 +158,7 @@ class MainMenu():
         submit.pack(side=LEFT)
         temp = Label(frame4, text = "",width = 5, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT)
-        Smoothbutton = Button(frame4, text = "Fast bvh Smoothing: ", width = 20, command=lambda: buttonSmooth(bvhName))
+        Smoothbutton = Button(frame4, text = "Fast bvh Smoothing: ", width = 20, command=lambda: buttonSmooth(self.bvhName))
         Smoothbutton.pack(side=LEFT)
         temp = Label(frame4, text = "",width = 5, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT)
@@ -220,12 +227,17 @@ class MainMenu():
                 messagebox.showwarning("Input Warning", "The folder or the file failed to be browsed")
             else:
                 disable_buttons()
-                inference_video(self.file_name,self.folder_name,'alpha_pose')
+                self.prediction = inference_video(self.file_name,self.folder_name,'alpha_pose')
                 enable_buttons()
+                print(self.prediction.shape)
 
         def threading():
+            global t1
             t1=Thread(target=click)
             t1.start()
+            
+
+            
     
         def select_file():
             filetypes = (('video files', '*.mp4'),('video files', '*.avi'),('All files', '*.*'))

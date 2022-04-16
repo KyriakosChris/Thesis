@@ -12,7 +12,7 @@ from numpy import *
 import numpy as np
 from bvh_skeleton import h36m_skeleton,cmu_skeleton
 from Model import *
-
+from animate_bvh.bvh import *
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -47,14 +47,14 @@ def main(args):
     # 第一步：检测2D关键点
     detector_2d = get_detector_2d(args.detector_2d)
     assert detector_2d, 'detector_2d should be alpha_pose'
-
+    #args.input_npz = 'keypoints.npy'
     # 2D kpts loads or generate
     if not args.input_npz:
         video_name = args.viz_video
         keypoints = detector_2d(video_name)
+        np.save('keypoints.npy',keypoints)
     else:
-        npz = np.load(args.input_npz)
-        keypoints = npz['kpts']  # (N, 17, 2)
+        keypoints =np.load(args.input_npz)  # (N, 17, 2)
     XYZ = []
     poly = []
     for frame in keypoints:
@@ -68,6 +68,7 @@ def main(args):
         A = (xmax - xmin)*(ymax - ymin)
         Zestimate = np.log2(A)
         XYZ.append((Xavg,Zestimate,Yavg))
+    
     #saveVideo(args,poly,XYZ)
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
@@ -117,35 +118,37 @@ def main(args):
     write_standard_bvh(args.viz_output,prediction_copy) 
     bvh_file = write_smartbody_bvh(args.viz_output,prediction_copy)
 
-    # XYZ = np.array(XYZ)
-    # x0 = XYZ[0][0]
-    # z0 = XYZ[0][1]
-    # y0 = prediction[0,0,2] + XYZ[0][2]
-    # for frame in range(prediction.shape[0]):
-    #     prediction[frame][0][0] = x0-XYZ[frame][0]   # X
-    #     prediction[frame][0][1] = z0-XYZ[frame][1]   # Z
-    #     prediction[frame][0][2] = y0-XYZ[frame][2]   # Y
-    # # rebase the height
-    # base_Y = Calculate_Height(bvh_file)
+    XYZ = np.array(XYZ)
+    x0 = XYZ[0][0]
+    z0 = XYZ[0][1]
+    y0 = prediction[0,0,2] + XYZ[0][2]
+    for frame in range(prediction.shape[0]):
+        prediction[frame][0][0] = x0-XYZ[frame][0]   # X
+        prediction[frame][0][1] = z0-XYZ[frame][1]   # Z
+        prediction[frame][0][2] = y0-XYZ[frame][2]   # Y
+    # rebase the height
+    base_Y = Calculate_Height(bvh_file)
 
-    # # Adding some adjustments...
-    # prediction[:, 0, 0] /= (args.height + args.width)*0.1
-    # prediction[:, 0, 1] /= (args.height + args.width)*0.1
-    # prediction[:, 0, 2] /= (args.height + args.width)*0.1
-    # prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
-    # PositionsEdit(bvh_file,prediction, False)
+    # Adding some adjustments...
+    prediction[:, 0, 0] /= (args.height + args.width)*0.1
+    prediction[:, 0, 1] /= (args.height + args.width)*0.1
+    prediction[:, 0, 2] /= (args.height + args.width)*0.1
+    prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
+    PositionsEdit(bvh_file,prediction, False)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
-    vis_3d_keypoints_sequence(keypoints_sequence=prediction,skeleton=h36m_skeleton.H36mSkeleton(),
-    azimuth=np.array(45., dtype=np.float32),fps=60,output_file=video_file,b=True)
+    create_video(bvh_file, video_file,True)
+
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
+
+    return prediction
 
 
     
 def inference_video(video_path, output_path, detector_2d):
     """
     Do image -> 2d points -> 3d points to video.
-    :param detector_2d: used 2d joints detector. Can be {alpha_pose, hr_pose}
+    :param detector_2d: used 2d joints detector. Can be alpha_pose
     :param video_path: relative to outputs
     :return: None
     """
@@ -165,7 +168,7 @@ def inference_video(video_path, output_path, detector_2d):
     args.evaluate = 'pretrained_h36m_detectron_coco.bin'
 
     with Timer(video_path):
-        main(args)
+        return main(args)
 
 
 def saveVideo(args,poly,xyz):
@@ -199,8 +202,8 @@ def saveVideo(args,poly,xyz):
 
 def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     '''
-    :param outbvhfilepath: 输出bvh动作文件路径
-    :param prediction3dpoint: 预测的三维关节点
+    :param outbvhfilepath: 
+    :param prediction3dpoint: 
     :return:
     '''
 
@@ -227,12 +230,12 @@ def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     if not os.path.exists(bvhfileDirectory):
         os.makedirs(bvhfileDirectory)
     bvhfileName = os.path.join(dir_name,video_name,"{}.bvh".format(video_name))
-    cmuskeleton = h36m_skeleton.H36mSkeleton()
-    cmuskeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
-    # human36m_skeleton = h36m_skeleton.H36mSkeleton()
-    # human36m_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    # cmuskeleton = h36m_skeleton.H36mSkeleton()
+    # cmuskeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    human36m_skeleton = h36m_skeleton.H36mSkeleton()
+    human36m_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
 
-# 将3dpoint转换为SmartBody的bvh格式并输出到outputs/outputvideo/alpha_pose_视频名/bvh下
+
 def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     '''
     :param outbvhfilepath: 输出bvh动作文件路径
