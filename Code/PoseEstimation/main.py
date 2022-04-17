@@ -15,7 +15,8 @@ class Redirect():
     def __init__(self, widget, autoscroll=True):
         self.widget = widget
         self.autoscroll = autoscroll
-
+    def __del__(self):
+        pass
     def write(self, text):
         if "Processing..." in text or "Rendering..." in text:
             self.widget.delete("end-1c linestart", "end")
@@ -35,6 +36,8 @@ class MainMenu():
         self.root.withdraw()
         self.current_window = None
         self.prediction = None
+        self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
+        self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
         
 
     def getfile(self):
@@ -83,7 +86,7 @@ class MainMenu():
             frame10 = Frame(window)
             frame10.pack(side=TOP)
             video_label = Label(frame10)
-            video_label.pack(side=LEFT)
+            video_label.pack(side=RIGHT)
             videoplayer = tkvideo(self.file, video_label, loop = 0 ,size = (700, 480))
             videoplayer.play()
             openbtn.config(state="disabled")
@@ -99,9 +102,8 @@ class MainMenu():
             open_file()
 
         def Reset():
+            create_video(self.bvhName , self.file, False)
             frame10.destroy()
-            create_video(self.bvhName , self.file, True)
-            #new_animation(self.prediction,file)
             open_file()
             
         def buttonSmooth(file):
@@ -113,7 +115,6 @@ class MainMenu():
         window = self.replace_window(self.root)
         frame = Frame(window)
         frame.pack()
-        t1.setDaemon()
         basename = os.path.basename(self.file_name)
         video_name = basename[:basename.rfind('.')] 
         self.file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'
@@ -149,6 +150,7 @@ class MainMenu():
         label3.pack(side=LEFT)
         Zinput = Entry(frame3,width=5)
         Zinput.pack(side=LEFT)
+        
 
 
         frame4 = Frame(window)
@@ -206,6 +208,7 @@ class MainMenu():
         playbtn.config(state="disabled")
         resetbtn.config(state="disabled")
         fastresetbtn.config(state="disabled")
+        
 
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
@@ -229,7 +232,6 @@ class MainMenu():
                 disable_buttons()
                 self.prediction = inference_video(self.file_name,self.folder_name,'alpha_pose')
                 enable_buttons()
-                print(self.prediction.shape)
 
         def threading():
             global t1
@@ -305,7 +307,7 @@ class MainMenu():
         temp.pack(side=LEFT)
         ChangeMenu = Button(frame4, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
         ChangeMenu.pack(side=LEFT)
-        ChangeMenu.config(state="disabled")
+        #ChangeMenu.config(state="disabled")
 
         frame5 = Frame(window)
         frame5.pack(side=TOP)

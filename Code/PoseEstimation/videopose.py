@@ -51,7 +51,6 @@ def main(args):
     if not args.input_npz:
         video_name = args.viz_video
         keypoints = detector_2d(video_name)
-        np.save('keypoints.npy',keypoints)
     else:
         keypoints =np.load(args.input_npz)  # (N, 17, 2)
     XYZ = []

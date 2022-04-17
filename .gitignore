@@ -52,6 +52,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Videos
+.avi
+.mp4
+
 # Distribution / packaging
 .Python
 env/
