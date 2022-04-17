@@ -6,13 +6,12 @@ from common.generators import UnchunkedGenerator
 from common.loss import *
 from common.model import *
 from common.utils import Timer, evaluate, add_path
-from common.Bvh2Gif import *
 import cv2
 from numpy import *
 import numpy as np
 from bvh_skeleton import h36m_skeleton,cmu_skeleton
 from Model import *
-from animate_bvh.bvh import *
+from common.visualize import *
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 

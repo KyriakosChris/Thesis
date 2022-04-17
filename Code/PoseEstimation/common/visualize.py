@@ -241,7 +241,7 @@ class Bvh:
 
 
         name = len(images)
-        path = f'./animate_bvh/images/{name}.png'
+        path = f'./common/images/{name}.png'
         plt.savefig(path)
         images.append(cv2.imread(path))
 
@@ -273,6 +273,10 @@ class Bvh:
         return f"BVH {len(self.joints.keys())} joints, {self.frames} frames"
 
 def create_video(file, output,show):
+    folder =f'./common/images'
+    if not os.path.exists(folder):
+        # Create a new directory because it does not exist 
+        os.makedirs(folder)
     anim = Bvh()
     # parser file
     anim.parse_file(file)
@@ -285,9 +289,11 @@ def create_video(file, output,show):
     for i in range(len(images)):
         out.write(images[i])
     out.release()
-    path = f'./animate_bvh/images/*.png'
-    removing_files = glob.glob(path)
+    image_path = f'./common/images/*.png'
+    removing_files = glob.glob(image_path)
     for i in removing_files:
         os.remove(i)
+    os.rmdir(folder)
+    
 if __name__ == '__main__':
     create_video("kunkun_cut_one_second.bvh")

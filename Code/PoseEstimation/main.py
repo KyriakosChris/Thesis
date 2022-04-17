@@ -6,9 +6,9 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, fastsmooth , new_animation
+from functions import PositionEdit, fastsmooth 
 from tkvideo import tkvideo
-from animate_bvh.bvh import *
+from common.visualize import create_video
 global  t1
 class Redirect():
 
@@ -100,7 +100,7 @@ class MainMenu():
 
         def Reset():
             frame10.destroy()
-            create_video(self.bvhName , self.file, False)
+            create_video(self.bvhName , self.file, True)
             #new_animation(self.prediction,file)
             open_file()
             
@@ -113,7 +113,7 @@ class MainMenu():
         window = self.replace_window(self.root)
         frame = Frame(window)
         frame.pack()
-        t1.join()
+        t1.setDaemon()
         basename = os.path.basename(self.file_name)
         video_name = basename[:basename.rfind('.')] 
         self.file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'

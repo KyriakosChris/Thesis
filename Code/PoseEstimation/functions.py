@@ -2,8 +2,7 @@ from tkinter import *
 
 from BVHsmoother.smooth import smooth
 import numpy as np
-from bvh_skeleton import h36m_skeleton
-from common.Bvh2Gif import *
+
 def fastsmooth(filename):
     filter = 'butterworth'
     border = 100 
@@ -48,11 +47,6 @@ def PositionEdit(file,positions):
         print("Unable to write to file")
             
 
-def new_animation(prediction, output):
-    vis_3d_keypoints_sequence(keypoints_sequence=prediction,skeleton=h36m_skeleton.H36mSkeleton(),
-    azimuth=np.array(45., dtype=np.float32),fps=60,output_file=output,b=False)
-
-
 def motion(file):
 
     data = open(file, 'r')
@@ -71,6 +65,3 @@ def motion(file):
             mocap.append(pos)
 
     return np.array(mocap)        
-
-
-#new_animation("D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\kunkun_cut_one_second.bvh","D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\3d_pose.mp4")
