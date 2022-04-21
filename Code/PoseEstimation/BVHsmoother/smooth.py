@@ -2,7 +2,6 @@ import numpy as np
 
 import BVHsmoother.code_bvh.freqfilter as freqfilter
 import BVHsmoother.code_bvh.bvh as bvh
-import BVHsmoother.code_bvh.args as args
 import BVHsmoother.code_bvh.spacefilter as spacefilter
 import BVHsmoother.code_bvh.angle as angle
 

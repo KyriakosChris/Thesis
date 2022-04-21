@@ -3,13 +3,11 @@ import re
 from transforms3d.euler import euler2mat, mat2euler
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import glob
 import cv2
 import os
 import warnings
-import matplotlib.cbook
-warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+warnings.filterwarnings('ignore')
 from progress_Bar.bar import IncrementalBar
 images  = []
 class BvhJoint:
@@ -259,12 +257,18 @@ class Bvh:
     def plot_all_frames(self,show):
 
         fig = plt.figure()
-        
+
+        # new_stdout = io.StringIO()
+        # sys.stdout = new_stdout
         ax = fig.gca()
         ax = fig.add_subplot(111, projection='3d')
         if show:
             for i in IncrementalBar('Rendering...').iter(range(self.frames)):
                 self.plot_frame(i, fig, ax)
+                # message.config(text="")
+                # output = new_stdout.getvalue()
+                # print(output)
+                #message.config(text=new_stdout.getvalue().splitlines())
         else:
             for i in range(self.frames):
                 self.plot_frame(i, fig, ax)

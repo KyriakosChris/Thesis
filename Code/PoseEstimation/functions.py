@@ -1,7 +1,8 @@
 from tkinter import *
-
+from tkinter import ttk
 from BVHsmoother.smooth import smooth
 import numpy as np
+from tkinter import *   
 
 def fastsmooth(filename):
     filter = 'butterworth'
@@ -46,6 +47,29 @@ def PositionEdit(file,positions):
     except:
         print("Unable to write to file")
             
+def filter_display(win,file):
+    def Quit():
+        win.destroy()
+        #window.deiconify()
+    
+    width = win.winfo_screenwidth()/3
+    height = win.winfo_screenheight()/3
+    win.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
+    win.title("Filter Editor")
+    frame = Frame(win)
+    frame.pack(side=TOP)
+    submit = Button(frame, text = 'Default Smoothing', width = 20 ,command=fastsmooth(file))
+    submit.pack(side=LEFT,padx = 10, pady = 0)
+    quit = Button(frame, text = 'Quit', width = 20 ,command=Quit)
+    quit.pack(side=LEFT, padx = 10, pady = 0)
+    frame = Frame(win)
+    frame.pack(side=TOP)
+    vlist = ["butterworth", "average", "gaussian"]
+    
+    Combo = ttk.Combobox(frame, values = vlist)
+    Combo.set("Pick a Filter")
+    Combo.pack(side=LEFT,padx = 0, pady = 20)
+    win.mainloop()
 
 def motion(file):
 

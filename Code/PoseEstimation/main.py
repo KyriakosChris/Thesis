@@ -1,3 +1,6 @@
+from asyncio import sleep
+
+import time
 from videopose import inference_video
 from threading import *
 from tkinter import *   
@@ -6,26 +9,30 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, fastsmooth 
+from functions import PositionEdit, fastsmooth , filter_display
 from tkvideo import tkvideo
 from common.visualize import create_video
-global  t1
+
 class Redirect():
 
     def __init__(self, widget, autoscroll=True):
         self.widget = widget
         self.autoscroll = autoscroll
     def __del__(self):
+        # Destructor
         pass
     def write(self, text):
-        if "Processing..." in text or "Rendering..." in text:
-            self.widget.delete("end-1c linestart", "end")
-            self.widget.insert('end', '\n')
-        if "===========================>" in text or "--------------" in text:
-            self.widget.insert('end', '\n')
-        self.widget.insert('end', text)
-        if self.autoscroll:
-            self.widget.see("end")  # autoscroll
+        try:
+            if "Processing..." in text or "Rendering..." in text:
+                self.widget.delete("end-1c linestart", "end")
+                self.widget.insert('end', '\n')
+            if "===========================>" in text or "--------------" in text:
+                self.widget.insert('end', '\n')
+            self.widget.insert('end', text)
+            if self.autoscroll:
+                self.widget.see("end")  # autoscroll
+        except:
+            pass
 
     def flush(self):
         pass
@@ -56,7 +63,7 @@ class MainMenu():
 
         return self.current_window
     def EditBvh(self):
-        def click():
+        def check_input():
             if is_float(Xinput.get()) and is_float(Yinput.get()) and is_float(Zinput.get()) and self.file_name != '' and self.folder_name != '':
                 X = float(Xinput.get())
                 Y = float(Yinput.get())
@@ -101,25 +108,44 @@ class MainMenu():
             frame10.destroy()
             open_file()
 
+        def threading():
+            t1=Thread(target=Reset)
+            t1.start()
+
         def Reset():
-            create_video(self.bvhName , self.file, False)
             frame10.destroy()
+            text.pack(side=LEFT)
+            create_video(self.bvhName , self.file, True)
             open_file()
+            text.pack_forget()
             
         def buttonSmooth(file):
-            Smoothbutton.config(state="disabled")
-            fastsmooth(file)
-            messagebox.showinfo(title="Filter Info", message="Filter was applied successfully")
-            Smoothbutton.config(state="normal")
-            
+            #Smoothbutton.config(state="disabled")
+            #window.withdraw()
+            win = Toplevel(window)
+            win.grab_set()
+            filter_display(win,file)
+            #window.grab_set()
+            #fastsmooth(file)
+            #messagebox.showinfo(title="Filter Info", message="Filter was applied successfully")
+            #window.grab_release()
+            #window.deiconify()
+
+
+        # reset to default the printing method
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+
         window = self.replace_window(self.root)
         frame = Frame(window)
         frame.pack()
+
         basename = os.path.basename(self.file_name)
         video_name = basename[:basename.rfind('.')] 
         self.file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'
         self.bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
-        window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
+        window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()) )
         window.title("BVH Editor")
         window.resizable(True, True)
         im = Image.open(r"TUC.jpg")
@@ -156,7 +182,7 @@ class MainMenu():
         frame4 = Frame(window)
         frame4.pack(side=TOP)
   
-        submit = Button(frame4, text = 'Submit', width = 20 ,command=click)
+        submit = Button(frame4, text = 'Submit', width = 20 ,command=check_input)
         submit.pack(side=LEFT)
         temp = Label(frame4, text = "",width = 5, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT)
@@ -197,14 +223,21 @@ class MainMenu():
         playbtn.pack(side=LEFT)
         temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT) 
-        resetbtn = Button(frame9, text='Reset Video', command=lambda: Reset())
+        resetbtn = Button(frame9, text='Reset Video', command=lambda: threading())
         resetbtn.pack(side=LEFT)
         temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT) 
         fastresetbtn = Button(frame9, text='Fast Reset Video', command=lambda: Fast_Reset())
         fastresetbtn.pack(side=LEFT)
 
+        frame11 = Frame(window)
+        frame11.pack(side=TOP)
 
+        text = Text(frame11,width=78 ,height = 1,relief='flat',bg='SystemButtonFace')
+        text.pack_forget()
+        sys.stdout = Redirect(text)
+        
+        
         playbtn.config(state="disabled")
         resetbtn.config(state="disabled")
         fastresetbtn.config(state="disabled")
@@ -234,13 +267,9 @@ class MainMenu():
                 enable_buttons()
 
         def threading():
-            global t1
             t1=Thread(target=click)
             t1.start()
-            
 
-            
-    
         def select_file():
             filetypes = (('video files', '*.mp4'),('video files', '*.avi'),('All files', '*.*'))
 
@@ -258,6 +287,8 @@ class MainMenu():
             else:
                 print('Folder ', self.folder_name, ' ,was set successfully!')
 
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
         # create a tkinter window
         window = self.replace_window(self.root)     
 
