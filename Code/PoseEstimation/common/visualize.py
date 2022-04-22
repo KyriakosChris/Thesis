@@ -254,7 +254,7 @@ class Bvh:
         with open(path, 'r') as f:
             self.parse_string(f.read())
 
-    def plot_all_frames(self,show):
+    def plot_all_frames(self):
 
         fig = plt.figure()
 
@@ -262,21 +262,17 @@ class Bvh:
         # sys.stdout = new_stdout
         ax = fig.gca()
         ax = fig.add_subplot(111, projection='3d')
-        if show:
-            for i in IncrementalBar('Rendering...').iter(range(self.frames)):
-                self.plot_frame(i, fig, ax)
-                # message.config(text="")
-                # output = new_stdout.getvalue()
-                # print(output)
-                #message.config(text=new_stdout.getvalue().splitlines())
-        else:
-            for i in range(self.frames):
-                self.plot_frame(i, fig, ax)
+        for i in IncrementalBar('Rendering...').iter(range(self.frames)):
+            self.plot_frame(i, fig, ax)
+            # message.config(text="")
+            # output = new_stdout.getvalue()
+            # print(output)
+            #message.config(text=new_stdout.getvalue().splitlines())
 
     def __repr__(self):
         return f"BVH {len(self.joints.keys())} joints, {self.frames} frames"
 
-def create_video(file, output,show):
+def create_video(file, output):
     folder =f'./common/images'
     if not os.path.exists(folder):
         # Create a new directory because it does not exist 
@@ -286,7 +282,7 @@ def create_video(file, output,show):
     anim.parse_file(file)
 
     # show full animation
-    anim.plot_all_frames(show)
+    anim.plot_all_frames()
     height, width, layers = np.array(images[0]).shape
     size = (width,height)
     out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 60, size)

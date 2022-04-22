@@ -9,10 +9,11 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, fastsmooth , filter_display
+from functions import PositionEdit, fastsmooth , filter_display, display_video
 from tkvideo import tkvideo
 from common.visualize import create_video
-
+import threading
+import imageio
 class Redirect():
 
     def __init__(self, widget, autoscroll=True):
@@ -90,6 +91,7 @@ class MainMenu():
         def open_file():
             global videoplayer
             global frame10
+            global video_label
             frame10 = Frame(window)
             frame10.pack(side=TOP)
             video_label = Label(frame10)
@@ -103,21 +105,24 @@ class MainMenu():
 
         def playAgain():
             videoplayer.play()
+            
         
         def Fast_Reset():
+            video_label.destroy()
             frame10.destroy()
             open_file()
 
-        def threading():
+        def create_threading():
             t1=Thread(target=Reset)
             t1.start()
 
         def Reset():
+            video_label.destroy()
             frame10.destroy()
-            text.pack(side=LEFT)
-            create_video(self.bvhName , self.file, True)
+            #text.pack(side=LEFT)
+            create_video(self.bvhName , self.file)
             open_file()
-            text.pack_forget()
+            #text.pack_forget()
             
         def buttonSmooth(file):
             #Smoothbutton.config(state="disabled")
@@ -131,7 +136,17 @@ class MainMenu():
             #window.grab_release()
             #window.deiconify()
 
-
+        def change_window():
+            self.file_name = ""
+            self.folder_name = ""
+            self.file = ""
+            self.bvhName = ""
+            try:
+                video_label.destroy()
+                frame10.destroy()
+            except:
+                pass
+            self.Model()
         # reset to default the printing method
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
@@ -190,7 +205,7 @@ class MainMenu():
         Smoothbutton.pack(side=LEFT)
         temp = Label(frame4, text = "",width = 5, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT)
-        ChangeMenu = Button(frame4, text = "Animate Another Video: ", width = 20, command=self.Model)
+        ChangeMenu = Button(frame4, text = "Animate Another Video: ", width = 20, command=change_window)
         ChangeMenu.pack(side=LEFT)
 
         frame6 = Frame(window)
@@ -223,7 +238,7 @@ class MainMenu():
         playbtn.pack(side=LEFT)
         temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT) 
-        resetbtn = Button(frame9, text='Reset Video', command=lambda: threading())
+        resetbtn = Button(frame9, text='Reset Video', command=lambda: create_threading())
         resetbtn.pack(side=LEFT)
         temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
         temp.pack(side=LEFT) 
@@ -234,8 +249,9 @@ class MainMenu():
         frame11.pack(side=TOP)
 
         text = Text(frame11,width=78 ,height = 1,relief='flat',bg='SystemButtonFace')
-        text.pack_forget()
-        sys.stdout = Redirect(text)
+        text.pack(side=LEFT)
+        #text.pack_forget()
+        #sys.stdout = Redirect(text)
         
         
         playbtn.config(state="disabled")

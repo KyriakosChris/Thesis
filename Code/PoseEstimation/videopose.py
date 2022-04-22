@@ -134,7 +134,7 @@ def main(args):
     prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
     PositionsEdit(bvh_file,prediction, False)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
-    create_video(bvh_file, video_file,True)
+    create_video(bvh_file, video_file)
 
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))

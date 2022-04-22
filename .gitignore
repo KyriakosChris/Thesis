@@ -39,7 +39,7 @@ exampleJsonData/
 Icon?
 ehthumbs.db
 Thumbs.db
-
+*.bvh
 #executables
 exe/
 *.exe
