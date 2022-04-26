@@ -233,9 +233,9 @@ class Bvh:
             ax = fig.add_subplot(111, projection='3d')
         ax.cla()
         ax.scatter(p[:, 0], p[:, 2], p[:, 1])
-        ax.set_xlim(-200, 200)
-        ax.set_ylim(-200, 200)
-        ax.set_zlim(-1, 200)
+        ax.set_xlim(-150, 150)
+        ax.set_ylim(-150, 150)
+        ax.set_zlim(-1, 150)
 
 
         name = len(images)

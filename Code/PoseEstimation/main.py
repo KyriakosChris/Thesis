@@ -9,7 +9,7 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, fastsmooth , filter_display, display_video
+from functions import PositionEdit, fastsmooth , filter_display
 from tkvideo import tkvideo
 from common.visualize import create_video
 import threading
@@ -119,10 +119,10 @@ class MainMenu():
         def Reset():
             video_label.destroy()
             frame10.destroy()
-            #text.pack(side=LEFT)
+            text.pack(side=LEFT)
             create_video(self.bvhName , self.file)
             open_file()
-            #text.pack_forget()
+            text.pack_forget()
             
         def buttonSmooth(file):
             #Smoothbutton.config(state="disabled")
@@ -249,9 +249,9 @@ class MainMenu():
         frame11.pack(side=TOP)
 
         text = Text(frame11,width=78 ,height = 1,relief='flat',bg='SystemButtonFace')
-        text.pack(side=LEFT)
-        #text.pack_forget()
-        #sys.stdout = Redirect(text)
+        #text.pack(side=LEFT)
+        text.pack_forget()
+        sys.stdout = Redirect(text)
         
         
         playbtn.config(state="disabled")
