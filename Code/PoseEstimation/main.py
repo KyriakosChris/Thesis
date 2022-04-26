@@ -1,6 +1,3 @@
-from asyncio import sleep
-
-import time
 from videopose import inference_video
 from threading import *
 from tkinter import *   
@@ -9,11 +6,10 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, fastsmooth , filter_display
+from functions import PositionEdit, filter_display
 from tkvideo import tkvideo
 from common.visualize import create_video
-import threading
-import imageio
+
 class Redirect():
 
     def __init__(self, widget, autoscroll=True):
@@ -90,11 +86,11 @@ class MainMenu():
                 
         def open_file():
             global videoplayer
-            global frame10
+            global frame8
             global video_label
-            frame10 = Frame(window)
-            frame10.pack(side=TOP)
-            video_label = Label(frame10)
+            frame8 = Frame(window)
+            frame8.pack(side=TOP)
+            video_label = Label(frame8)
             video_label.pack(side=RIGHT)
             videoplayer = tkvideo(self.file, video_label, loop = 0 ,size = (700, 480))
             videoplayer.play()
@@ -109,7 +105,7 @@ class MainMenu():
         
         def Fast_Reset():
             video_label.destroy()
-            frame10.destroy()
+            frame8.destroy()
             open_file()
 
         def create_threading():
@@ -118,23 +114,17 @@ class MainMenu():
 
         def Reset():
             video_label.destroy()
-            frame10.destroy()
+            frame8.destroy()
             text.pack(side=LEFT)
             create_video(self.bvhName , self.file)
             open_file()
             text.pack_forget()
             
         def buttonSmooth(file):
-            #Smoothbutton.config(state="disabled")
-            #window.withdraw()
             win = Toplevel(window)
             win.grab_set()
             filter_display(win,file)
-            #window.grab_set()
-            #fastsmooth(file)
-            #messagebox.showinfo(title="Filter Info", message="Filter was applied successfully")
-            #window.grab_release()
-            #window.deiconify()
+
 
         def change_window():
             self.file_name = ""
@@ -143,7 +133,7 @@ class MainMenu():
             self.bvhName = ""
             try:
                 video_label.destroy()
-                frame10.destroy()
+                frame8.destroy()
             except:
                 pass
             self.Model()
@@ -177,88 +167,53 @@ class MainMenu():
         frame3 = Frame(window)
         frame3.pack(side=TOP)
 
-        label1 = Label(frame3, text = "Give X threshold: ", fg = "black", font= "none 12 bold")
-        label1.pack(side=LEFT)
+        Label(frame3, text = "Give X threshold: ", fg = "black", font= "none 12 bold")
         Xinput = Entry(frame3,width=5)
-        Xinput.pack(side=LEFT)
-        
-        label2 = Label(frame3, text = "Give Y threshold: ", fg = "black", font= "none 12 bold")
-        label2.pack(side=LEFT)
+        Label(frame3, text = "Give Y threshold: ", fg = "black", font= "none 12 bold")
         Yinput = Entry(frame3,width=5)
-        Yinput.pack(side=LEFT)
-
-        label3 = Label(frame3, text = "Give Z threshold: ", fg = "black", font= "none 12 bold")
-        label3.pack(side=LEFT)
+        Label(frame3, text = "Give Z threshold: ", fg = "black", font= "none 12 bold")
         Zinput = Entry(frame3,width=5)
-        Zinput.pack(side=LEFT)
-        
 
+        for widget in frame3.winfo_children():
+            widget.pack(side=LEFT,padx=5, pady=5)
 
         frame4 = Frame(window)
         frame4.pack(side=TOP)
   
-        submit = Button(frame4, text = 'Submit', width = 20 ,command=check_input)
-        submit.pack(side=LEFT)
-        temp = Label(frame4, text = "",width = 5, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-        Smoothbutton = Button(frame4, text = "Fast bvh Smoothing: ", width = 20, command=lambda: buttonSmooth(self.bvhName))
-        Smoothbutton.pack(side=LEFT)
-        temp = Label(frame4, text = "",width = 5, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-        ChangeMenu = Button(frame4, text = "Animate Another Video: ", width = 20, command=change_window)
-        ChangeMenu.pack(side=LEFT)
+        Button(frame4, text = 'Submit', width = 20 ,command=check_input)
+        Button(frame4, text = "Fast bvh Smoothing: ", width = 20, command=lambda: buttonSmooth(self.bvhName))
+        Button(frame4, text = "Animate Another Video: ", width = 20, command=change_window)
+
+        for widget in frame4.winfo_children():
+            widget.pack(side=LEFT,padx=25, pady=15)
+
+        frame5 = Frame(window)
+        frame5.pack(side=TOP)
+        lbl1 = Label(frame5, text="BVH Video Player", font="none 12 bold")
+        lbl1.pack(side=LEFT,padx=5, pady=5)
 
         frame6 = Frame(window)
         frame6.pack(side=TOP)
 
+        openbtn = Button(frame6, text='Open Video', command=lambda: open_file())
+        playbtn = Button(frame6, text='Play Video', command=lambda: playAgain())
+        resetbtn = Button(frame6, text='Reset Video', command=lambda: create_threading())
+        fastresetbtn = Button(frame6, text='Fast Reset Video', command=lambda: Fast_Reset())
+
+        for widget in frame6.winfo_children():
+            widget.pack(side=LEFT,padx=50, pady=10)
+
         frame7 = Frame(window)
         frame7.pack(side=TOP)
-        temp = Label(frame7, text = "",height= 1, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
 
-        frame07 = Frame(window)
-        frame07.pack(side=TOP)
-        lbl1 = Label(frame07, text="BVH Video Player", font="none 12 bold")
-        lbl1.pack(side=LEFT)
-
-
-        frame8 = Frame(window)
-        frame8.pack(side=TOP)
-        temp = Label(frame8, text = "",height= 1, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-
-        frame9 = Frame(window)
-        frame9.pack(side=TOP)
-
-        openbtn = Button(frame9, text='Open Video', command=lambda: open_file())
-        openbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-        playbtn = Button(frame9, text='Play Video', command=lambda: playAgain())
-        playbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT) 
-        resetbtn = Button(frame9, text='Reset Video', command=lambda: create_threading())
-        resetbtn.pack(side=LEFT)
-        temp = Label(frame9, text = "",width = 10, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT) 
-        fastresetbtn = Button(frame9, text='Fast Reset Video', command=lambda: Fast_Reset())
-        fastresetbtn.pack(side=LEFT)
-
-        frame11 = Frame(window)
-        frame11.pack(side=TOP)
-
-        text = Text(frame11,width=78 ,height = 1,relief='flat',bg='SystemButtonFace')
-        #text.pack(side=LEFT)
+        text = Text(frame7,width=78 ,height = 1,relief='flat',bg='SystemButtonFace')
         text.pack_forget()
         sys.stdout = Redirect(text)
-        
         
         playbtn.config(state="disabled")
         resetbtn.config(state="disabled")
         fastresetbtn.config(state="disabled")
         
-
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
     def Model(self):
@@ -323,49 +278,27 @@ class MainMenu():
         
         frame2 = Frame(window)
         frame2.pack(side=TOP)
-        # Create a Button
-        button1 = Label(frame2, text = "Enter video file: ", fg = "black", font= "none 12 bold")
-        button1.pack(side=LEFT)
-        temp = Label(frame2, text = "",width = 3, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
+        Label(frame2, text = "Enter video file: ", fg = "black", font= "none 12 bold")
         file_button = Button(frame2,text='Browse a File',command=select_file)
-        file_button.pack(side=LEFT)
-        temp = Label(frame2, text = "",width = 3, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-        button2 = Label(frame2, text = "Output folder: ", fg = "black", font= "none 12 bold")
-        button2.pack(side=LEFT)
-        temp = Label(frame2, text = "",width = 3, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
+        Label(frame2, text = "Output folder: ", fg = "black", font= "none 12 bold")
         folder_button = Button(frame2,text='Browse a Folder',command=select_folder)
-        folder_button.pack(side=LEFT)
+  
+        for widget in frame2.winfo_children():
+            widget.pack(side=LEFT,padx=5, pady=5)
 
         frame3 = Frame(window)
         frame3.pack(side=TOP)
-
-        temp = Label(frame3, text = "",width = 30, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
+        submit = Button(frame3, text = 'Submit', width = 30,command=threading)
+        ChangeMenu = Button(frame3, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
+        ChangeMenu.config(state="disabled")
+        for widget in frame3.winfo_children():
+            widget.pack(side=LEFT,padx=15, pady=15)
 
         frame4 = Frame(window)
         frame4.pack(side=TOP)
 
-        submit = Button(frame4, text = 'Submit', width = 30,command=threading)
-        submit.pack(side=LEFT)
-        temp = Label(frame4, text = "",width = 5, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-        ChangeMenu = Button(frame4, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
-        ChangeMenu.pack(side=LEFT)
-        #ChangeMenu.config(state="disabled")
-
-        frame5 = Frame(window)
-        frame5.pack(side=TOP)
-        temp = Label(frame5, text = "",width = 30, fg = "black", font= "none 12 bold")
-        temp.pack(side=LEFT)
-
-        frame6 = Frame(window)
-        frame6.pack(side=TOP)
-
-        label = Label(frame6, text = "Console Redirect: ", fg = "black", font= "none 12 bold")
-        label.pack(side=LEFT)
+        label = Label(frame4, text = "Console Redirect: ", fg = "black", font= "none 12 bold")
+        label.pack(side=LEFT,padx=15, pady=15)
         frame = Frame(window)
         frame.pack(side=TOP)
         text = Text(frame)
@@ -375,6 +308,7 @@ class MainMenu():
         text['yscrollcommand'] = scrollbar.set
         scrollbar['command'] = text.yview
         sys.stdout = Redirect(text)
+        
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
 

@@ -83,9 +83,6 @@ def filter_display(win,file):
                 submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,border=Border.get(),sigma=Sigma.get())) 
             submit.pack(side=TOP,pady=20)
     def click(filter, border=None,uo=None,order=None,median=None,sigma=None) :
-        print(filter, border,uo,order,median,sigma)
-        print(type(median))
-        print(string_Parse(median))
         if string_Parse(border) or string_Parse(uo) or string_Parse(order) or string_Parse(median) or string_Parse(sigma):
             messagebox.showinfo(title="Input Info", message='The filter parameteres must be integers.')
             return
