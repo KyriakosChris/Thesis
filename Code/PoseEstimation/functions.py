@@ -5,7 +5,8 @@ import numpy as np
 from tkinter import *   
 from PIL import Image, ImageTk
 from tkinter import messagebox
-
+import datetime
+from tkVideoPlayer import TkinterVideo
 def fastsmooth(filename):
     filter = 'butterworth'
     border = 100 

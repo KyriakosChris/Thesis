@@ -274,6 +274,7 @@ class Bvh:
 
 def create_video(file, output):
     folder =f'./common/images'
+    images.clear()
     if not os.path.exists(folder):
         # Create a new directory because it does not exist 
         os.makedirs(folder)
@@ -285,12 +286,15 @@ def create_video(file, output):
     anim.plot_all_frames()
     height, width, layers = np.array(images[0]).shape
     size = (width,height)
-    out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 60, size)
+    if os.path.exists(output):
+        os.remove(output)
+    out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
     for i in range(len(images)):
         out.write(images[i])
     out.release()
     image_path = f'./common/images/*.png'
     removing_files = glob.glob(image_path)
+
     for i in removing_files:
         os.remove(i)
     os.rmdir(folder)

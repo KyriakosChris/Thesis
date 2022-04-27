@@ -7,8 +7,9 @@ from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
 from functions import PositionEdit, filter_display
-from tkvideo import tkvideo
 from common.visualize import create_video
+import datetime
+from common.tkvideoplayer import TkinterVideo
 
 class Redirect():
 
@@ -83,42 +84,113 @@ class MainMenu():
                 return True
             except ValueError:
                 return False
+
+        
+        def play_video():
+            def update_duration(event):
                 
-        def open_file():
-            global videoplayer
+                """ updates the duration after finding the duration """
+                end_time["text"] = str(datetime.timedelta(seconds=vid_player.duration()))
+                progress_slider["to"] = vid_player.duration()
+
+
+            def update_scale(event):
+                """ updates the scale value """
+                progress_slider.set(vid_player.current_duration())
+
+
+            def load_video():
+                """ loads the video """
+                if self.file:
+                    pass
+                vid_player.load(self.file)
+                progress_slider.config(to=0, from_=0)
+                progress_slider.set(0)
+                play_pause_btn["text"] = "Play"
+
+
+            def seek(value):
+                """ used to seek a specific timeframe """
+                vid_player.seek(int(value))
+
+
+            def skip(value: int):
+                """ skip seconds """
+                vid_player.skip_sec(value)
+                progress_slider.set(progress_slider.get() + value)
+
+
+            def play_pause():
+                """ pauses and plays """
+                if self.loaded:
+                    load_video()
+                    self.loaded = False
+                if vid_player.is_paused():
+                    vid_player.play()
+                    play_pause_btn["text"] = "Pause"
+
+                else:
+                    vid_player.pause()
+                    play_pause_btn["text"] = "Play"
+
+
+            def video_ended(event):
+                """ handle video ended """
+                progress_slider.set(progress_slider["to"])
+                play_pause_btn["text"] = "Play"
+            self.loaded = True
             global frame8
-            global video_label
+            global vid_player
             frame8 = Frame(window)
             frame8.pack(side=TOP)
-            video_label = Label(frame8)
-            video_label.pack(side=RIGHT)
-            videoplayer = tkvideo(self.file, video_label, loop = 0 ,size = (700, 480))
-            videoplayer.play()
-            openbtn.config(state="disabled")
-            playbtn.config(state="normal")
-            resetbtn.config(state="normal")
-            fastresetbtn.config(state="normal")
 
-        def playAgain():
-            videoplayer.play()
-            
-        
-        def Fast_Reset():
-            video_label.destroy()
-            frame8.destroy()
-            open_file()
+            vid_player = TkinterVideo(scaled=True, pre_load=False, master=frame8)
+            vid_player.pack(side=LEFT ,expand=True, fill="both")
+
+            vid_player = TkinterVideo(scaled=True, pre_load=False, master=frame8)
+            vid_player.pack(expand=True, fill="both")
+
+            play_pause_btn = Button(frame8, text="Play", command=play_pause)
+            play_pause_btn.pack()
+
+            skip_plus_5sec = Button(frame8, text="Skip -5 sec", command=lambda: skip(-5))
+            skip_plus_5sec.pack(side="left")
+
+            start_time = Label(frame8, text=str(datetime.timedelta(seconds=0)))
+            start_time.pack(side="left")
+
+            progress_slider = Scale(frame8, from_=0, to=0, orient="horizontal", command=seek)
+            progress_slider.pack(side="left", fill="x", expand=True)
+
+            end_time = Label(frame8, text=str(datetime.timedelta(seconds=0)))
+            end_time.pack(side="left")
+
+            vid_player.bind("<<Duration>>", update_duration)
+            vid_player.bind("<<SecondChanged>>", update_scale)
+            vid_player.bind("<<Ended>>", video_ended )
+
+            skip_plus_5sec = Button(frame8, text="Skip +5 sec", command=lambda: skip(5))
+            skip_plus_5sec.pack(side="left")
 
         def create_threading():
             t1=Thread(target=Reset)
             t1.start()
 
         def Reset():
-            video_label.destroy()
-            frame8.destroy()
+            self.loaded = True
+            try:              
+                vid_player.destroy()
+                resetbtn.config(state="disabled")
+                for widgets in frame8.winfo_children():
+                    widgets.destroy()
+                frame8.destroy()
+            except:
+                pass
             text.pack(side=LEFT)
             create_video(self.bvhName , self.file)
-            open_file()
             text.pack_forget()
+            play_video()
+            resetbtn.config(state="normal")
             
         def buttonSmooth(file):
             win = Toplevel(window)
@@ -127,15 +199,19 @@ class MainMenu():
 
 
         def change_window():
+
+            try:
+                vid_player.destroy()
+                for widgets in frame8.winfo_children():
+                    widgets.destroy()
+
+                frame8.destroy()
+            except:
+                pass
             self.file_name = ""
             self.folder_name = ""
             self.file = ""
             self.bvhName = ""
-            try:
-                video_label.destroy()
-                frame8.destroy()
-            except:
-                pass
             self.Model()
         # reset to default the printing method
         sys.stdout = sys.__stdout__
@@ -148,9 +224,9 @@ class MainMenu():
 
         basename = os.path.basename(self.file_name)
         video_name = basename[:basename.rfind('.')] 
-        self.file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'
+        self.file = f'{self.folder_name}\{video_name}\{"3d_pose"}.mp4'
         self.bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
-        window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()) )
+        window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
         window.title("BVH Editor")
         window.resizable(True, True)
         im = Image.open(r"TUC.jpg")
@@ -190,18 +266,17 @@ class MainMenu():
         frame5 = Frame(window)
         frame5.pack(side=TOP)
         lbl1 = Label(frame5, text="BVH Video Player", font="none 12 bold")
-        lbl1.pack(side=LEFT,padx=5, pady=5)
+        lbl1.pack(side=LEFT,padx=5, pady=0)
 
         frame6 = Frame(window)
         frame6.pack(side=TOP)
 
-        openbtn = Button(frame6, text='Open Video', command=lambda: open_file())
-        playbtn = Button(frame6, text='Play Video', command=lambda: playAgain())
+
         resetbtn = Button(frame6, text='Reset Video', command=lambda: create_threading())
-        fastresetbtn = Button(frame6, text='Fast Reset Video', command=lambda: Fast_Reset())
+
 
         for widget in frame6.winfo_children():
-            widget.pack(side=LEFT,padx=50, pady=10)
+            widget.pack(side=LEFT,padx=50, pady=0)
 
         frame7 = Frame(window)
         frame7.pack(side=TOP)
@@ -209,11 +284,10 @@ class MainMenu():
         text = Text(frame7,width=78 ,height = 1,relief='flat',bg='SystemButtonFace')
         text.pack_forget()
         sys.stdout = Redirect(text)
-        
-        playbtn.config(state="disabled")
-        resetbtn.config(state="disabled")
-        fastresetbtn.config(state="disabled")
-        
+
+        # resetbtn.config(state="disabled")
+
+        play_video()
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
     def Model(self):
@@ -260,7 +334,7 @@ class MainMenu():
 
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
-        # create a tkinter window
+
         window = self.replace_window(self.root)     
 
         frame = Frame(window)
@@ -308,7 +382,7 @@ class MainMenu():
         text['yscrollcommand'] = scrollbar.set
         scrollbar['command'] = text.yview
         sys.stdout = Redirect(text)
-        
+
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
 
