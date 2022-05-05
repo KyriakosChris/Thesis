@@ -1,26 +1,32 @@
-from tkinter import *
+import tkinter as tk
 
-def donothing():
-   filewin = Toplevel(root)
-   button = Button(filewin, text="Do nothing button")
-   button.pack()
-   
-root = Tk()
-menubar = Menu(root)
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Open File", command=donothing)
-filemenu.add_command(label="Save File", command=donothing)
-filemenu.add_command(label="Close", command=donothing)
 
-filemenu.add_separator()
+class ToolTip(object):
+    def __init__(self, widget, text):
+        self.widget = widget
+        self.text = text
 
-filemenu.add_command(label="Exit", command=root.quit)
-menubar.add_cascade(label="File", menu=filemenu)
-editmenu = Menu(menubar, tearoff=0)
+        def enter(event):
+            self.showTooltip()
+        def leave(event):
+            self.hideTooltip()
+        widget.bind('<Enter>', enter)
+        widget.bind('<Leave>', leave)
 
-helpmenu = Menu(menubar, tearoff=0)
-helpmenu.add_command(label="About...", command=donothing)
-menubar.add_cascade(label="Help", menu=helpmenu)
+    def showTooltip(self):
+        self.tooltipwindow = tw = tk.Toplevel(self.widget)
+        tw.wm_overrideredirect(1) # window without border and no normal means of closing
+        tw.wm_geometry("+{}+{}".format(self.widget.winfo_rootx(), self.widget.winfo_rooty()))
+        label = tk.Label(tw, text = self.text, background = "#ffffff", relief = 'solid', borderwidth = 2).pack()
 
-root.config(menu=menubar)
+    def hideTooltip(self):
+        tw = self.tooltipwindow
+        tw.destroy()
+        self.tooltipwindow = None
+root = tk.Tk() 
+
+your_widget = tk.Button(root, text = "Hover me!")
+your_widget.pack()
+ToolTip(widget = your_widget, text = "Hover text!")
+
 root.mainloop()

@@ -6,7 +6,7 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, filter_display
+from functions import PositionEdit, filter_display,ToolTip
 from common.visualize import create_video
 import datetime
 from common.tkvideoplayer import TkinterVideo
@@ -41,6 +41,8 @@ class MainMenu():
         self.root.withdraw()
         self.current_window = None
         self.prediction = None
+        # self.file_name = ""
+        # self.folder_name = ""
         self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
         self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
         
@@ -213,12 +215,25 @@ class MainMenu():
             self.file = ""
             self.bvhName = ""
             self.Model()
+        def Help():
+            filewin = Toplevel(self.root)
+            width = filewin.winfo_screenwidth()/3
+            height = filewin.winfo_screenheight()/3
+            filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
+            text = Label(filewin, text = "TO DO...", fg = "black", font= "none 12 bold")
+            text.pack()
         # reset to default the printing method
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
 
 
         window = self.replace_window(self.root)
+        width = window.winfo_screenwidth()/2.5
+        height = window.winfo_screenheight()
+        window.geometry("%dx%d+%d+%d" % ( width , height , -8 +1.5*width/2 , 0) )
+        #window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
+        window.title("BVH Editor")
+        window.resizable(0, True)
         frame = Frame(window)
         frame.pack()
 
@@ -226,11 +241,23 @@ class MainMenu():
         video_name = basename[:basename.rfind('.')] 
         self.file = f'{self.folder_name}\{video_name}\{"3d_pose"}.mp4'
         self.bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
-        window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
-        window.title("BVH Editor")
-        window.resizable(True, True)
-        im = Image.open(r"TUC.jpg")
-        im1 = im.resize((window.winfo_screenwidth() ,300), Image.ANTIALIAS)
+        # window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
+        # window.title("BVH Editor")
+        # window.resizable(True, True)
+
+
+        menubar = Menu(window)
+        filemenu = Menu(menubar, tearoff=0)
+
+        filemenu.add_command(label="Exit", command=self.root.quit)
+        menubar.add_cascade(label="File", menu=filemenu)
+        
+        helpmenu = Menu(menubar, tearoff=0)
+        helpmenu.add_command(label="About...", command=Help)
+        menubar.add_cascade(label="Help", menu=helpmenu)
+        window.config(menu=menubar)
+        im = Image.open(r"menu.jpg")
+        im1 = im.resize((int(width) ,300), Image.ANTIALIAS)
         new_img = ImageTk.PhotoImage(im1)
         tuc = Label(frame, image = new_img)
         tuc.pack(side=LEFT)
@@ -285,21 +312,19 @@ class MainMenu():
         text.pack_forget()
         sys.stdout = Redirect(text)
 
-        # resetbtn.config(state="disabled")
-
         play_video()
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
     def Model(self):
         def disable_buttons():
-            file_button.config(state="disabled")
-            folder_button.config(state="disabled")
+            # file_button.config(state="disabled")
+            # folder_button.config(state="disabled")
             submit.config(state="disabled")
 
         def enable_buttons():
             submit.config(state="normal")
-            file_button.config(state="normal")
-            folder_button.config(state="normal")
+            # file_button.config(state="normal")
+            # folder_button.config(state="normal")
             ChangeMenu.config(state="normal")
 
 
@@ -331,47 +356,71 @@ class MainMenu():
                 messagebox.showwarning("Folder Warning", "The folder failed to be browsed")
             else:
                 print('Folder ', self.folder_name, ' ,was set successfully!')
-
+        def Help():
+            filewin = Toplevel(self.root)
+            width = filewin.winfo_screenwidth()/3
+            height = filewin.winfo_screenheight()/3
+            filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
+            text = Label(filewin, text = "TO DO...", fg = "black", font= "none 12 bold")
+            text.pack()
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
 
         window = self.replace_window(self.root)     
+        width = window.winfo_screenwidth()/2.5
+        height = window.winfo_screenheight()
+        window.geometry("%dx%d+%d+%d" % ( width , height , -8 +1.5*width/2 , 0) )
+        #window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
+        window.title("Video To BVH Estimator")
+        window.resizable(0, True)
 
         frame = Frame(window)
         frame.pack()
 
-        window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
-        window.title("Video To BVH Estimator")
-        window.resizable(True, True)
-        im = Image.open(r"TUC.jpg")
 
-        im1 = im.resize((window.winfo_screenwidth() ,300), Image.ANTIALIAS)
+        menubar = Menu(window)
+        filemenu = Menu(menubar, tearoff=0)
+        filemenu.add_command(label="New Video", command=select_file)
+        filemenu.add_command(label="Save To", command=select_folder)
+        filemenu.add_separator()
+
+        filemenu.add_command(label="Exit", command=window.quit)
+        menubar.add_cascade(label="File", menu=filemenu)
+        
+        helpmenu = Menu(menubar, tearoff=0)
+        helpmenu.add_command(label="About...", command=Help)
+        menubar.add_cascade(label="Help", menu=helpmenu)
+        window.config(menu=menubar)
+        im = Image.open(r"menu.jpg")
+
+        im1 = im.resize((int(width) ,300), Image.ANTIALIAS)
         new_img = ImageTk.PhotoImage(im1)
         tuc = Label(frame, image = new_img)
         tuc.pack(side=LEFT)
         
-        frame2 = Frame(window)
-        frame2.pack(side=TOP)
-        Label(frame2, text = "Enter video file: ", fg = "black", font= "none 12 bold")
-        file_button = Button(frame2,text='Browse a File',command=select_file)
-        Label(frame2, text = "Output folder: ", fg = "black", font= "none 12 bold")
-        folder_button = Button(frame2,text='Browse a Folder',command=select_folder)
+        # frame2 = Frame(window)
+        # frame2.pack(side=TOP)
+        # Label(frame2, text = "Enter video file: ", fg = "black", font= "none 12 bold")
+        # file_button = Button(frame2,text='Browse a File',command=select_file)
+        # Label(frame2, text = "Output folder: ", fg = "black", font= "none 12 bold")
+        # folder_button = Button(frame2,text='Browse a Folder',command=select_folder)
   
-        for widget in frame2.winfo_children():
-            widget.pack(side=LEFT,padx=5, pady=5)
+        # for widget in frame2.winfo_children():
+        #     widget.pack(side=LEFT,padx=5, pady=5)
 
         frame3 = Frame(window)
         frame3.pack(side=TOP)
         submit = Button(frame3, text = 'Submit', width = 30,command=threading)
         ChangeMenu = Button(frame3, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
-        ChangeMenu.config(state="disabled")
+        ToolTip(widget = ChangeMenu, text = "Animation and a BVH Editor Tool")
+        #ChangeMenu.config(state="disabled")
         for widget in frame3.winfo_children():
             widget.pack(side=LEFT,padx=15, pady=15)
 
         frame4 = Frame(window)
         frame4.pack(side=TOP)
 
-        label = Label(frame4, text = "Console Redirect: ", fg = "black", font= "none 12 bold")
+        label = Label(frame4, text = "Terminal: ", fg = "black", font= "none 12 bold")
         label.pack(side=LEFT,padx=15, pady=15)
         frame = Frame(window)
         frame.pack(side=TOP)

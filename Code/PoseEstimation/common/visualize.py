@@ -233,9 +233,9 @@ class Bvh:
             ax = fig.add_subplot(111, projection='3d')
         ax.cla()
         ax.scatter(p[:, 0], p[:, 2], p[:, 1])
-        ax.set_xlim(-150, 150)
-        ax.set_ylim(-150, 150)
-        ax.set_zlim(-1, 150)
+        ax.set_xlim(self.X[0], self.X[1])
+        ax.set_ylim(self.Y[0], self.Y[1])
+        ax.set_zlim(self.Z[0], self.Z[1])
 
 
         name = len(images)
@@ -258,16 +258,17 @@ class Bvh:
 
         fig = plt.figure()
 
-        # new_stdout = io.StringIO()
-        # sys.stdout = new_stdout
+
         ax = fig.gca()
         ax = fig.add_subplot(111, projection='3d')
+        p,r = self.all_frame_poses()
+        self.pos = p[:,0,:]
+        self.X = (-150 + min(p[:,0,0]), 150 + max(p[:,0,0]))
+        self.Z = (-150 + min(p[:,0,1]), 150 + max(p[:,0,1]))
+        self.Y = (-1 + min(p[:,0,2]), 150 + max(p[:,0,2]))
+        
         for i in IncrementalBar('Rendering...').iter(range(self.frames)):
             self.plot_frame(i, fig, ax)
-            # message.config(text="")
-            # output = new_stdout.getvalue()
-            # print(output)
-            #message.config(text=new_stdout.getvalue().splitlines())
 
     def __repr__(self):
         return f"BVH {len(self.joints.keys())} joints, {self.frames} frames"
@@ -300,4 +301,4 @@ def create_video(file, output):
     os.rmdir(folder)
     
 if __name__ == '__main__':
-    create_video("kunkun_cut_one_second.bvh")
+    create_video("D:\\tuc\\Github\\Thesis\\BVH\\kunkun_cut_one_second\\kunkun_cut_one_second.bvh",'test.mp4')

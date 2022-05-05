@@ -5,8 +5,31 @@ import numpy as np
 from tkinter import *   
 from PIL import Image, ImageTk
 from tkinter import messagebox
-import datetime
-from tkVideoPlayer import TkinterVideo
+
+class ToolTip(object):
+    def __init__(self, widget, text):
+        self.widget = widget
+        self.text = text
+
+        def enter(event):
+            self.showTooltip()
+        def leave(event):
+            self.hideTooltip()
+        widget.bind('<Enter>', enter)
+        widget.bind('<Leave>', leave)
+
+    def showTooltip(self):
+        self.tooltipwindow = tw = Toplevel(self.widget)
+        tw.wm_overrideredirect(1) # window without border and no normal means of closing
+        tw.wm_geometry("+{}+{}".format(self.widget.winfo_rootx(), self.widget.winfo_rooty()+30))
+        Label(tw, text = self.text, background = "#ffffff", relief = 'solid', borderwidth = 1).pack(side=BOTTOM)
+
+    def hideTooltip(self):
+        tw = self.tooltipwindow
+        tw.destroy()
+        self.tooltipwindow = None
+
+
 def fastsmooth(filename):
     filter = 'butterworth'
     border = 100 
@@ -60,7 +83,7 @@ def PositionEdit(file,positions):
             pos  = [float(i) for i in pos]
 
             for i in range(0,3): 
-                pos[i] = pos[i]/positions[i]
+                pos[i] = pos[i]*positions[i]
             for n,i in enumerate(pos):
                 if n == len(pos) -1:
                     l += str(i) + '\n'
@@ -70,10 +93,10 @@ def PositionEdit(file,positions):
         else:
             Edited.append(line)
     try:
-        geeky_file = open(file, 'wt')
+        save_file = open(file, 'wt')
         for line in Edited:
-                geeky_file.write(str(line))
-        geeky_file.close()
+                save_file.write(str(line))
+        save_file.close()
     except:
         pass
             
@@ -95,26 +118,26 @@ def filter_display(win,file):
         if filter == 'butterworth':
             Label(comboframe, text = "FFT Border: ", fg = "black")
             Border = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
-            Border.set(1)
+            Border.set(100)
             Label(comboframe, text = "Cutoff frequency: ", fg = "black")
             Uo = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
-            Uo.set(1)
+            Uo.set(60)
             Label(comboframe, text = "Order: ", fg = "black")
             Order = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
-            Order.set(1)
+            Order.set(2)
             
         elif filter == 'average':
             Label(comboframe, text = "Median: ", fg = "black")
             Median = ttk.Spinbox(comboframe, from_=2, to=10000, width=5, textvariable=IntVar())
-            Median.set(2)
+            Median.set(35)
             
         elif filter == 'gaussian':
             Label(comboframe, text = "FFT Border: ", fg = "black")
             Border = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
-            Border.set(1)
+            Border.set(100)
             Label(comboframe, text = "Sigma: ", fg = "black")
             Sigma = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
-            Sigma.set(1)
+            Sigma.set(30)
             
         for widget in comboframe.winfo_children():
             widget.pack(side=LEFT,padx=15, pady=10)
