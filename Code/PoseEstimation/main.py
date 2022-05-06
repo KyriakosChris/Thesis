@@ -6,7 +6,7 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, filter_display,ToolTip
+from functions import PositionEdit, filter_display,CreateToolTip
 from common.visualize import create_video
 import datetime
 from common.tkvideoplayer import TkinterVideo
@@ -41,6 +41,8 @@ class MainMenu():
         self.root.withdraw()
         self.current_window = None
         self.prediction = None
+        self.question = '❔'
+        self.edit = False
         # self.file_name = ""
         # self.folder_name = ""
         self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
@@ -183,6 +185,9 @@ class MainMenu():
             try:              
                 vid_player.destroy()
                 resetbtn.config(state="disabled")
+                sumbit.config(state="disabled")
+                filter.config(state="disabled")
+                change.config(state="disabled")
                 for widgets in frame8.winfo_children():
                     widgets.destroy()
                 frame8.destroy()
@@ -193,7 +198,10 @@ class MainMenu():
             text.pack_forget()
             play_video()
             resetbtn.config(state="normal")
-            
+            sumbit.config(state="normal")
+            filter.config(state="normal")
+            change.config(state="normal")
+
         def buttonSmooth(file):
             win = Toplevel(window)
             win.grab_set()
@@ -214,6 +222,7 @@ class MainMenu():
             self.folder_name = ""
             self.file = ""
             self.bvhName = ""
+            self.edit = False
             self.Model()
         def Help():
             filewin = Toplevel(self.root)
@@ -231,7 +240,6 @@ class MainMenu():
         width = window.winfo_screenwidth()/2.5
         height = window.winfo_screenheight()
         window.geometry("%dx%d+%d+%d" % ( width , height , -8 +1.5*width/2 , 0) )
-        #window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
         window.title("BVH Editor")
         window.resizable(0, True)
         frame = Frame(window)
@@ -249,7 +257,7 @@ class MainMenu():
         menubar = Menu(window)
         filemenu = Menu(menubar, tearoff=0)
 
-        filemenu.add_command(label="Exit", command=self.root.quit)
+        filemenu.add_command(label="Exit", command=self.root.destroy)
         menubar.add_cascade(label="File", menu=filemenu)
         
         helpmenu = Menu(menubar, tearoff=0)
@@ -266,7 +274,10 @@ class MainMenu():
         frame2.pack(side=TOP)
         label0 = Label(frame2, text = "Give the XYZ thresholds (3 float numbers): ", fg = "black", font= "none 12 bold")
         label0.pack(side=LEFT)
-
+        question = Label(frame2, text = self.question, fg = "black")
+        question.pack(side=LEFT,padx=5)
+        CreateToolTip(widget = question, text = "It will multiply the given number of each dimension with every frame of the BVH file.\n"
+        "It affects only the location of the Skeleton")
         frame3 = Frame(window)
         frame3.pack(side=TOP)
 
@@ -276,16 +287,17 @@ class MainMenu():
         Yinput = Entry(frame3,width=5)
         Label(frame3, text = "Give Z threshold: ", fg = "black", font= "none 12 bold")
         Zinput = Entry(frame3,width=5)
-
+        
         for widget in frame3.winfo_children():
             widget.pack(side=LEFT,padx=5, pady=5)
-
+        sumbit = Button(frame3, text = 'Submit', width = 10 ,command=check_input)
+        sumbit.pack(side=LEFT,padx=15, pady=5)
         frame4 = Frame(window)
         frame4.pack(side=TOP)
   
-        Button(frame4, text = 'Submit', width = 20 ,command=check_input)
-        Button(frame4, text = "Fast bvh Smoothing: ", width = 20, command=lambda: buttonSmooth(self.bvhName))
-        Button(frame4, text = "Animate Another Video: ", width = 20, command=change_window)
+        #sumbit = Button(frame4, text = 'Submit', width = 20 ,command=check_input)
+        filter = Button(frame4, text = "BVH Filtering: ", width = 20, command=lambda: buttonSmooth(self.bvhName))
+        change = Button(frame4, text = "Animate Another Video: ", width = 20, command=change_window)
 
         for widget in frame4.winfo_children():
             widget.pack(side=LEFT,padx=25, pady=15)
@@ -297,13 +309,11 @@ class MainMenu():
 
         frame6 = Frame(window)
         frame6.pack(side=TOP)
-
-
         resetbtn = Button(frame6, text='Reset Video', command=lambda: create_threading())
-
-
+        CreateToolTip(widget = resetbtn, text = "The reset is not very fast, It depends on your CPU speed.")
+   
         for widget in frame6.winfo_children():
-            widget.pack(side=LEFT,padx=50, pady=0)
+            widget.pack(side=LEFT,padx=5, pady=0)
 
         frame7 = Frame(window)
         frame7.pack(side=TOP)
@@ -317,17 +327,19 @@ class MainMenu():
         window.mainloop()
     def Model(self):
         def disable_buttons():
-            # file_button.config(state="disabled")
-            # folder_button.config(state="disabled")
             submit.config(state="disabled")
+            ChangeMenu.config(state="disabled")
 
         def enable_buttons():
             submit.config(state="normal")
-            # file_button.config(state="normal")
-            # folder_button.config(state="normal")
+            self.edit = True
             ChangeMenu.config(state="normal")
 
-
+        def changePanel():
+            if self.edit:
+                self.EditBvh()
+            else:
+                messagebox.showwarning("Edit Warning", "Create the BVH file first to edit it")
         def click():
             if len(self.file_name) == 0 or len(self.folder_name) == 0:
                 messagebox.showwarning("Input Warning", "The folder or the file failed to be browsed")
@@ -368,8 +380,8 @@ class MainMenu():
 
         window = self.replace_window(self.root)     
         width = window.winfo_screenwidth()/2.5
-        height = window.winfo_screenheight()
-        window.geometry("%dx%d+%d+%d" % ( width , height , -8 +1.5*width/2 , 0) )
+        height = window.winfo_screenheight()/1.25
+        window.geometry("%dx%d+%d+%d" % ( width , height , -8 +1.5*width/2 , 0.125*height/1.25) )
         #window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
         window.title("Video To BVH Estimator")
         window.resizable(0, True)
@@ -384,9 +396,11 @@ class MainMenu():
         filemenu.add_command(label="Save To", command=select_folder)
         filemenu.add_separator()
 
-        filemenu.add_command(label="Exit", command=window.quit)
+        filemenu.add_command(label="Exit", command=self.root.destroy)
         menubar.add_cascade(label="File", menu=filemenu)
-        
+        editmenu = Menu(menubar, tearoff=0)
+        editmenu.add_command(label="Edit Results...", command=changePanel)
+        menubar.add_cascade(label="Edit", menu=editmenu)
         helpmenu = Menu(menubar, tearoff=0)
         helpmenu.add_command(label="About...", command=Help)
         menubar.add_cascade(label="Help", menu=helpmenu)
@@ -408,14 +422,7 @@ class MainMenu():
         # for widget in frame2.winfo_children():
         #     widget.pack(side=LEFT,padx=5, pady=5)
 
-        frame3 = Frame(window)
-        frame3.pack(side=TOP)
-        submit = Button(frame3, text = 'Submit', width = 30,command=threading)
-        ChangeMenu = Button(frame3, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
-        ToolTip(widget = ChangeMenu, text = "Animation and a BVH Editor Tool")
-        #ChangeMenu.config(state="disabled")
-        for widget in frame3.winfo_children():
-            widget.pack(side=LEFT,padx=15, pady=15)
+
 
         frame4 = Frame(window)
         frame4.pack(side=TOP)
@@ -431,6 +438,15 @@ class MainMenu():
         text['yscrollcommand'] = scrollbar.set
         scrollbar['command'] = text.yview
         sys.stdout = Redirect(text)
+
+
+        frame3 = Frame(window)
+        frame3.pack(side=TOP)
+        submit = Button(frame3, text = 'Submit', width = 30,command=threading)
+        ChangeMenu = Button(frame3, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
+        #ChangeMenu.config(state="disabled")
+        for widget in frame3.winfo_children():
+            widget.pack(side=LEFT,padx=15, pady=15)
 
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()

@@ -263,9 +263,9 @@ class Bvh:
         ax = fig.add_subplot(111, projection='3d')
         p,r = self.all_frame_poses()
         self.pos = p[:,0,:]
-        self.X = (-150 + min(p[:,0,0]), 150 + max(p[:,0,0]))
-        self.Z = (-150 + min(p[:,0,1]), 150 + max(p[:,0,1]))
-        self.Y = (-1 + min(p[:,0,2]), 150 + max(p[:,0,2]))
+        self.X = (-75 + min(p[:,0,0]), 75 + max(p[:,0,0]))
+        self.Z = (-75 + min(p[:,0,1]), 75 + max(p[:,0,1]))
+        self.Y = (-75 + min(p[:,0,2]), 75 + max(p[:,0,2]))
         
         for i in IncrementalBar('Rendering...').iter(range(self.frames)):
             self.plot_frame(i, fig, ax)

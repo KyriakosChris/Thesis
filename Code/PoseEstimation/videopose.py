@@ -10,7 +10,7 @@ import cv2
 from numpy import *
 import numpy as np
 from bvh_skeleton import h36m_skeleton,cmu_skeleton
-from Model import *
+from functions import CorrectionOfPositions, Calculate_Height
 from common.visualize import *
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -132,7 +132,7 @@ def main(args):
     prediction[:, 0, 1] /= (args.height + args.width)*0.1
     prediction[:, 0, 2] /= (args.height + args.width)*0.1
     prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
-    PositionsEdit(bvh_file,prediction, False)
+    CorrectionOfPositions(bvh_file,prediction)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
     create_video(bvh_file, video_file)
 

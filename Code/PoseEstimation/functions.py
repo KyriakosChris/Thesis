@@ -7,27 +7,43 @@ from PIL import Image, ImageTk
 from tkinter import messagebox
 
 class ToolTip(object):
-    def __init__(self, widget, text):
+
+    def __init__(self, widget):
         self.widget = widget
+        self.tipwindow = None
+        self.id = None
+        self.x = self.y = 0
+
+    def showtip(self, text):
+        "Display text in tooltip window"
         self.text = text
+        if self.tipwindow or not self.text:
+            return
+        x, y, cx, cy = self.widget.bbox("insert")
+        x = x + self.widget.winfo_rootx()
+        y = y + cy + self.widget.winfo_rooty() +27
+        self.tipwindow = tw = Toplevel(self.widget)
+        tw.wm_overrideredirect(1)
+        tw.wm_geometry("+%d+%d" % (x, y))
+        label = Label(tw, text=self.text, justify=LEFT,
+                      background="#ffffff", relief=SOLID, borderwidth=1,
+                      font=("tahoma", "8", "normal"))
+        label.pack(ipadx=1)
 
-        def enter(event):
-            self.showTooltip()
-        def leave(event):
-            self.hideTooltip()
-        widget.bind('<Enter>', enter)
-        widget.bind('<Leave>', leave)
+    def hidetip(self):
+        tw = self.tipwindow
+        self.tipwindow = None
+        if tw:
+            tw.destroy()
 
-    def showTooltip(self):
-        self.tooltipwindow = tw = Toplevel(self.widget)
-        tw.wm_overrideredirect(1) # window without border and no normal means of closing
-        tw.wm_geometry("+{}+{}".format(self.widget.winfo_rootx(), self.widget.winfo_rooty()+30))
-        Label(tw, text = self.text, background = "#ffffff", relief = 'solid', borderwidth = 1).pack(side=BOTTOM)
-
-    def hideTooltip(self):
-        tw = self.tooltipwindow
-        tw.destroy()
-        self.tooltipwindow = None
+def CreateToolTip(widget, text):
+    toolTip = ToolTip(widget)
+    def enter(event):
+        toolTip.showtip(text)
+    def leave(event):
+        toolTip.hidetip()
+    widget.bind('<Enter>', enter)
+    widget.bind('<Leave>', leave)
 
 
 def fastsmooth(filename):
@@ -99,15 +115,68 @@ def PositionEdit(file,positions):
         save_file.close()
     except:
         pass
-            
+def Calculate_Height(file):
+    data = open(file, 'r')
+    Lines = data.readlines()
+    height = 0
+    found = False
+    for n,line in enumerate(Lines) :
+
+        if "RightKnee" in line or "RightAnkle" in line:
+            found = True
+        if found and "OFFSET" in line:
+            found = False
+            base = line.split(' ')
+
+            base = float(base[-1])
+
+            height+=abs(base)
+
+        if "Motion" in line :
+            break
+    return height
+
+def CorrectionOfPositions(file,positions):
+
+    data = open(file, 'r')
+    Lines = data.readlines()
+    motion = False
+    Edited = []
+    counter = 0
+    for line in Lines :
+
+        if 'Frame Time:' in line:
+            motion = True
+            Edited.append(line)
+            continue
+        if motion :
+            pos = line.split(" ")
+            l = ''
+            pos  = [float(i) for i in pos]
+
+            for i in range(0,3): 
+                pos[i] = positions[counter][0][i]
+
+            counter +=1
+            for n,i in enumerate(pos):
+                if n == len(pos) -1:
+                    l += str(i) + '\n'
+                else:
+                    l += str(i) + ' '
+            Edited.append(l)
+        else:
+            Edited.append(line)
+    try:
+        geeky_file = open(file, 'wt')
+        for line in Edited:
+                geeky_file.write(str(line))
+        geeky_file.close()
+    except:
+        print("Unable to write to file")        
 def filter_display(win,file):
     def Quit():
         win.destroy()
-        
-    def default_filter():
-        fastsmooth(file)
-        messagebox.showinfo(title="Filter Info", message="The butterworth filter was applied successfully")
-        Quit()
+    
     def event(event=None):
         filter = Combo.get()
         if comboframe.winfo_exists():
@@ -116,31 +185,43 @@ def filter_display(win,file):
     
 
         if filter == 'butterworth':
+            question = Label(comboframe, text = '❔', fg = "black")
+            CreateToolTip(widget = question, text = "Border")
             Label(comboframe, text = "FFT Border: ", fg = "black")
             Border = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Border.set(100)
+            question = Label(comboframe, text = '❔', fg = "black")
+            CreateToolTip(widget = question, text = "Cutoff")
             Label(comboframe, text = "Cutoff frequency: ", fg = "black")
             Uo = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Uo.set(60)
+            question = Label(comboframe, text = '❔', fg = "black")
+            CreateToolTip(widget = question, text = "Order")
             Label(comboframe, text = "Order: ", fg = "black")
             Order = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Order.set(2)
             
         elif filter == 'average':
+            question = Label(comboframe, text = '❔', fg = "black")
+            CreateToolTip(widget = question, text = "Average")
             Label(comboframe, text = "Median: ", fg = "black")
             Median = ttk.Spinbox(comboframe, from_=2, to=10000, width=5, textvariable=IntVar())
             Median.set(35)
             
         elif filter == 'gaussian':
+            question = Label(comboframe, text = '❔', fg = "black")
+            CreateToolTip(widget = question, text = "Border")
             Label(comboframe, text = "FFT Border: ", fg = "black")
             Border = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Border.set(100)
+            question = Label(comboframe, text = '❔', fg = "black")
+            CreateToolTip(widget = question, text = "Sigma")
             Label(comboframe, text = "Sigma: ", fg = "black")
             Sigma = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Sigma.set(30)
             
         for widget in comboframe.winfo_children():
-            widget.pack(side=LEFT,padx=15, pady=10)
+            widget.pack(side=LEFT,padx=5, pady=10)
         if len(comboframe.winfo_children())> 1 :    
             if submit_frame.winfo_exists():
                 for widget in submit_frame.winfo_children():
@@ -167,12 +248,13 @@ def filter_display(win,file):
     height = win.winfo_screenheight()/3
     win.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
     win.title("Filter Editor")
-    frame = Frame(win)
-    frame.pack(side=TOP)
-    submit = Button(frame, text = 'Default Smoothing', width = 20 ,command=default_filter)
-    submit.pack(side=LEFT,padx = 10, pady = 0)
-    quit = Button(frame, text = 'Quit', width = 20 ,command=Quit)
-    quit.pack(side=LEFT, padx = 10, pady = 0)
+    menubar = Menu(win)
+    filemenu = Menu(menubar, tearoff=0)
+
+    filemenu.add_command(label="Exit", command=Quit)
+    menubar.add_cascade(label="File", menu=filemenu)
+    
+    win.config(menu=menubar)
     frame = Frame(win)
     frame.pack(side=TOP)
     vlist = ["butterworth", "average", "gaussian"]
@@ -182,27 +264,11 @@ def filter_display(win,file):
     Combo.set("Pick a Filter")
     Combo.pack(side=LEFT,padx = 20, pady = 20)
     Combo.bind("<<ComboboxSelected>>", event)
+    question = Label(frame, text = '❔', fg = "black")
+    question.pack(side=LEFT)
+    CreateToolTip(widget = question, text = "Filter Details")
     comboframe = Frame(win)
     comboframe.pack(side=TOP)
     submit_frame = Frame(win)
     submit_frame.pack(side=TOP)
     win.mainloop()
-
-def motion(file):
-
-    data = open(file, 'r')
-    Lines = data.readlines()
-    motion = False
-    mocap = []
-    for line in Lines:
-
-        if 'Frame Time:' in line:
-            motion = True
-            continue
-        if motion :
-            pos = line.split(" ")
-            pos  = np.array([float(i) for i in pos])
-            pos = pos.reshape((17,3))
-            mocap.append(pos)
-
-    return np.array(mocap)        
