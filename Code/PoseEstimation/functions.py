@@ -186,36 +186,45 @@ def filter_display(win,file):
 
         if filter == 'butterworth':
             question = Label(comboframe, text = '❔', fg = "black")
-            CreateToolTip(widget = question, text = "Border")
+            CreateToolTip(widget = question, text = "The FFT algorithm is used to convert a digital signal (x) with length (N) from the time domain into a signal in the frequency domain (X)\n"
+                                                    "The FFT takes as input a number of samples from a signal (the time domain representation)\n"
+                                                    "and produces as output the intensity at corresponding frequencies (the frequency domain representation).")
             Label(comboframe, text = "FFT Border: ", fg = "black")
             Border = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Border.set(100)
             question = Label(comboframe, text = '❔', fg = "black")
-            CreateToolTip(widget = question, text = "Cutoff")
+            CreateToolTip(widget = question, text = "Lets you establish a limit frequency value, in Hertz (Hz).\n"
+                                                    " All frequencies higher than this value are cut.\n"
+                                                    "The lower the value, the more frequencies are removed, resulting in a much smoother curve.")
             Label(comboframe, text = "Cutoff frequency: ", fg = "black")
             Uo = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Uo.set(60)
             question = Label(comboframe, text = '❔', fg = "black")
-            CreateToolTip(widget = question, text = "Order")
+            CreateToolTip(widget = question, text = "The order of a filter is the degree of the approximating polynomial and in passive filters corresponds to the number of elements required to build it.\n"
+                                                    "Increasing order increases roll-off and brings the filter closer to the ideal response.")
             Label(comboframe, text = "Order: ", fg = "black")
             Order = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Order.set(2)
             
-        elif filter == 'average':
+        elif filter == 'median':
             question = Label(comboframe, text = '❔', fg = "black")
-            CreateToolTip(widget = question, text = "Average")
+            CreateToolTip(widget = question, text = "Median filters are widely used as smoothers for image processing , as well as in signal processing and time series processing.\n"
+                                                    " A major advantage of the median filter over linear filters is that the median filter\n"
+                                                    " can eliminate the effect of input noise values with extremely large magnitudes.")
             Label(comboframe, text = "Median: ", fg = "black")
             Median = ttk.Spinbox(comboframe, from_=2, to=10000, width=5, textvariable=IntVar())
             Median.set(35)
             
         elif filter == 'gaussian':
             question = Label(comboframe, text = '❔', fg = "black")
-            CreateToolTip(widget = question, text = "Border")
+            CreateToolTip(widget = question, text = "The FFT algorithm is used to convert a digital signal (x) with length (N) from the time domain into a signal in the frequency domain (X)\n"
+                                                    "The FFT takes as input a number of samples from a signal (the time domain representation)\n"
+                                                    "and produces as output the intensity at corresponding frequencies (the frequency domain representation).")
             Label(comboframe, text = "FFT Border: ", fg = "black")
             Border = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Border.set(100)
             question = Label(comboframe, text = '❔', fg = "black")
-            CreateToolTip(widget = question, text = "Sigma")
+            CreateToolTip(widget = question, text = "A sigma value is a description of how far a sample or point of data is away from its mean")
             Label(comboframe, text = "Sigma: ", fg = "black")
             Sigma = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Sigma.set(30)
@@ -228,7 +237,7 @@ def filter_display(win,file):
                     widget.destroy()
             if filter == 'butterworth':
                 submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,border=Border.get(),uo=Uo.get(),order=Order.get()))
-            elif filter == 'average' :
+            elif filter == 'median' :
                 submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,median=Median.get()))
             elif filter == 'gaussian':
                 submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,border=Border.get(),sigma=Sigma.get())) 
@@ -238,10 +247,10 @@ def filter_display(win,file):
             messagebox.showinfo(title="Input Info", message='The filter parameteres must be integers.')
             return
         
-        if filter == 'average' and int(median) <2:
+        if filter == 'median' and int(median) <2:
             messagebox.showinfo(title="Median Info", message='The median must be greater than one.')
             return
-        smooth(filename=file,out=file, filter=filter,border= Try_parse(border),order=Try_parse(order),uo=Try_parse(uo),median=Try_parse(median),sigma=Try_parse(sigma))
+        smooth(filename=file,out=file, filter='average',border= Try_parse(border),order=Try_parse(order),uo=Try_parse(uo),median=Try_parse(median),sigma=Try_parse(sigma))
         messagebox.showinfo(title="Filter Info", message='The ' +filter+ ' was applied successfully.')
         Quit()
     width = win.winfo_screenwidth()/3
@@ -257,7 +266,7 @@ def filter_display(win,file):
     win.config(menu=menubar)
     frame = Frame(win)
     frame.pack(side=TOP)
-    vlist = ["butterworth", "average", "gaussian"]
+    vlist = ["butterworth", "median", "gaussian"]
     label = Label(frame, text = "Choose the filter type", fg = "black")
     label.pack(side=LEFT, padx = 20, pady = 20)
     Combo = ttk.Combobox(frame, values = vlist)
@@ -266,7 +275,11 @@ def filter_display(win,file):
     Combo.bind("<<ComboboxSelected>>", event)
     question = Label(frame, text = '❔', fg = "black")
     question.pack(side=LEFT)
-    CreateToolTip(widget = question, text = "Filter Details")
+    CreateToolTip(widget = question, text = "The Butterworth filter is a type of signal processing filter designed to have as flat\n" 
+                                            "frequency response as possible (no ripples) in the pass-band and zero roll off response in the stop-band.\n\n"
+                                            "The Median filter is a non-linear digital filtering technique, often used to completely remove noise from a signal,\n"
+                                            "but it reduce the quality of the signal. \n\n"
+                                            "A Gaussian Filter is a low pass filter used for reducing noise (high frequency components) and blurring.")
     comboframe = Frame(win)
     comboframe.pack(side=TOP)
     submit_frame = Frame(win)
