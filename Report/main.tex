@@ -1,0 +1,154 @@
+\documentclass[12pt,oneside,a4paper,english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin2]{inputenc}
+\usepackage[margin=2.25cm,headheight=26pt,includeheadfoot]{geometry}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage[framed, numbered]{matlab-prettifier}
+\usepackage{changepage}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{caption}
+\usepackage{tocloft}
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage{titling}
+\usepackage{float}
+\usepackage{comment}
+\usepackage{booktabs}
+\usepackage{indentfirst}
+\usepackage{lscape}
+\usepackage[english]{babel}
+\usepackage{booktabs,caption}
+\usepackage[flushleft]{threeparttable}
+\usepackage[english]{nomencl}
+\usepackage{xcolor}
+\usepackage{lipsum}
+
+
+% --- set footer and header ---
+\pagestyle{fancy}
+\fancyhf{}
+
+\setlength{\parindent}{2em}
+\title{Thesis} % to reference as \title, dont use \maketitle
+\makeatletter\let\Title\@title\makeatother
+
+
+
+\lstset{language=Matlab,
+style=Matlab-editor,
+basicstyle=\normalsize\mlttfamily,
+numbers=left,
+numberstyle={\scriptsize\color{black}},			% size of the numbers
+numbersep=0.5cm											
+}
+
+\newlist{steps}{enumerate}{1}
+\setlist[steps, 1]{leftmargin=1.5cm,label = Step \arabic*:}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+%\lhead{\Title}
+\rhead{\nouppercase{\rightmark}}
+\lhead{\Title}
+%\rfoot{\includegraphics[height=1.25cm]{root/logo.pdf}} % right header logo
+\setlength\headheight{16pt}
+\setlength{\footskip}{50pt}
+\lhead{\Title} %rightH title
+\cfoot{\thepage}
+
+% --- End of page settings ---
+
+
+
+\begin{document}
+\pagenumbering{roman} 
+\input{sources/0_frontpage.tex}
+
+\newpage
+\doublespacing
+%\addcontentsline{toc}{section}{Table of Contents}
+\renewcommand{\baselinestretch}{1}\normalsize
+\tableofcontents
+\renewcommand{\baselinestretch}{1}\normalsize
+\singlespacing
+\thispagestyle{fancy} % force page style
+
+
+\newpage
+\pagenumbering{arabic} 
+\fancyfoot[C]{Page \thepage\ of \pageref{EndOfText}}
+\newpage
+\section*{Abstract}
+\newpage
+\section*{Acknowledgments}
+\newpage
+\section*{Chapter 1 \\}
+\section{Introduction}
+\subsection{The increased demand of mocap clips}
+\input{sources/1_1.tex} 
+\subsection{Thesis aim}
+\input{sources/1_2.tex} 
+\subsection{Thesis Structure}
+\input{sources/1_3.tex} 
+
+\newpage
+\section*{Chapter 2 \\}
+\section{Background}
+\subsection{Mocap clips}
+\input{sources/2_1.tex} 
+\pagebreak
+\subsubsection{Optical Motion Capture}
+\input{sources/2_1_1.tex} 
+\pagebreak
+\subsubsection{Non-Optical Motion Capture}
+\input{sources/2_1_2.tex} 
+\subsection{Related Work}
+\subsection{First Approach, with GAN's}
+\subsubsection{Dataset}
+\subsubsection{Theory}
+\subsubsection{Cons and Pros of this idea}
+\newpage
+\section{Requirements}
+\subsection{Hardware}
+\subsection{Input requirements}
+\subsection{Application's UI}
+\newpage
+\section{Implementation}
+\subsection{Mocap Dataset Augmentation using pretrained models}
+\subsubsection{Dataset Augmentation}
+\subsubsection{Available Pretrained Models}
+\subsubsection{Alpha-pose model}
+\subsubsection{Orientation and location estimation}
+\subsection{Animator Tools}
+\subsubsection{Fast BVH Editing}
+\subsubsection{BVH Filtering}
+\subsection{Windows Application}
+\subsubsection{Tkinter library}
+\subsubsection{Construction of the Application }
+\newpage
+\section{Evaluation}
+\subsection{Algorithm Accuracy}
+\subsection{Comparing Result}
+\newpage
+\section{Discussion}
+\subsection{Drawbacks of our Work}
+\subsection{Future Approaches}
+\newpage
+\input{sources/references.tex} 
+% \section{Introduction} \label{ch1}
+% \input{sources/1_introduction.tex} 
+
+\label{EndOfText}
+
+\label{endOfDoc}
+
+\end{document}
