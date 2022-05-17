@@ -328,12 +328,12 @@ class MainMenu():
     def Model(self):
         def disable_buttons():
             submit.config(state="disabled")
-            ChangeMenu.config(state="disabled")
+            #ChangeMenu.config(state="disabled")
 
         def enable_buttons():
             submit.config(state="normal")
             self.edit = True
-            ChangeMenu.config(state="normal")
+            #ChangeMenu.config(state="normal")
 
         def changePanel():
             if self.edit:
@@ -443,7 +443,7 @@ class MainMenu():
         frame3 = Frame(window)
         frame3.pack(side=TOP)
         submit = Button(frame3, text = 'Submit', width = 30,command=threading)
-        ChangeMenu = Button(frame3, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
+        #ChangeMenu = Button(frame3, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
         #ChangeMenu.config(state="disabled")
         for widget in frame3.winfo_children():
             widget.pack(side=LEFT,padx=15, pady=15)

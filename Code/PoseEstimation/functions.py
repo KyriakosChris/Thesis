@@ -250,7 +250,9 @@ def filter_display(win,file):
         if filter == 'median' and int(median) <2:
             messagebox.showinfo(title="Median Info", message='The median must be greater than one.')
             return
-        smooth(filename=file,out=file, filter='average',border= Try_parse(border),order=Try_parse(order),uo=Try_parse(uo),median=Try_parse(median),sigma=Try_parse(sigma))
+        if filter == 'median':
+            filter = 'average'
+        smooth(filename=file,out=file, filter=filter,border= Try_parse(border),order=Try_parse(order),uo=Try_parse(uo),median=Try_parse(median),sigma=Try_parse(sigma))
         messagebox.showinfo(title="Filter Info", message='The ' +filter+ ' was applied successfully.')
         Quit()
     width = win.winfo_screenwidth()/3
