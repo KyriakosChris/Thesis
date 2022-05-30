@@ -26,7 +26,6 @@ class InferenNet(nn.Module):
 
         # model = createModel().cpu()
         model = createModel().cuda()
-        print('Loading POSE model.. ')
         sys.stdout.flush()
         model.load_state_dict(torch.load('joints_detectors/Alphapose/models/sppe/duc_se.pth', map_location=torch.device('cpu')))
         #model.load_state_dict(torch.load('joints_detectors/Alphapose/models/sppe/duc_se.pth'))
@@ -56,7 +55,6 @@ class InferenNet_fast(nn.Module):
 
         model = createModel().cpu()
         #model = createModel().cuda()
-        print('Loading pose model from {}'.format('models/sppe/duc_se.pth'))
         model.load_state_dict(torch.load('models/sppe/duc_se.pth'))
         model.eval()
         self.pyranet = model

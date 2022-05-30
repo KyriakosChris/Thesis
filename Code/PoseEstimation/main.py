@@ -43,10 +43,10 @@ class MainMenu():
         self.prediction = None
         self.question = '❔'
         self.edit = False
-        # self.file_name = ""
-        # self.folder_name = ""
-        self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
-        self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
+        self.file_name = ""
+        self.folder_name = ""
+        #self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
+        #self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
         
 
     def getfile(self):
@@ -225,7 +225,9 @@ class MainMenu():
             self.edit = False
             self.Model()
         def Help():
-            filewin = Toplevel(self.root)
+            filewin = Toplevel(window)
+            filewin.grab_set()
+            filewin.resizable(0, 0)
             width = filewin.winfo_screenwidth()/3
             height = filewin.winfo_screenheight()/3
             filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
@@ -328,12 +330,10 @@ class MainMenu():
     def Model(self):
         def disable_buttons():
             submit.config(state="disabled")
-            #ChangeMenu.config(state="disabled")
 
         def enable_buttons():
             submit.config(state="normal")
             self.edit = True
-            #ChangeMenu.config(state="normal")
 
         def changePanel():
             if self.edit:
@@ -369,7 +369,9 @@ class MainMenu():
             else:
                 print('Folder ', self.folder_name, ' ,was set successfully!')
         def Help():
-            filewin = Toplevel(self.root)
+            filewin = Toplevel(window)
+            filewin.grab_set()
+            filewin.resizable(0, 0)
             width = filewin.winfo_screenwidth()/3
             height = filewin.winfo_screenheight()/3
             filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
@@ -411,18 +413,6 @@ class MainMenu():
         new_img = ImageTk.PhotoImage(im1)
         tuc = Label(frame, image = new_img)
         tuc.pack(side=LEFT)
-        
-        # frame2 = Frame(window)
-        # frame2.pack(side=TOP)
-        # Label(frame2, text = "Enter video file: ", fg = "black", font= "none 12 bold")
-        # file_button = Button(frame2,text='Browse a File',command=select_file)
-        # Label(frame2, text = "Output folder: ", fg = "black", font= "none 12 bold")
-        # folder_button = Button(frame2,text='Browse a Folder',command=select_folder)
-  
-        # for widget in frame2.winfo_children():
-        #     widget.pack(side=LEFT,padx=5, pady=5)
-
-
 
         frame4 = Frame(window)
         frame4.pack(side=TOP)
@@ -443,8 +433,7 @@ class MainMenu():
         frame3 = Frame(window)
         frame3.pack(side=TOP)
         submit = Button(frame3, text = 'Submit', width = 30,command=threading)
-        #ChangeMenu = Button(frame3, text = "Animate and the Edit Results: ",width = 30,command=self.EditBvh)
-        #ChangeMenu.config(state="disabled")
+        
         for widget in frame3.winfo_children():
             widget.pack(side=LEFT,padx=15, pady=15)
 

@@ -46,14 +46,6 @@ def CreateToolTip(widget, text):
     widget.bind('<Leave>', leave)
 
 
-def fastsmooth(filename):
-    filter = 'butterworth'
-    border = 100 
-    u0 = 60
-    order = 2
-    median = None
-    sigma = None
-    smooth(filename,filename,filter,order,border,u0, median , sigma)
 
 def string_Parse(str):
     if str == None:

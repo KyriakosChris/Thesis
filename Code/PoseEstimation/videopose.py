@@ -128,9 +128,9 @@ def main(args):
     base_Y = Calculate_Height(bvh_file)
 
     # Adding some adjustments...
-    prediction[:, 0, 0] /= (args.height + args.width)*0.1
-    prediction[:, 0, 1] /= (args.height + args.width)*0.1
-    prediction[:, 0, 2] /= (args.height + args.width)*0.1
+    prediction[:, 0, 0] /= (args.height + args.width)*0.3
+    prediction[:, 0, 1] /= (args.height + args.width)*0.3
+    prediction[:, 0, 2] /= (args.height + args.width)*0.3
     prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
     CorrectionOfPositions(bvh_file,prediction)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")

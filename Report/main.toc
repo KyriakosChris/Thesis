@@ -1,0 +1,43 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {0}Abstract}{1}{section.0}%
+\contentsline {section}{\numberline {0}Acknowledgments}{2}{section.0}%
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}The increased demand of mocap clips}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Thesis aim}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Thesis Structure}{4}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Background}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Mocap clips}{6}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Optical Motion Capture}{7}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Non-Optical Motion Capture}{8}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Neural Networks}{10}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Artificial Neural Network}{10}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Convolutional Neural Network}{14}{subsubsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}Related Work}{16}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Gait mocap clip Generation through a GAN}{18}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Dataset}{18}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Generative Adversarial Networks}{19}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Evaluation of the approach}{20}{subsubsection.2.4.3}%
+\contentsline {section}{\numberline {3}Requirements}{22}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Hardware}{22}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Input requirements}{23}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Application's Workflow}{24}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Implementation}{25}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Mocap Dataset Augmentation using pretrained models}{25}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Dataset Augmentation}{25}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Available Pretrained Models}{25}{subsubsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.3}Alpha-pose model}{25}{subsubsection.4.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.4}Orientation and location estimation}{25}{subsubsection.4.1.4}%
+\contentsline {subsection}{\numberline {4.2}Animator Tools}{25}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Biovision Hierarchical (BVH)}{25}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Fast BVH Editing}{25}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}BVH Filtering}{25}{subsubsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.3}Windows Application}{25}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Application's UI}{25}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Tkinter library}{25}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Construction of the Application }{25}{subsubsection.4.3.3}%
+\contentsline {section}{\numberline {5}Evaluation}{26}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Algorithm Accuracy}{26}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Comparing Result}{26}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Discussion}{27}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Drawbacks of our Work}{27}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Future Approaches}{27}{subsection.6.2}%

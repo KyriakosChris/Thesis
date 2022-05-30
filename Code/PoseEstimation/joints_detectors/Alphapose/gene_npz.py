@@ -83,7 +83,7 @@ def handle_video(video_file):
     print('The video is {} f/s'.format(fps))
     # =========== end video ===============
     # Load detection loader
-    print('Loading YOLO model..')
+    print('Loading Model...')
     sys.stdout.flush()
     det_loader = DetectionLoader(data_loader, batchSize=args.detbatch).start()
     #  start a thread to read frames from the file video stream
@@ -106,7 +106,7 @@ def handle_video(video_file):
     save_path = os.path.join(args.outputpath, 'AlphaPose_' + ntpath.basename(video_file).split('.')[0] + '.avi')
 
     writer = DataWriter(args.save_video).start()
-    print('Start pose estimation...')
+    print('Starting pose estimation...')
     batchSize = args.posebatch
     n = data_loader.length()  # or however many loading slots you want to have
     loading = '.' * n  # for strings, * is the repeat operator

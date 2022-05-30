@@ -32,7 +32,6 @@
 \usepackage{xcolor}
 \usepackage{lipsum}
 
-
 % --- set footer and header ---
 \pagestyle{fancy}
 \fancyhf{}
@@ -40,8 +39,6 @@
 \setlength{\parindent}{2em}
 \title{Thesis} % to reference as \title, dont use \maketitle
 \makeatletter\let\Title\@title\makeatother
-
-
 
 \lstset{language=Matlab,
 style=Matlab-editor,
@@ -75,21 +72,22 @@ numbersep=0.5cm
 
 \newpage
 \doublespacing
-%\addcontentsline{toc}{section}{Table of Contents}
+%\addcontentsline{toc}{section}{Abstract}
+%\addcontentsline{toc}{section}{Acknowledgments}
 \renewcommand{\baselinestretch}{1}\normalsize
 \tableofcontents
 \renewcommand{\baselinestretch}{1}\normalsize
 \singlespacing
 \thispagestyle{fancy} % force page style
-
-
 \newpage
 \pagenumbering{arabic} 
 \fancyfoot[C]{Page \thepage\ of \pageref{EndOfText}}
 \newpage
-\section*{Abstract}
+\addtocounter{section}{-1}
+\section{Abstract}
+\addtocounter{section}{-1}
 \newpage
-\section*{Acknowledgments}
+\section{Acknowledgments}
 \newpage
 \section*{Chapter 1 \\}
 \section{Introduction}
@@ -111,16 +109,29 @@ numbersep=0.5cm
 \pagebreak
 \subsubsection{Non-Optical Motion Capture}
 \input{sources/2_1_2.tex} 
+\subsection{Neural Networks}
+\subsubsection{Artificial Neural Network}
+\input{sources/2_2_1.tex} 
+\subsubsection{Convolutional Neural Network}
+\input{sources/2_2_2.tex}
 \subsection{Related Work}
-\subsection{First Approach, with GAN's}
+\input{sources/2_3.tex} 
+\subsection{Gait mocap clip Generation through a GAN}
+\input{sources/2_4.tex}
 \subsubsection{Dataset}
-\subsubsection{Theory}
-\subsubsection{Cons and Pros of this idea}
+\input{sources/2_4_1}
+\subsubsection{Generative Adversarial Networks}
+\input{sources/2_4_2}
+\subsubsection{Evaluation of the approach}
+\input{sources/2_4_3}
 \newpage
 \section{Requirements}
 \subsection{Hardware}
+\input{sources/3_1}
 \subsection{Input requirements}
-\subsection{Application's UI}
+\input{sources/3_2}
+\subsection{Application's Workflow}
+\input{sources/3_3}
 \newpage
 \section{Implementation}
 \subsection{Mocap Dataset Augmentation using pretrained models}
@@ -129,9 +140,11 @@ numbersep=0.5cm
 \subsubsection{Alpha-pose model}
 \subsubsection{Orientation and location estimation}
 \subsection{Animator Tools}
+\subsubsection{Biovision Hierarchical (BVH)}
 \subsubsection{Fast BVH Editing}
 \subsubsection{BVH Filtering}
 \subsection{Windows Application}
+\subsubsection{Application's UI}
 \subsubsection{Tkinter library}
 \subsubsection{Construction of the Application }
 \newpage

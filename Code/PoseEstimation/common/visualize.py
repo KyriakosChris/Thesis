@@ -289,7 +289,10 @@ def create_video(file, output):
     size = (width,height)
     if os.path.exists(output):
         os.remove(output)
-    out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
+    if anim.fps > 45 :
+        out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
+    else:
+        out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
     for i in range(len(images)):
         out.write(images[i])
     out.release()
