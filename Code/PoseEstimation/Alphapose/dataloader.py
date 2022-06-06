@@ -11,14 +11,14 @@ import torch.multiprocessing as mp
 import torch.utils.data as data
 from torch.autograd import Variable
 
-from SPPE.src.utils.eval import getPrediction, getMultiPeakPrediction
-from SPPE.src.utils.img import load_image, cropBox, im_to_torch
-from matching import candidate_reselect as matching
-from opt import opt
-from pPose_nms import pose_nms
-from yolo.darknet import Darknet
-from yolo.preprocess import prep_image, prep_frame
-from yolo.util import dynamic_write_results
+from Alphapose.SPPE.src.utils.eval import getPrediction, getMultiPeakPrediction
+from Alphapose.SPPE.src.utils.img import load_image, cropBox, im_to_torch
+from Alphapose.matching import candidate_reselect as matching
+from Alphapose.opt import opt
+from Alphapose.pPose_nms import pose_nms
+from Alphapose.yolo.darknet import Darknet
+from Alphapose.yolo.preprocess import prep_image, prep_frame
+from Alphapose.yolo.util import dynamic_write_results
 
 # import the Queue class from Python 3
 if sys.version_info >= (3, 0):
@@ -28,9 +28,9 @@ else:
     from Queue import Queue, LifoQueue
 
 if opt.vis_fast:
-    from fn import vis_frame_fast as vis_frame
+    from Alphapose.fn import vis_frame_fast as vis_frame
 else:
-    from fn import vis_frame
+    from Alphapose.fn import vis_frame
 
 
 
@@ -131,8 +131,8 @@ class DetectionLoader:
     def __init__(self, dataloder, batchSize=1, queueSize=1024):
         # initialize the file video stream along with the boolean
         # used to indicate if the thread should be stopped or not
-        self.det_model = Darknet("joints_detectors/Alphapose/yolo/cfg/yolov3-spp.cfg")
-        self.det_model.load_weights('joints_detectors/Alphapose/models/yolo/yolov3-spp.weights')
+        self.det_model = Darknet("Alphapose/yolo/cfg/yolov3-spp.cfg")
+        self.det_model.load_weights('Alphapose/models/yolo/yolov3-spp.weights')
         self.det_model.net_info['height'] = opt.inp_dim
         self.det_inp_dim = int(self.det_model.net_info['height'])
         assert self.det_inp_dim % 32 == 0

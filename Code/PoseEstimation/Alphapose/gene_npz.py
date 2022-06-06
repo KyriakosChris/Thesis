@@ -5,11 +5,11 @@ import shutil
 import numpy as np
 import torch.utils.data
 from progress_Bar.bar import *
-from SPPE.src.main_fast_inference import *
-from common.utils import calculate_area
-from dataloader import DetectionLoader, DetectionProcessor, DataWriter, Mscoco, VideoLoader
-from fn import getTime
-from opt import opt
+from Alphapose.SPPE.src.main_fast_inference import *
+from model_functions.utils import calculate_area
+from Alphapose.dataloader import DetectionLoader, DetectionProcessor, DataWriter, Mscoco, VideoLoader
+from Alphapose.fn import getTime
+from Alphapose.opt import opt
 
 args = opt
 args.dataset = 'coco'

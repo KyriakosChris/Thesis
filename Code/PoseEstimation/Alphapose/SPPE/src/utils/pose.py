@@ -4,7 +4,7 @@ from .eval import getPrediction
 import torch
 import numpy as np
 import random
-from opt import opt
+from Alphapose.opt import opt
 
 
 def rnd(x):

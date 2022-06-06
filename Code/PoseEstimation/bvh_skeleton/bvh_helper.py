@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-
 class BvhNode(object):
     def __init__(
         self, name, offset, rotation_order,
@@ -58,19 +57,44 @@ def write_header(writer, node, level):
     indent = ' ' * 4 * level
     writer.write(f'{indent}{"}"}\n')
 
-
 def write_bvh(output_file, header, channels, frame_rate=30):
     output_file = Path(output_file)
     if not output_file.parent.exists():
         os.makedirs(output_file.parent)
-    
+    T_Pose = {
+            'Hip': [-1, 0, 0],
+            'RightHip': [-1, 0, 0],
+            'RightKnee': [0, 0, -1],
+            'RightAnkle': [0, 0, -1],
+            'RightAnkleEndSite': [0, -1, 0],
+            'LeftHip': [1, 0, 0],
+            'LeftKnee': [0, 0, -1],
+            'LeftAnkle': [0, 0, -1],
+            'LeftAnkleEndSite': [0, -1, 0],
+            'Spine': [0, 0, 1],
+            'Thorax': [0, 0, 1],
+            'Neck': [0, 0, 1],
+            'HeadEndSite': [0, 0, 1],
+            'LeftShoulder': [1, 0, 0],
+            'LeftElbow': [1, 0, 0],
+            'LeftWrist': [1, 0, 0],
+            'LeftWristEndSite': [1, 0, 0],
+            'RightShoulder': [-1, 0, 0],
+            'RightElbow': [-1, 0, 0],
+            'RightWrist': [-1, 0, 0],
+            'RightWristEndSite': [-1, 0, 0]
+        }
     with output_file.open('w') as f:
         f.write('HIERARCHY\n')
         write_header(writer=f, node=header.root, level=0)
         
         f.write('MOTION\n')
-        f.write(f'Frames: {len(channels)}\n')
+        f.write(f'Frames: {len(channels) +1}\n')
         f.write(f'Frame Time: {1 / frame_rate}\n')
-
+        s = '0 0 0 ' # init position 
+        for value in T_Pose.values():
+            for dir in value:
+                s+= str(dir) + ' ' 
+        f.write(f'{s[:-1]}\n')
         for channel in channels:
             f.write(' '.join([f'{element}' for element in channel]) + '\n')

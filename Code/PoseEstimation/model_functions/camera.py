@@ -6,8 +6,8 @@
 #
 
 import numpy as np
-from common.quaternion import qrot, qinverse
-from common.utils import wrap
+from model_functions.quaternion import qrot, qinverse
+from model_functions.utils import wrap
 
 
 def normalize_screen_coordinates(X, w, h):

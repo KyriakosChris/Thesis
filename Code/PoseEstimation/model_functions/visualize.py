@@ -267,7 +267,7 @@ class Bvh:
         self.Z = (-75 + min(p[:,0,1]), 75 + max(p[:,0,1]))
         self.Y = (-75 + min(p[:,0,2]), 75 + max(p[:,0,2]))
         
-        for i in IncrementalBar('Rendering...').iter(range(self.frames)):
+        for i in IncrementalBar('Rendering...').iter(range(self.frames - 1)):
             self.plot_frame(i, fig, ax)
 
     def __repr__(self):
@@ -293,7 +293,7 @@ def create_video(file, output):
         out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
     else:
         out = cv2.VideoWriter(output,cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
-    for i in range(len(images)):
+    for i in range(1,len(images)):
         out.write(images[i])
     out.release()
     image_path = f'./common/images/*.png'

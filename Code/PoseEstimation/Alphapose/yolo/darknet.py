@@ -12,9 +12,9 @@ try:
     from util import convert2cpu as cpu
     from util import predict_transform
 except ImportError:
-    from yolo.util import count_parameters as count
-    from yolo.util import convert2cpu as cpu
-    from yolo.util import predict_transform
+    from Alphapose.yolo.util import count_parameters as count
+    from Alphapose.yolo.util import convert2cpu as cpu
+    from Alphapose.yolo.util import predict_transform
 
 class test_net(nn.Module):
     def __init__(self, num_layers, input_size):

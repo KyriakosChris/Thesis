@@ -1,17 +1,17 @@
 import os
 import time
-from common.arguments import parse_args
-from common.camera import *
-from common.generators import UnchunkedGenerator
-from common.loss import *
-from common.model import *
-from common.utils import Timer, evaluate, add_path
+from model_functions.arguments import parse_args
+from model_functions.camera import *
+from model_functions.generators import UnchunkedGenerator
+from model_functions.loss import *
+from model_functions.model import *
+from model_functions.utils import Timer, evaluate, add_path
 import cv2
 from numpy import *
 import numpy as np
-from bvh_skeleton import h36m_skeleton,cmu_skeleton
-from functions import CorrectionOfPositions, Calculate_Height
-from common.visualize import *
+from bvh_skeleton import h36m_skeleton
+from usefulTools import CorrectionOfPositions, Calculate_Height
+from model_functions.visualize import *
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -31,7 +31,7 @@ time0 = ckpt_time()
 
 def get_detector_2d(detector_name):
     def get_alpha_pose():
-        from joints_detectors.Alphapose.gene_npz import generate_kpts as alpha_pose
+        from Alphapose.gene_npz import generate_kpts as alpha_pose
         return alpha_pose
 
     detector_map = {
@@ -43,7 +43,6 @@ def get_detector_2d(detector_name):
     return detector_map[detector_name]()
 
 def main(args):
-    # 第一步：检测2D关键点
     detector_2d = get_detector_2d(args.detector_2d)
     assert detector_2d, 'detector_2d should be alpha_pose'
     #args.input_npz = 'keypoints.npy'
@@ -88,13 +87,12 @@ def main(args):
     # load trained model
     chk_filename = os.path.join(args.checkpoint, args.resume if args.resume else args.evaluate)
     print('Loading checkpoint', chk_filename)
-    checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)  # 把loc映射到storage
+    checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)  
     model_pos.load_state_dict(checkpoint['model_pos'])
 
     ckpt, time2 = ckpt_time(time1)
     print('-------------- load 3D model spends {:.2f} seconds'.format(ckpt))
 
-    #  Receptive field: 243 frames for args.arc [3, 3, 3, 3, 3]
     receptive_field = model_pos.receptive_field()
     pad = (receptive_field - 1) // 2  # Padding on each side
     causal_shift = 0
@@ -143,7 +141,7 @@ def main(args):
 
 
     
-def inference_video(video_path, output_path, detector_2d):
+def input_video(video_path, output_path, detector_2d):
     """
     Do image -> 2d points -> 3d points to video.
     :param detector_2d: used 2d joints detector. Can be alpha_pose
@@ -205,14 +203,12 @@ def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     :return:
     '''
 
-    # 将预测的点放大100倍
     for frame in prediction3dpoint:
         for point3d in frame:
             point3d[0] *= 100
             point3d[1] *= 100
             point3d[2] *= 100
 
-            # 交换Y和Z的坐标
             #X = point3d[0]
             #Y = point3d[1]
             #Z = point3d[2]
@@ -228,27 +224,20 @@ def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     if not os.path.exists(bvhfileDirectory):
         os.makedirs(bvhfileDirectory)
     bvhfileName = os.path.join(dir_name,video_name,"{}.bvh".format(video_name))
-    # cmuskeleton = h36m_skeleton.H36mSkeleton()
-    # cmuskeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
     human36m_skeleton = h36m_skeleton.H36mSkeleton()
     human36m_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
 
 
 def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
-    '''
-    :param outbvhfilepath: 输出bvh动作文件路径
-    :param prediction3dpoint: 预测的三维关节点
-    :return:
-    '''
 
-    # 将预测的点放大100倍
+
+
     for frame in prediction3dpoint:
         for point3d in frame:
             # point3d[0] *= 100
             # point3d[1] *= 100
             # point3d[2] *= 100
 
-            # 交换Y和Z的坐标
             X = point3d[0]
             Y = point3d[1]
             Z = point3d[2]
@@ -264,12 +253,10 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     if not os.path.exists(bvhfileDirectory):
         os.makedirs(bvhfileDirectory)
     bvhfileName = os.path.join(dir_name,video_name,"{}.bvh".format(video_name))
-    cmuskeleton = h36m_skeleton.H36mSkeleton()
-    cmuskeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
-    # SmartBody_skeleton = smartbody_skeleton.SmartBodySkeleton()
-    # SmartBody_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
+    human36m_skeleton = h36m_skeleton.H36mSkeleton()
+    human36m_skeleton.poses2bvh(prediction3dpoint,output_file=bvhfileName)
     return bvhfileName
 
 if __name__ == '__main__':
-    inference_video('outputs/inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
+    input_video('outputs/inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
 

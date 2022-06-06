@@ -6,8 +6,8 @@ import torch.nn as nn
 import torch.utils.data
 import torch.utils.data.distributed
 
-from SPPE.src.models.FastPose import createModel
-from SPPE.src.utils.img import flip, shuffleLR
+from Alphapose.SPPE.src.models.FastPose import createModel
+from Alphapose.SPPE.src.utils.img import flip, shuffleLR
 
 try:
     torch._utils._rebuild_tensor_v2
@@ -27,8 +27,8 @@ class InferenNet(nn.Module):
         # model = createModel().cpu()
         model = createModel().cuda()
         sys.stdout.flush()
-        model.load_state_dict(torch.load('joints_detectors/Alphapose/models/sppe/duc_se.pth', map_location=torch.device('cpu')))
-        #model.load_state_dict(torch.load('joints_detectors/Alphapose/models/sppe/duc_se.pth'))
+        model.load_state_dict(torch.load('Alphapose/models/sppe/duc_se.pth', map_location=torch.device('cpu')))
+        #model.load_state_dict(torch.load('Alphapose/models/sppe/duc_se.pth'))
         model.eval()
         self.pyranet = model
 
@@ -53,9 +53,9 @@ class InferenNet_fast(nn.Module):
     def __init__(self, kernel_size, dataset):
         super(InferenNet_fast, self).__init__()
 
-        model = createModel().cpu()
-        #model = createModel().cuda()
-        model.load_state_dict(torch.load('models/sppe/duc_se.pth'))
+        #model = createModel().cpu()
+        model = createModel().cuda()
+        model.load_state_dict(torch.load('models/sppe/duc_se.pth',map_location=torch.device('cpu')))
         model.eval()
         self.pyranet = model
 

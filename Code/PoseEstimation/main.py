@@ -1,4 +1,4 @@
-from videopose import inference_video
+from AlgorithmMain import input_video
 from threading import *
 from tkinter import *   
 import sys
@@ -6,10 +6,10 @@ from tkinter import filedialog as fd
 from PIL import Image,ImageTk
 import os
 from tkinter import messagebox
-from functions import PositionEdit, filter_display,CreateToolTip
-from common.visualize import create_video
+from usefulTools import PositionEdit, filter_display,CreateToolTip
+from model_functions.visualize import create_video
 import datetime
-from common.tkvideoplayer import TkinterVideo
+from model_functions.tkvideoplayer import TkinterVideo
 
 class Redirect():
 
@@ -40,13 +40,13 @@ class MainMenu():
         self.root = Tk()
         self.root.withdraw()
         self.current_window = None
-        self.prediction = None
         self.question = '❔'
         self.edit = False
-        self.file_name = ""
-        self.folder_name = ""
-        #self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
-        #self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
+        #self.file_name = ""
+        #self.folder_name = ""
+        self.file_load = ""
+        self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
+        self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
         
 
     def getfile(self):
@@ -76,9 +76,6 @@ class MainMenu():
                 bvhpath = f'{self.folder_name}/{video_name}/{video_name}.bvh'
                 PositionEdit(bvhpath,positions)
                 messagebox.showinfo(title="Edit Info", message="Edit completed successfully")
-                self.prediction[:, 0, 0] /= X
-                self.prediction[:, 0, 1] /= Y
-                self.prediction[:, 0, 2] /= Z
             else:
                 messagebox.showwarning(title="Edit Info", message="Wrong Input")
                 
@@ -323,8 +320,11 @@ class MainMenu():
         text = Text(frame7,width=78 ,height = 1,relief='flat',bg='SystemButtonFace')
         text.pack_forget()
         sys.stdout = Redirect(text)
-
         play_video()
+        if self.edit == False:
+            create_threading()
+            self.edit = True
+        
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
         window.mainloop()
     def Model(self):
@@ -332,7 +332,7 @@ class MainMenu():
             submit.config(state="disabled")
 
         def enable_buttons():
-            submit.config(state="normal")
+            #submit.config(state="normal")
             self.edit = True
 
         def changePanel():
@@ -345,7 +345,7 @@ class MainMenu():
                 messagebox.showwarning("Input Warning", "The folder or the file failed to be browsed")
             else:
                 disable_buttons()
-                self.prediction = inference_video(self.file_name,self.folder_name,'alpha_pose')
+                self.prediction = input_video(self.file_name,self.folder_name,'alpha_pose')
                 enable_buttons()
 
         def threading():
@@ -360,6 +360,22 @@ class MainMenu():
                 messagebox.showwarning("File Warning", "The file failed to load")
             else:
                 print('File ', self.file_name, ' ,was loaded successfully!')
+
+        def select_bvh():
+            filetypes = (('video files', '*.bvh'),('All files', '*.*'))
+            self.bvhName = fd.askopenfilename(title='Browse a file',initialdir='/',filetypes=filetypes)
+
+            if len(self.bvhName) == 0:
+                messagebox.showwarning("File Warning", "The file failed to load")
+            else:
+                print('File ', self.bvhName, ' ,was loaded successfully!')
+                
+                basename = os.path.basename(self.bvhName)
+                self.file_name = self.bvhName
+                video_name = basename[:basename.rfind('.')] 
+                self.folder_name = self.bvhName.split(video_name)[0]
+                self.file = f'{self.folder_name}\{video_name}\{"3d_pose"}.mp4'
+                self.EditBvh()
 
         def select_folder():
             window.update()
@@ -396,6 +412,7 @@ class MainMenu():
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New Video", command=select_file)
         filemenu.add_command(label="Save To", command=select_folder)
+        filemenu.add_command(label="Load BVH File", command=select_bvh)
         filemenu.add_separator()
 
         filemenu.add_command(label="Exit", command=self.root.destroy)

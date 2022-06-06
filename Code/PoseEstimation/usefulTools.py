@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import ttk
+
+from torch import true_divide
 from BVHsmoother.smooth import smooth
 import numpy as np
 from tkinter import *   
@@ -78,11 +80,16 @@ def PositionEdit(file,positions):
     data = open(file, 'r')
     Lines = data.readlines()
     motion = False
+    T_pose = False
     Edited = []
     for line in Lines:
 
         if 'Frame Time:' in line:
             motion = True
+            Edited.append(line)
+            continue
+        if T_pose:
+            T_pose = False
             Edited.append(line)
             continue
         if motion :
@@ -133,12 +140,18 @@ def CorrectionOfPositions(file,positions):
     data = open(file, 'r')
     Lines = data.readlines()
     motion = False
+    T_pose = False
     Edited = []
     counter = 0
     for line in Lines :
 
         if 'Frame Time:' in line:
             motion = True
+            Edited.append(line)
+            T_pose = True
+            continue
+        if T_pose:
+            T_pose = False
             Edited.append(line)
             continue
         if motion :
