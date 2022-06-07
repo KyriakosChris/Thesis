@@ -1,4 +1,4 @@
-import av
+from av import open
 import time
 import threading
 import logging
@@ -77,7 +77,7 @@ class TkinterVideo(tk.Label):
         current_thread = threading.current_thread()
 
         try:
-            with av.open(file_path) as container:
+            with open(file_path) as container:
 
                 try:
                     self._frame_rate = int(container.streams.video[0].average_rate)

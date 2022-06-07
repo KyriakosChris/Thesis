@@ -10,7 +10,6 @@ from usefulTools import PositionEdit, filter_display,CreateToolTip
 from model_functions.visualize import create_video
 import datetime
 from model_functions.tkvideoplayer import TkinterVideo
-
 class Redirect():
 
     def __init__(self, widget, autoscroll=True):
@@ -340,16 +339,16 @@ class MainMenu():
                 self.EditBvh()
             else:
                 messagebox.showwarning("Edit Warning", "Create the BVH file first to edit it")
-        def click():
+        def pose_estimator():
             if len(self.file_name) == 0 or len(self.folder_name) == 0:
                 messagebox.showwarning("Input Warning", "The folder or the file failed to be browsed")
             else:
                 disable_buttons()
-                self.prediction = input_video(self.file_name,self.folder_name,'alpha_pose')
+                input_video(self.file_name,self.folder_name,'alpha_pose')
                 enable_buttons()
 
         def threading():
-            t1=Thread(target=click)
+            t1=Thread(target=pose_estimator)
             t1.start()
 
         def select_file():

@@ -164,7 +164,7 @@ def input_video(video_path, output_path, detector_2d):
     args.evaluate = 'pretrained_h36m_detectron_coco.bin'
 
     with Timer(video_path):
-        return main(args)
+        main(args)
 
 
 def saveVideo(args,poly,xyz):
@@ -258,5 +258,5 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     return bvhfileName
 
 if __name__ == '__main__':
-    input_video('outputs/inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
+    input_video('inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
 
