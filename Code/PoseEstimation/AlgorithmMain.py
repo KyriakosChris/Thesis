@@ -1,3 +1,4 @@
+from http.cookiejar import MozillaCookieJar
 import os
 import time
 from model_functions.arguments import parse_args
@@ -38,20 +39,23 @@ def get_detector_2d(detector_name):
         'alpha_pose': get_alpha_pose
     }
 
-    assert detector_name in detector_map, f'2D detector: {detector_name} not implemented yet!'
 
     return detector_map[detector_name]()
 
 def main(args):
     detector_2d = get_detector_2d(args.detector_2d)
     assert detector_2d, 'detector_2d should be alpha_pose'
-    #args.input_npz = 'keypoints.npy'
+    
+    basename = os.path.basename(args.viz_video)
+    name = basename[:basename.rfind('.')]
+    args.input_npz = f'{args.new_folder}/{name}.npy'
     # 2D kpts loads or generate
-    if not args.input_npz:
-        video_name = args.viz_video
-        keypoints = detector_2d(video_name)
+    if not os.path.exists(args.input_npz):
+        keypoints = detector_2d(args.viz_video)
+        #np.save(args.input_npz, keypoints)
     else:
         keypoints =np.load(args.input_npz)  # (N, 17, 2)
+    args.points = keypoints
     XYZ = []
     poly = []
     for frame in keypoints:
@@ -66,7 +70,6 @@ def main(args):
         Zestimate = np.log2(A)
         XYZ.append((Xavg,Zestimate,Yavg))
     
-    #saveVideo(args,poly,XYZ)
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
     joints_left, joints_right = list([4, 5, 6, 11, 12, 13]), list([1, 2, 3, 14, 15, 16])
@@ -132,12 +135,12 @@ def main(args):
     prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
     CorrectionOfPositions(bvh_file,prediction)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
-    create_video(bvh_file, video_file)
-
+    #create_video(bvh_file, video_file)
+    if not os.path.exists(args.input_npz):
+        np.save(args.input_npz, keypoints)
+    saveVideo(args,poly,XYZ)
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
-
-    return prediction
 
 
     
@@ -155,6 +158,7 @@ def input_video(video_path, output_path, detector_2d):
     args.detector_2d = detector_2d
     new_dir_name = output_path
     basename = os.path.basename(video_path)
+    
     video_name = basename[:basename.rfind('.')]
     
     args.viz_video = video_path
@@ -174,11 +178,17 @@ def saveVideo(args,poly,xyz):
         print("Error opening video  file")
     images = []
     count = 0
+    colors = [[255, 0, 0], [255, 85, 0], [255, 170, 0], [255, 255, 0], [170, 255, 0], [85, 255, 0], [0, 255, 0], \
+          [0, 255, 85], [0, 255, 170], [0, 255, 255], [0, 170, 255], [0, 85, 255], [0, 0, 255], [85, 0, 255], \
+          [170, 0, 255], [255, 0, 255], [255, 0, 170], [255, 0, 85]]
+    fps = cap.get(cv2.CAP_PROP_FPS)
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret == True:
-            image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=4, color=(0, 0, 255), thickness=-1)
-            image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =1)
+            for i in range(args.points.shape[1]):
+                image = cv2.circle(frame, (int(args.points[count][i][0]),int(args.points[count][i][1])), radius=4, color=colors[i], thickness=-1)
+            image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=4, color=(255, 0, 0), thickness=-1)
+            image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =3)
             # Display the resulting frame
             images.append(image)
             count+=1
@@ -190,11 +200,10 @@ def saveVideo(args,poly,xyz):
             break
     cap.release()
     path = f'{args.new_folder}/Positionsvideo.mp4'
-    out = cv2.VideoWriter(path,cv2.VideoWriter_fourcc(*'DIVX'), 60, size)
+    out = cv2.VideoWriter(path,cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
     for i in range(len(images)):
         out.write(images[i])
     out.release()
-
 
 def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     '''
@@ -258,5 +267,5 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     return bvhfileName
 
 if __name__ == '__main__':
-    input_video('inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
+    input_video('inputvideo/3.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
 
