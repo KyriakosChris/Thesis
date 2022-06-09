@@ -1,6 +1,8 @@
 from http.cookiejar import MozillaCookieJar
 import os
 import time
+
+from cv2 import imshow
 from model_functions.arguments import parse_args
 from model_functions.camera import *
 from model_functions.generators import UnchunkedGenerator
@@ -52,9 +54,12 @@ def main(args):
     # 2D kpts loads or generate
     if not os.path.exists(args.input_npz):
         keypoints = detector_2d(args.viz_video)
-        #np.save(args.input_npz, keypoints)
+        if not os.path.exists(args.new_folder):
+            os.makedirs(args.new_folder)
+        np.save(args.input_npz, keypoints,allow_pickle=True)
     else:
-        keypoints =np.load(args.input_npz)  # (N, 17, 2)
+        keypoints =np.load(args.input_npz,allow_pickle=True)  # (N, 17, 2)
+    
     args.points = keypoints
     XYZ = []
     poly = []
@@ -69,7 +74,7 @@ def main(args):
         A = (xmax - xmin)*(ymax - ymin)
         Zestimate = np.log2(A)
         XYZ.append((Xavg,Zestimate,Yavg))
-    
+    saveVideo(args,poly,XYZ)
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
     joints_left, joints_right = list([4, 5, 6, 11, 12, 13]), list([1, 2, 3, 14, 15, 16])
@@ -100,6 +105,8 @@ def main(args):
     pad = (receptive_field - 1) // 2  # Padding on each side
     causal_shift = 0
 
+        
+    
     input_keypoints = keypoints.copy()
     gen = UnchunkedGenerator(None, None, [input_keypoints],
                              pad=pad, causal_shift=causal_shift, augment=args.test_time_augmentation,
@@ -116,7 +123,6 @@ def main(args):
     prediction_copy = np.copy(prediction)
     write_standard_bvh(args.viz_output,prediction_copy) 
     bvh_file = write_smartbody_bvh(args.viz_output,prediction_copy)
-
     XYZ = np.array(XYZ)
     x0 = XYZ[0][0]
     z0 = XYZ[0][1]
@@ -136,9 +142,6 @@ def main(args):
     CorrectionOfPositions(bvh_file,prediction)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
     #create_video(bvh_file, video_file)
-    if not os.path.exists(args.input_npz):
-        np.save(args.input_npz, keypoints)
-    saveVideo(args,poly,XYZ)
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
@@ -174,36 +177,37 @@ def input_video(video_path, output_path, detector_2d):
 def saveVideo(args,poly,xyz):
     cap = cv2.VideoCapture(args.viz_video)
     # Check if video opened successfully
+    path = f'{args.new_folder}/Positionsvideo.mp4'
+    if os.path.exists(path):
+        os.remove(path)
     if (cap.isOpened()== False): 
         print("Error opening video  file")
-    images = []
     count = 0
     colors = [[255, 0, 0], [255, 85, 0], [255, 170, 0], [255, 255, 0], [170, 255, 0], [85, 255, 0], [0, 255, 0], \
           [0, 255, 85], [0, 255, 170], [0, 255, 255], [0, 170, 255], [0, 85, 255], [0, 0, 255], [85, 0, 255], \
           [170, 0, 255], [255, 0, 255], [255, 0, 170], [255, 0, 85]]
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    ret, frame = cap.read()
+    height, width, layers = frame.shape
+    size = (width,height)
+    out = cv2.VideoWriter(path,cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
     while(cap.isOpened()):
-        ret, frame = cap.read()
+        
         if ret == True:
             for i in range(args.points.shape[1]):
                 image = cv2.circle(frame, (int(args.points[count][i][0]),int(args.points[count][i][1])), radius=4, color=colors[i], thickness=-1)
-            image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=4, color=(255, 0, 0), thickness=-1)
+            image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=4, color=(255, 255, 255), thickness=3)
             image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =3)
             # Display the resulting frame
-            images.append(image)
+            out.write(image)
             count+=1
-            height, width, layers = frame.shape
-            size = (width,height)
-
+            ret, frame = cap.read()
         # Break the loop
         else: 
             break
     cap.release()
-    path = f'{args.new_folder}/Positionsvideo.mp4'
-    out = cv2.VideoWriter(path,cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
-    for i in range(len(images)):
-        out.write(images[i])
     out.release()
+        
+    
 
 def write_standard_bvh(outbvhfilepath,prediction3dpoint):
     '''
@@ -267,5 +271,5 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     return bvhfileName
 
 if __name__ == '__main__':
-    input_video('inputvideo/3.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
+    input_video('inputvideo/1.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
 
