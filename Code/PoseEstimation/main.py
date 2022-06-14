@@ -344,7 +344,7 @@ class MainMenu():
                 messagebox.showwarning("Input Warning", "The folder or the file failed to be browsed")
             else:
                 disable_buttons()
-                input_video(self.file_name,self.folder_name,'alpha_pose')
+                input_video(self.file_name,self.folder_name)
                 enable_buttons()
 
         def threading():

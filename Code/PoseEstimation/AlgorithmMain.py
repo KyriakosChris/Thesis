@@ -30,8 +30,6 @@ def ckpt_time(ckpt=None):
         return time.time() - float(ckpt), time.time()
 
 
-time0 = ckpt_time()
-
 def get_detector_2d(detector_name):
     def get_alpha_pose():
         from Alphapose.gene_npz import generate_kpts as alpha_pose
@@ -45,6 +43,7 @@ def get_detector_2d(detector_name):
     return detector_map[detector_name]()
 
 def main(args):
+    time0 = ckpt_time()
     detector_2d = get_detector_2d(args.detector_2d)
     assert detector_2d, 'detector_2d should be alpha_pose'
     
@@ -95,7 +94,7 @@ def main(args):
     # load trained model
     chk_filename = os.path.join(args.checkpoint, args.resume if args.resume else args.evaluate)
     print('Loading checkpoint', chk_filename)
-    checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)  
+    checkpoint = torch.load(chk_filename, map_location=torch.device('cuda'))  
     model_pos.load_state_dict(checkpoint['model_pos'])
 
     ckpt, time2 = ckpt_time(time1)
@@ -147,10 +146,10 @@ def main(args):
 
 
     
-def input_video(video_path, output_path, detector_2d):
+def input_video(video_path, output_path):
     """
     Do image -> 2d points -> 3d points to video.
-    :param detector_2d: used 2d joints detector. Can be alpha_pose
+    :param detector_2d: used 2d joints detector.
     :param video_path: relative to outputs
     :return: None
     """
@@ -158,7 +157,7 @@ def input_video(video_path, output_path, detector_2d):
     vid = cv2.VideoCapture(video_path)
     args.height = vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
     args.width = vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-    args.detector_2d = detector_2d
+    args.detector_2d = 'alpha_pose'
     new_dir_name = output_path
     basename = os.path.basename(video_path)
     
@@ -168,7 +167,7 @@ def input_video(video_path, output_path, detector_2d):
     args.viz_output = f'{new_dir_name}/{video_name}.mp4'
     args.new_folder = f'{new_dir_name}/{video_name}'
 
-    args.evaluate = 'pretrained_h36m_detectron_coco.bin'
+    args.evaluate = 'pretrained_h36m_cpn.bin'
 
     with Timer(video_path):
         main(args)
@@ -195,7 +194,7 @@ def saveVideo(args,poly,xyz):
         if ret == True:
             for i in range(args.points.shape[1]):
                 image = cv2.circle(frame, (int(args.points[count][i][0]),int(args.points[count][i][1])), radius=4, color=colors[i], thickness=-1)
-            image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=4, color=(255, 255, 255), thickness=3)
+            image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=6, color=(255, 255, 255), thickness=-1)
             image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =3)
             # Display the resulting frame
             out.write(image)
@@ -222,14 +221,6 @@ def write_standard_bvh(outbvhfilepath,prediction3dpoint):
             point3d[1] *= 100
             point3d[2] *= 100
 
-            #X = point3d[0]
-            #Y = point3d[1]
-            #Z = point3d[2]
-
-            #point3d[0] = -X
-            #point3d[1] = Z
-            #point3d[2] = Y
-
     dir_name = os.path.dirname(outbvhfilepath)
     basename = os.path.basename(outbvhfilepath)
     video_name = basename[:basename.rfind('.')]
@@ -247,9 +238,6 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
 
     for frame in prediction3dpoint:
         for point3d in frame:
-            # point3d[0] *= 100
-            # point3d[1] *= 100
-            # point3d[2] *= 100
 
             X = point3d[0]
             Y = point3d[1]
@@ -271,5 +259,5 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     return bvhfileName
 
 if __name__ == '__main__':
-    input_video('inputvideo/1.mp4',"D:\\tuc\\Github\\Thesis\\BVH" , 'alpha_pose')
+    input_video('inputvideo/toumpa.mp4',"D:\\tuc\\Github\\Thesis\\BVH")
 

@@ -10,7 +10,7 @@ import torch
 
 def qrot(q, v):
     """
-    Rotate vector(s) v about the rotation described by 四元数quaternion(s) q.
+    Rotate vector(s) v about the rotation described by quaternion(s) q.
     Expects a tensor of shape (*, 4) for q and a tensor of shape (*, 3) for v,
     where * denotes any number of dimensions.
     Returns a tensor of shape (*, 3).

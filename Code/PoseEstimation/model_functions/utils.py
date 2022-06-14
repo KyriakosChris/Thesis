@@ -13,7 +13,7 @@ import torch
 import cv2
 
 def add_path():
-    Alphapose_path = os.path.abspath('joints_detectors/Alphapose')
+    Alphapose_path = os.path.abspath('Alphapose')
     paths = filter(lambda p: p not in sys.path, [Alphapose_path])
 
     sys.path.extend(paths)
