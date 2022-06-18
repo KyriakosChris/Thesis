@@ -239,7 +239,7 @@ class Bvh:
 
 
         name = len(images)
-        path = f'./common/images/{name}.png'
+        path = f'./model_functions/images/{name}.png'
         plt.savefig(path)
         images.append(cv2.imread(path))
 
@@ -274,7 +274,7 @@ class Bvh:
         return f"BVH {len(self.joints.keys())} joints, {self.frames} frames"
 
 def create_video(file, output):
-    folder =f'./common/images'
+    folder =f'./model_functions/images'
     images.clear()
     if not os.path.exists(folder):
         # Create a new directory because it does not exist 
@@ -296,7 +296,7 @@ def create_video(file, output):
     for i in range(1,len(images)):
         out.write(images[i])
     out.release()
-    image_path = f'./common/images/*.png'
+    image_path = f'./model_functions/images/*.png'
     removing_files = glob.glob(image_path)
 
     for i in removing_files:

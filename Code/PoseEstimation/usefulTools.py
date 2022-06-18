@@ -199,7 +199,7 @@ def filter_display(win,file):
             Border.set(100)
             question = Label(comboframe, text = '❔', fg = "black")
             CreateToolTip(widget = question, text = "Lets you establish a limit frequency value, in Hertz (Hz).\n"
-                                                    " All frequencies higher than this value are cut.\n"
+                                                    "All frequencies higher than this value are cut.\n"
                                                     "The lower the value, the more frequencies are removed, resulting in a much smoother curve.")
             Label(comboframe, text = "Cutoff frequency: ", fg = "black")
             Uo = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
@@ -211,14 +211,13 @@ def filter_display(win,file):
             Order = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Order.set(2)
             
-        elif filter == 'median':
+        elif filter == 'mean':
             question = Label(comboframe, text = '❔', fg = "black")
-            CreateToolTip(widget = question, text = "Median filters are widely used as smoothers for image processing , as well as in signal processing and time series processing.\n"
-                                                    " A major advantage of the median filter over linear filters is that the median filter\n"
-                                                    " can eliminate the effect of input noise values with extremely large magnitudes.")
-            Label(comboframe, text = "Median: ", fg = "black")
-            Median = ttk.Spinbox(comboframe, from_=2, to=10000, width=5, textvariable=IntVar())
-            Median.set(35)
+            CreateToolTip(widget = question, text = "The input must be an odd integer number to create the nxn kernel. We suggest using a small n, increasing it,\n"
+                                                    "will also increase the complexity and at some point it will decrease the filtering quality.")
+            Label(comboframe, text = "Kernel Size (odd number): ", fg = "black")
+            Mean = ttk.Spinbox(comboframe, from_=2, to=10000, width=5, textvariable=IntVar())
+            Mean.set(5)
             
         elif filter == 'gaussian':
             question = Label(comboframe, text = '❔', fg = "black")
@@ -242,22 +241,21 @@ def filter_display(win,file):
                     widget.destroy()
             if filter == 'butterworth':
                 submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,border=Border.get(),uo=Uo.get(),order=Order.get()))
-            elif filter == 'median' :
-                submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,median=Median.get()))
+            elif filter == 'mean' :
+                submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,mean=Mean.get()))
             elif filter == 'gaussian':
                 submit = Button(submit_frame, text='Submit',width = 20, command=lambda: click(filter=filter,border=Border.get(),sigma=Sigma.get())) 
             submit.pack(side=TOP,pady=20)
-    def click(filter, border=None,uo=None,order=None,median=None,sigma=None) :
-        if string_Parse(border) or string_Parse(uo) or string_Parse(order) or string_Parse(median) or string_Parse(sigma):
+    def click(filter, border=None,uo=None,order=None,mean=None,sigma=None) :
+        if string_Parse(border) or string_Parse(uo) or string_Parse(order) or string_Parse(mean) or string_Parse(sigma):
             messagebox.showinfo(title="Input Info", message='The filter parameteres must be integers.')
             return
-        
-        if filter == 'median' and int(median) <2:
-            messagebox.showinfo(title="Median Info", message='The median must be greater than one.')
+        if filter == 'mean' and int(mean) <2:
+            messagebox.showinfo(title="Mean Info", message='The mean must be greater than one.')
             return
-        if filter == 'median':
+        if filter == 'mean':
             filter = 'average'
-        smooth(filename=file,out=file, filter=filter,border= Try_parse(border),order=Try_parse(order),uo=Try_parse(uo),median=Try_parse(median),sigma=Try_parse(sigma))
+        smooth(filename=file,out=file, filter=filter,border= Try_parse(border),order=Try_parse(order),uo=Try_parse(uo),mean=Try_parse(mean),sigma=Try_parse(sigma))
         messagebox.showinfo(title="Filter Info", message='The ' +filter+ ' was applied successfully.')
         Quit()
     width = win.winfo_screenwidth()/3
@@ -273,7 +271,7 @@ def filter_display(win,file):
     win.config(menu=menubar)
     frame = Frame(win)
     frame.pack(side=TOP)
-    vlist = ["butterworth", "median", "gaussian"]
+    vlist = ["butterworth", "mean", "gaussian"]
     label = Label(frame, text = "Choose the filter type", fg = "black")
     label.pack(side=LEFT, padx = 20, pady = 20)
     Combo = ttk.Combobox(frame, values = vlist)
@@ -284,8 +282,9 @@ def filter_display(win,file):
     question.pack(side=LEFT)
     CreateToolTip(widget = question, text = "The Butterworth filter is a type of signal processing filter designed to have as flat\n" 
                                             "frequency response as possible (no ripples) in the pass-band and zero roll off response in the stop-band.\n\n"
-                                            "The Median filter is a non-linear digital filtering technique, often used to completely remove noise from a signal,\n"
-                                            "but it reduce the quality of the signal. \n\n"
+                                            "Mean filters are widely used as smoothers for image processing , as well as in signal processing and time series processing.\n"
+                                            "A major advantage of the mean filter over linear filters is that the mean filter\n"
+                                            "can eliminate the effect of input noise values with extremely large magnitudes.\n\n"
                                             "A Gaussian Filter is a low pass filter used for reducing noise (high frequency components) and blurring.")
     comboframe = Frame(win)
     comboframe.pack(side=TOP)

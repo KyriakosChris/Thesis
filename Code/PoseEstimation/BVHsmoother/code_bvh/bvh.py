@@ -19,11 +19,30 @@ import numpy as np
 #           RETURN (void)
 # ----------------------------------------------------------------------------------
 
-
+def remove_TPose(input):
+    T_Pose = "0 0 0 -1 0 0 -1 0 0 0 0 -1 0 0 -1 0 -1 0 1 0 0 0 0 -1 0 0 -1 0 -1 0 0 0 1 0 0 1 0 0 1 0 0 1 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0"
+    with open(input) as f:
+        data = f.readlines()
+    
+    f.close()
+    for i in range(len(data)): 
+        if T_Pose in data[i]:
+            data[i]= ""
+            data[i-2] = data[i-2].split(" ")[0] + " " + str(int(data[i-2].split(" ")[1])-1) + "\n"
+            break  
+        i+=1
+    try:
+        file = open(input, 'wt')
+        for line in data:
+                file.write(str(line))
+        file.close()
+    except:
+        print("Unable to write to file")    
 # PARAM input (string) - the BVH file path
 # RETURN (map) - the BVH structure
 def read_file(input):
     # open file and get data
+    remove_TPose(input)
     with open(input) as f:
         data = f.readlines()
     # close file
@@ -84,7 +103,7 @@ def write_file(output, bvh):
 
     # write motion information in the file
     file.write("MOTION\n")
-    file.write("Frames: " + str(bvh["FRAME NUMBER"]) + "\n")
+    file.write("Frames: " + str(bvh["FRAME NUMBER"] +1 ) + "\n")
     file.write("Frame Time: " + str(bvh["FRAME TIME"]) + "\n")
 
     r = bvh["ROTATIONS"] # get rotations
@@ -99,7 +118,8 @@ def write_file(output, bvh):
         v[:, i*3 + 3] = r[:,i,0]
         v[:, i*3 + 4] = r[:,i,1]
         v[:, i*3 + 5] = r[:,i,2]
-
+    T_Pose = "0 0 0 -1 0 0 -1 0 0 0 0 -1 0 0 -1 0 -1 0 1 0 0 0 0 -1 0 0 -1 0 -1 0 0 0 1 0 0 1 0 0 1 0 0 1 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0"
+    file.write(T_Pose + "\n")
     # write the motion values in the file
     for i in range(bvh["FRAME NUMBER"]):
         file.write(" ".join(v[i].astype(str)) + "\n")

@@ -43,6 +43,7 @@ class MainMenu():
         self.edit = False
         #self.file_name = ""
         #self.folder_name = ""
+        self.submitisPressed = False
         self.file_load = ""
         self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
         self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
@@ -219,6 +220,7 @@ class MainMenu():
             self.file = ""
             self.bvhName = ""
             self.edit = False
+            self.submitisPressed = False
             self.Model()
         def Help():
             filewin = Toplevel(window)
@@ -321,7 +323,8 @@ class MainMenu():
         sys.stdout = Redirect(text)
         play_video()
         if self.edit == False:
-            create_threading()
+            if not os.path.exists(self.file):
+                create_threading()
             self.edit = True
         
         window.wm_protocol("WM_DELETE_WINDOW", self.root.destroy)
@@ -331,7 +334,8 @@ class MainMenu():
             submit.config(state="disabled")
 
         def enable_buttons():
-            #submit.config(state="normal")
+            submit.config(state="normal")
+            submit['text'] = 'Edit Results'
             self.edit = True
 
         def changePanel():
@@ -348,6 +352,10 @@ class MainMenu():
                 enable_buttons()
 
         def threading():
+            if (self.submitisPressed):
+                changePanel()
+            else:
+                self.submitisPressed = True
             t1=Thread(target=pose_estimator)
             t1.start()
 
