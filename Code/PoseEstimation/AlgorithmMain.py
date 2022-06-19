@@ -143,9 +143,13 @@ def main(args):
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
     create_video(bvh_file, video_file)
     ckpt, time3 = ckpt_time(time2)
-    # os.remove(args.viz_video)
-    # path = args.viz_video.split(".")[0] + 'old' +'.mp4'
-    # os.rename(path, args.viz_video)
+    cv2.destroyAllWindows()
+    try :
+        dir = 'images/temp'
+        for f in os.listdir(dir):
+            os.remove(os.path.join(dir, f))
+    except:
+        pass
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
 

@@ -55,12 +55,19 @@ def resize_video(video_path):
     new_path = f'images/temp/{video_name}.mp4'
     cap = cv2.VideoCapture(video_path)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(new_path,fourcc, 30, (1920,1080))
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+    if (height > width):
+        size = (1080,1920)
+    else:
+        size = (1920,1080)
+    out = cv2.VideoWriter(new_path,fourcc, fps, size)
 
     while True:
         ret, frame = cap.read()
         if ret == True:
-            b = cv2.resize(frame,(1920,1080),fx=0,fy=0, interpolation = cv2.INTER_CUBIC)
+            b = cv2.resize(frame,size,fx=0,fy=0, interpolation = cv2.INTER_CUBIC)
             out.write(b)
         else:
             break
