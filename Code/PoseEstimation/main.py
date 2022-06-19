@@ -10,6 +10,7 @@ from usefulTools import PositionEdit, filter_display,CreateToolTip
 from model_functions.visualize import create_video
 import datetime
 from model_functions.tkvideoplayer import TkinterVideo
+
 class Redirect():
 
     def __init__(self, widget, autoscroll=True):
@@ -41,12 +42,10 @@ class MainMenu():
         self.current_window = None
         self.question = '❔'
         self.edit = False
-        #self.file_name = ""
-        #self.folder_name = ""
+        self.file_name = ""
+        self.folder_name = ""
         self.submitisPressed = False
         self.file_load = ""
-        self.file_name = "C:\\Users\\msi\\Desktop\\testing\\VideoTo3dPoseAndBvh\\outputs\\inputvideo\\kunkun_cut_one_second.mp4"
-        self.folder_name = "D:\\tuc\\Github\\Thesis\\BVH"
         
 
     def getfile(self):
@@ -66,10 +65,24 @@ class MainMenu():
         return self.current_window
     def EditBvh(self):
         def check_input():
+            # convert none or false value to one which is the default value
+            if not is_float(Xinput.get()): 
+                Xinput.delete(0, END)
+                Xinput.insert(0, '1')
+            if not is_float(Yinput.get()): 
+                Yinput.delete(0, END)
+                Yinput.insert(0, '1')
+            if not is_float(Zinput.get()): 
+                Zinput.delete(0, END)
+                Zinput.insert(0, '1')
             if is_float(Xinput.get()) and is_float(Yinput.get()) and is_float(Zinput.get()) and self.file_name != '' and self.folder_name != '':
                 X = float(Xinput.get())
                 Y = float(Yinput.get())
                 Z = float(Zinput.get())
+                # reset values
+                Xinput.delete(0, END)
+                Yinput.delete(0, END)
+                Zinput.delete(0, END)
                 positions = (X,Y,Z)
                 basename = os.path.basename(self.file_name)
                 video_name = basename[:basename.rfind('.')]
@@ -229,7 +242,7 @@ class MainMenu():
             width = filewin.winfo_screenwidth()/3
             height = filewin.winfo_screenheight()/3
             filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
-            text = Label(filewin, text = "TO DO...", fg = "black", font= "none 12 bold")
+            text = Label(filewin, text = "My Thesis Application", fg = "black", font= "none 12 bold")
             text.pack()
         # reset to default the printing method
         sys.stdout = sys.__stdout__
@@ -264,7 +277,7 @@ class MainMenu():
         helpmenu.add_command(label="About...", command=Help)
         menubar.add_cascade(label="Help", menu=helpmenu)
         window.config(menu=menubar)
-        im = Image.open(r"menu.jpg")
+        im = Image.open(r"images/menu.jpg")
         im1 = im.resize((int(width) ,300), Image.ANTIALIAS)
         new_img = ImageTk.PhotoImage(im1)
         tuc = Label(frame, image = new_img)
@@ -398,7 +411,7 @@ class MainMenu():
             width = filewin.winfo_screenwidth()/3
             height = filewin.winfo_screenheight()/3
             filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
-            text = Label(filewin, text = "TO DO...", fg = "black", font= "none 12 bold")
+            text = Label(filewin, text = "My Thesis Application", fg = "black", font= "none 12 bold")
             text.pack()
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
@@ -424,14 +437,14 @@ class MainMenu():
 
         filemenu.add_command(label="Exit", command=self.root.destroy)
         menubar.add_cascade(label="File", menu=filemenu)
-        editmenu = Menu(menubar, tearoff=0)
-        editmenu.add_command(label="Edit Results...", command=changePanel)
-        menubar.add_cascade(label="Edit", menu=editmenu)
+        #editmenu = Menu(menubar, tearoff=0)
+        #editmenu.add_command(label="Edit Results...", command=changePanel)
+        #menubar.add_cascade(label="Edit", menu=editmenu)
         helpmenu = Menu(menubar, tearoff=0)
         helpmenu.add_command(label="About...", command=Help)
         menubar.add_cascade(label="Help", menu=helpmenu)
         window.config(menu=menubar)
-        im = Image.open(r"menu.jpg")
+        im = Image.open(r"images/menu.jpg")
 
         im1 = im.resize((int(width) ,300), Image.ANTIALIAS)
         new_img = ImageTk.PhotoImage(im1)

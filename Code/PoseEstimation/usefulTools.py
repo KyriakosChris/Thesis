@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter import ttk
-
-from torch import true_divide
+import cv2
+import os
 from BVHsmoother.smooth import smooth
-import numpy as np
 from tkinter import *   
 from PIL import Image, ImageTk
 from tkinter import messagebox
@@ -47,7 +46,29 @@ def CreateToolTip(widget, text):
     widget.bind('<Enter>', enter)
     widget.bind('<Leave>', leave)
 
+def resize_video(video_path):
+    dir = 'images/temp'
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
+    basename = os.path.basename(video_path)
+    video_name = basename[:basename.rfind('.')]
+    new_path = f'images/temp/{video_name}.mp4'
+    cap = cv2.VideoCapture(video_path)
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(new_path,fourcc, 30, (1920,1080))
 
+    while True:
+        ret, frame = cap.read()
+        if ret == True:
+            b = cv2.resize(frame,(1920,1080),fx=0,fy=0, interpolation = cv2.INTER_CUBIC)
+            out.write(b)
+        else:
+            break
+        
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
+    return new_path
 
 def string_Parse(str):
     if str == None:
@@ -200,7 +221,7 @@ def filter_display(win,file):
             question = Label(comboframe, text = '❔', fg = "black")
             CreateToolTip(widget = question, text = "Lets you establish a limit frequency value, in Hertz (Hz).\n"
                                                     "All frequencies higher than this value are cut.\n"
-                                                    "The lower the value, the more frequencies are removed, resulting in a much smoother curve.")
+                                                    "The lower the value, the more frequencies are removed, resulting in a much smoother curve (too low value, may remove motion data information).")
             Label(comboframe, text = "Cutoff frequency: ", fg = "black")
             Uo = ttk.Spinbox(comboframe, from_=1, to=10000, width=5, textvariable=IntVar())
             Uo.set(60)

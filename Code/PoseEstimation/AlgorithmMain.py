@@ -1,8 +1,6 @@
-from http.cookiejar import MozillaCookieJar
 import os
 import time
 
-from cv2 import imshow
 from model_functions.arguments import parse_args
 from model_functions.camera import *
 from model_functions.generators import UnchunkedGenerator
@@ -13,7 +11,7 @@ import cv2
 from numpy import *
 import numpy as np
 from bvh_skeleton import h36m_skeleton
-from usefulTools import CorrectionOfPositions, Calculate_Height
+from usefulTools import CorrectionOfPositions, Calculate_Height , resize_video
 from model_functions.visualize import *
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -57,6 +55,7 @@ def main(args):
             os.makedirs(args.new_folder)
         np.save(args.input_npz, keypoints,allow_pickle=True)
     else:
+        print('Loading the saved keypoints...')
         keypoints =np.load(args.input_npz,allow_pickle=True)  # (N, 17, 2)
     
     args.points = keypoints
@@ -73,13 +72,15 @@ def main(args):
         A = (xmax - xmin)*(ymax - ymin)
         Zestimate = np.log2(A)
         XYZ.append((Xavg,Zestimate,Yavg))
+
     saveVideo(args,poly,XYZ)
+
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
     joints_left, joints_right = list([4, 5, 6, 11, 12, 13]), list([1, 2, 3, 14, 15, 16])
 
     # normlization keypoints  Suppose using the camera parameter
-    keypoints = normalize_screen_coordinates(keypoints[..., :2], w=1000, h=1002)
+    keypoints = normalize_screen_coordinates(keypoints[..., :2], w=1920, h=1080)
 
     model_pos = TemporalModel(17, 2, 17, filter_widths=[3, 3, 3, 3, 3], causal=args.causal, dropout=args.dropout, channels=args.channels,
                               dense=args.dense)
@@ -140,8 +141,11 @@ def main(args):
     prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
     CorrectionOfPositions(bvh_file,prediction)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
-    #create_video(bvh_file, video_file)
+    create_video(bvh_file, video_file)
     ckpt, time3 = ckpt_time(time2)
+    # os.remove(args.viz_video)
+    # path = args.viz_video.split(".")[0] + 'old' +'.mp4'
+    # os.rename(path, args.viz_video)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
 
@@ -153,6 +157,8 @@ def input_video(video_path, output_path):
     :param video_path: relative to outputs
     :return: None
     """
+    print('Reading Input...')
+    video_path = resize_video(video_path)
     args = parse_args()
     vid = cv2.VideoCapture(video_path)
     args.height = vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
