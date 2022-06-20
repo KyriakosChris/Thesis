@@ -196,8 +196,8 @@ class MainMenu():
                 vid_player.destroy()
                 resetbtn.config(state="disabled")
                 sumbit.config(state="disabled")
-                filter.config(state="disabled")
-                change.config(state="disabled")
+                #filter.config(state="disabled")
+                #change.config(state="disabled")
                 for widgets in frame8.winfo_children():
                     widgets.destroy()
                 frame8.destroy()
@@ -209,13 +209,13 @@ class MainMenu():
             play_video()
             resetbtn.config(state="normal")
             sumbit.config(state="normal")
-            filter.config(state="normal")
-            change.config(state="normal")
+            #filter.config(state="normal")
+            #change.config(state="normal")
 
-        def buttonSmooth(file):
+        def buttonSmooth():
             win = Toplevel(window)
             win.grab_set()
-            filter_display(win,file)
+            filter_display(win,self.bvhName)
 
 
         def change_window():
@@ -242,8 +242,15 @@ class MainMenu():
             width = filewin.winfo_screenwidth()/3
             height = filewin.winfo_screenheight()/3
             filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
-            text = Label(filewin, text = "My Thesis Application", fg = "black", font= "none 12 bold")
+            text = Label(filewin, text = "Thesis Application", fg = "black", font= "none 12 bold")
             text.pack()
+            text = Label(filewin, text = "Version: 0.0.1", fg = "black")
+            text.pack()
+            text = Label(filewin, text = "University: Technical University of Crete", fg = "black")
+            text.pack()
+            text = Label(filewin, text = "OS: Windows 10 x64", fg = "black")
+            text.pack()
+
         # reset to default the printing method
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
@@ -269,7 +276,9 @@ class MainMenu():
 
         menubar = Menu(window)
         filemenu = Menu(menubar, tearoff=0)
-
+        filemenu.add_command(label="BVH Filtering", command=buttonSmooth)
+        filemenu.add_command(label="Animate Another Video", command=change_window)
+        filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.root.destroy)
         menubar.add_cascade(label="File", menu=filemenu)
         
@@ -305,15 +314,15 @@ class MainMenu():
             widget.pack(side=LEFT,padx=5, pady=5)
         sumbit = Button(frame3, text = 'Submit', width = 10 ,command=check_input)
         sumbit.pack(side=LEFT,padx=15, pady=5)
-        frame4 = Frame(window)
-        frame4.pack(side=TOP)
-  
-        #sumbit = Button(frame4, text = 'Submit', width = 20 ,command=check_input)
-        filter = Button(frame4, text = "BVH Filtering: ", width = 20, command=lambda: buttonSmooth(self.bvhName))
-        change = Button(frame4, text = "Animate Another Video: ", width = 20, command=change_window)
 
-        for widget in frame4.winfo_children():
-            widget.pack(side=LEFT,padx=25, pady=15)
+        # frame4 = Frame(window)
+        # frame4.pack(side=TOP)
+  
+        # filter = Button(frame4, text = "BVH Filtering: ", width = 20, command=lambda: buttonSmooth)
+        # change = Button(frame4, text = "Animate Another Video: ", width = 20, command=change_window)
+
+        # for widget in frame4.winfo_children():
+        #     widget.pack(side=LEFT,padx=25, pady=15)
 
         frame5 = Frame(window)
         frame5.pack(side=TOP)
@@ -411,7 +420,13 @@ class MainMenu():
             width = filewin.winfo_screenwidth()/3
             height = filewin.winfo_screenheight()/3
             filewin.geometry("%dx%d+%d+%d" % ( width , height , width  , height) )
-            text = Label(filewin, text = "My Thesis Application", fg = "black", font= "none 12 bold")
+            text = Label(filewin, text = "Thesis Application", fg = "black", font= "none 12 bold")
+            text.pack()
+            text = Label(filewin, text = "Version: 0.0.1", fg = "black")
+            text.pack()
+            text = Label(filewin, text = "University: Technical University of Crete", fg = "black")
+            text.pack()
+            text = Label(filewin, text = "OS: Windows 10 x64", fg = "black")
             text.pack()
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
@@ -426,7 +441,6 @@ class MainMenu():
 
         frame = Frame(window)
         frame.pack()
-
 
         menubar = Menu(window)
         filemenu = Menu(menubar, tearoff=0)
