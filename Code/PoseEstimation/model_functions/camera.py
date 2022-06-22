@@ -9,32 +9,19 @@ import numpy as np
 from model_functions.quaternion import qrot, qinverse
 from model_functions.utils import wrap
 
-
+# Normalize so that all the keypoints are mapped into [-1, 1], while preserving the aspect ratio
+# we found it in stackexchange:  https://gamedev.stackexchange.com/questions/75758/how-do-i-convert-screen-coordinates-to-between-1-and-1
 def normalize_screen_coordinates(X, w, h):
     assert X.shape[-1] == 2
 
-    # Normalize so that [0, w] is mapped to [-1, 1], while preserving the aspect ratio
-    return X / w * 2 - [1, h / w]
-
-
-def normalize_screen_coordinates_new(X, w, h):
-    assert X.shape[-1] == 2
-
     return (X - (w / 2, h / 2)) / (w / 2, h / 2)
-
-
-def image_coordinates_new(X, w, h):
-    assert X.shape[-1] == 2
-
-    # Reverse camera frame normalization
-    return (X * (w / 2, h / 2)) + (w / 2, h / 2)
 
 
 def image_coordinates(X, w, h):
     assert X.shape[-1] == 2
 
     # Reverse camera frame normalization
-    return (X + [1, h / w]) * w / 2
+    return (X * (w / 2, h / 2)) + (w / 2, h / 2)
 
 
 def world_to_camera(X, R, t):

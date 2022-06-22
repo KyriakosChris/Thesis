@@ -55,7 +55,7 @@ class InferenNet_fast(nn.Module):
 
         #model = createModel().cpu()
         model = createModel().cuda()
-        model.load_state_dict(torch.load('models/sppe/duc_se.pth',map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load('Alphapose/models/sppe/duc_se.pth',map_location=torch.device('cpu')))
         model.eval()
         self.pyranet = model
 

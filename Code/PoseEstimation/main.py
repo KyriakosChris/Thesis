@@ -13,7 +13,7 @@ from model_functions.tkvideoplayer import TkinterVideo
 
 class Redirect():
 
-    def __init__(self, widget, autoscroll=True):
+    def __init__(self, widget, autoscroll=False):
         self.widget = widget
         self.autoscroll = autoscroll
     def __del__(self):

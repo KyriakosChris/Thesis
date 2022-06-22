@@ -10,7 +10,7 @@ from model_functions.utils import calculate_area
 from Alphapose.dataloader import DetectionLoader, DetectionProcessor, DataWriter, Mscoco, VideoLoader
 from Alphapose.fn import getTime
 from Alphapose.opt import opt
-
+from torchinfo import summary
 args = opt
 args.dataset = 'coco'
 args.fast_inference = False
@@ -90,11 +90,17 @@ def handle_video(video_file):
     det_processor = DetectionProcessor(det_loader).start()
     # Load pose model
     pose_dataset = Mscoco()
-    if args.fast_inference:
-        pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
-    else:
-        pose_model = InferenNet(4 * 1 + 1, pose_dataset)
+    pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
+    # if args.fast_inference:
+    #     pose_model = InferenNet(4 * 1 + 1, pose_dataset)
+    # else:
+    #     pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
     #pose_model.cpu()
+
+    print('\n\t\t       2D Model Summary...')
+    summary(pose_model)
+    print()
+
     pose_model.cuda()
     pose_model.eval()
     runtime_profile = {

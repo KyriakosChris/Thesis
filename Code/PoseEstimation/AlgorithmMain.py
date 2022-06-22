@@ -13,6 +13,7 @@ import numpy as np
 from bvh_skeleton import h36m_skeleton
 from usefulTools import CorrectionOfPositions, Calculate_Height , resize_video
 from model_functions.visualize import *
+from torchinfo import summary
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -80,15 +81,15 @@ def main(args):
     joints_left, joints_right = list([4, 5, 6, 11, 12, 13]), list([1, 2, 3, 14, 15, 16])
 
     # normlization keypoints  Suppose using the camera parameter
-    keypoints = normalize_screen_coordinates(keypoints[..., :2], w=1920, h=1080)
-
-    model_pos = TemporalModel(17, 2, 17, filter_widths=[3, 3, 3, 3, 3], causal=args.causal, dropout=args.dropout, channels=args.channels,
+    keypoints = normalize_screen_coordinates(keypoints[..., :2], w=args.width, h=args.height)
+    #keypoints = normalize_screen_coordinates_new(keypoints[..., :2], w=args.width, h=args.height)
+    model_3D = TemporalModel(17, 2, 17, filter_widths=[3, 3, 3, 3, 3], causal=args.causal, dropout=args.dropout, channels=args.channels,
                               dense=args.dense)
 
     if torch.cuda.is_available():
-        model_pos = model_pos.cuda()
+        model_3D = model_3D.cuda()
     else:
-        model_pos = model_pos.cpu()
+        model_3D = model_3D.cpu()
     ckpt, time1 = ckpt_time(time0)
     print('-------------- load data spends {:.2f} seconds'.format(ckpt))
 
@@ -96,12 +97,16 @@ def main(args):
     chk_filename = os.path.join(args.checkpoint, args.resume if args.resume else args.evaluate)
     print('Loading checkpoint', chk_filename)
     checkpoint = torch.load(chk_filename, map_location=torch.device('cuda'))  
-    model_pos.load_state_dict(checkpoint['model_pos'])
-
+    
+    print('\n\t\t       3D Model Summary...')
+    summary(model_3D)
+    print()
+    
+    model_3D.load_state_dict(checkpoint['model_pos'])
     ckpt, time2 = ckpt_time(time1)
     print('-------------- load 3D model spends {:.2f} seconds'.format(ckpt))
 
-    receptive_field = model_pos.receptive_field()
+    receptive_field = model_3D.receptive_field()
     pad = (receptive_field - 1) // 2  # Padding on each side
     causal_shift = 0
 
@@ -111,12 +116,12 @@ def main(args):
     gen = UnchunkedGenerator(None, None, [input_keypoints],
                              pad=pad, causal_shift=causal_shift, augment=args.test_time_augmentation,
                              kps_left=kps_left, kps_right=kps_right, joints_left=joints_left, joints_right=joints_right)
-    prediction = evaluate(gen, model_pos, return_predictions=True, )
+    prediction = evaluate(gen, model_3D, return_predictions=True)
     
     # save 3D joint points 
 
     rot = np.array([0.14070565, -0.15007018, -0.7552408, 0.62232804], dtype=np.float32)
-    prediction = camera_to_world(prediction, R=rot, t=0)
+    prediction = camera_to_world(prediction, R=rot, t=0) # rotates the keypoints so that the feet will touch the ground.
     # We don't have the trajectory, but at least we can rebase the height
     prediction[:, :, 2] -= np.min(prediction[:, :, 2])
 
@@ -273,5 +278,5 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     return bvhfileName
 
 if __name__ == '__main__':
-    input_video('inputvideo/toumpa.mp4',"D:\\tuc\\Github\\Thesis\\BVH")
+    input_video('inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH")
 

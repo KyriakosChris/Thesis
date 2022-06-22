@@ -108,7 +108,7 @@ def calculate_area(data):
     return np.abs(width * height)
 
 
-def evaluate(test_generator, model_pos, action=None, return_predictions=True):
+def evaluate(test_generator, model_pos, return_predictions=True):
     """
     Inference the 3d positions from 2d position.
     :type test_generator: UnchunkedGenerator
