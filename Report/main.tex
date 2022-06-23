@@ -37,7 +37,7 @@
 \fancyhf{}
 
 \setlength{\parindent}{2em}
-\title{Thesis} % to reference as \title, dont use \maketitle
+\title{Thesis} % to reference as \title, don't use \maketitle
 \makeatletter\let\Title\@title\makeatother
 
 \lstset{language=Matlab,
@@ -68,63 +68,73 @@ numbersep=0.5cm
 
 \begin{document}
 \pagenumbering{roman} 
-\input{sources/0_frontpage.tex}
-
+\input{sources/0_frontpage}
 \newpage
 \doublespacing
+
 %\addcontentsline{toc}{section}{Abstract}
 %\addcontentsline{toc}{section}{Acknowledgments}
 \renewcommand{\baselinestretch}{1}\normalsize
+
 \tableofcontents
+\newpage
+\listoffigures
+
 \renewcommand{\baselinestretch}{1}\normalsize
 \singlespacing
 \thispagestyle{fancy} % force page style
 \newpage
 \pagenumbering{arabic} 
 \fancyfoot[C]{Page \thepage\ of \pageref{EndOfText}}
+
 \newpage
 \addtocounter{section}{-1}
 \section{Abstract}
 \addtocounter{section}{-1}
 \newpage
 \section{Acknowledgments}
+
 \newpage
 \section*{Chapter 1 \\}
 \section{Introduction}
 \subsection{The increased demand of mocap clips}
-\input{sources/1_1.tex} 
+\input{sources/1_1} 
 \subsection{Thesis aim}
-\input{sources/1_2.tex} 
+\input{sources/1_2} 
 \subsection{Thesis Structure}
-\input{sources/1_3.tex} 
+\input{sources/1_3} 
 
 \newpage
 \section*{Chapter 2 \\}
 \section{Background}
 \subsection{Mocap clips}
-\input{sources/2_1.tex} 
+\input{sources/2_1} 
 \pagebreak
 \subsubsection{Optical Motion Capture}
-\input{sources/2_1_1.tex} 
+\input{sources/2_1_1} 
 \pagebreak
 \subsubsection{Non-Optical Motion Capture}
-\input{sources/2_1_2.tex} 
+\input{sources/2_1_2} 
 \subsection{Neural Networks}
 \subsubsection{Artificial Neural Network}
-\input{sources/2_2_1.tex} 
+\input{sources/2_2_1} 
 \subsubsection{Convolutional Neural Network}
-\input{sources/2_2_2.tex}
+\input{sources/2_2_2}
 \subsection{Related Work}
-\input{sources/2_3.tex} 
+\input{sources/2_3} 
 \subsection{Gait mocap clip Generation through a GAN}
-\input{sources/2_4.tex}
-\subsubsection{Dataset}
+\input{sources/2_4}
+\subsubsection{Data Augmentation}
 \input{sources/2_4_1}
-\subsubsection{Generative Adversarial Networks}
+\subsubsection{Dataset}
 \input{sources/2_4_2}
-\subsubsection{Evaluation of the approach}
+\subsubsection{Generative Adversarial Networks}
 \input{sources/2_4_3}
+\subsubsection{Evaluation of the approach}
+\input{sources/2_4_4}
+
 \newpage
+\section*{Chapter 3 \\}
 \section{Requirements}
 \subsection{Hardware}
 \input{sources/3_1}
@@ -132,29 +142,61 @@ numbersep=0.5cm
 \input{sources/3_2}
 \subsection{Application's Workflow}
 \input{sources/3_3}
+
 \newpage
+\section*{Chapter 4 \\}
 \section{Implementation}
-\subsection{Mocap Dataset Augmentation using pretrained models}
-\subsubsection{Dataset Augmentation}
-\subsubsection{Available Pretrained Models}
-\subsubsection{Alpha-pose model}
-\subsubsection{Orientation and location estimation}
+\input{sources/4}
+\subsection{Benefits of Using Pretrained Models}
+\input{sources/4_1}
+\subsubsection{Available 2D pose estimation Pretrained Models}
+\input{sources/4_1_1}
+\subsubsection{2D pose estimation to 3D pose estimation}
+\input{sources/4_1_2}
+\subsubsection{Orientation and Location Estimation}
+\input{sources/4_1_3}
+\subsubsection{3D Pose to Biovision Hierarchical (BVH)}
+\input{sources/4_1_4}
 \subsection{Animator Tools}
+\input{sources/4_2}
 \subsubsection{Biovision Hierarchical (BVH)}
-\subsubsection{Fast BVH Editing}
-\subsubsection{BVH Filtering}
+\input{sources/4_2_1}
+\subsubsection{BVH Position Tool Editing}
+\input{sources/4_2_2}
+\subsubsection{BVH Noise Filtering}
+\input{sources/4_2_3}
+\subsubsection{BVH Video Player}
+\input{sources/4_2_4}
 \subsection{Windows Application}
-\subsubsection{Application's UI}
-\subsubsection{Tkinter library}
+\input{sources/4_3}
+\subsubsection{Tkinter Library}
+\input{sources/4_3_1}
 \subsubsection{Construction of the Application }
+\input{sources/4_3_2}
+\subsubsection{Application's Use Case Diagram}
+\input{sources/4_3_3}
+
 \newpage
+\section*{Chapter 5 \\}
 \section{Evaluation}
-\subsection{Algorithm Accuracy}
-\subsection{Comparing Result}
+\input{sources/5}
+\subsection{AlphaPose Model Evaluation}
+\input{sources/5_1}
+\subsection{2D to 3D Pose Model Evaluation}
+\input{sources/5_2}
+\subsection{BVH Filters Evaluation}
+
 \newpage
+\section*{Chapter 6 \\}
 \section{Discussion}
-\subsection{Drawbacks of our Work}
+\input{sources/6}
+\subsection{Our Contribution}
+\input{sources/6_1}
+\subsection{Limitations of our Work}
+\input{sources/6_2}
 \subsection{Future Approaches}
+\input{sources/6_3}
+
 \newpage
 \input{sources/references.tex} 
 % \section{Introduction} \label{ch1}

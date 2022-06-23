@@ -1,16 +1,14 @@
-There are not many different walking datasets that can be used for this work. More specifically, Carnegie Mellon University which was created a huge motion capture dataset a decade ago that will be used in this Thesis. Moreover, It is possible for the skeleton that CMU proposed, to be rigged to a mixamo or another more modern skeleton through the blender and eventually import to game engines like Unity. This also means that we can increase the quantity of the CMU dataset by adding some mixamo or other well-known motion capture datasets (in BVH format) clips.\\
+Data augmentation techniques artificially generate different versions of a real dataset in order to increase its size. Machine learning models can benefit from data augmentation algorithms. A deep learning model with image augmentation outperforms a deep learning model without augmentation in terms of training loss (the penalty for a bad prediction), accuracy, validation loss, and accuracy.
 
-The CMU Graphics Lab Motion Capture Database (CMU) is by far the most extensive dataset of publicly available motion capture data. Many researchers within the community have used it to build prior models of human motion. This dataset was in Acclaim format. In particular, the Acclaim format is made up of two files, a skeleton file and a motion file. This was done knowing that a single skeleton works for many different motions most of the time and rather than storing the same skeleton in each of the motion files, it should be stored just once in another file. The skeleton file is the ASF file (Acclaim Skeleton File). The motion file is the AMC file (Acclaim Motion Capture data). In addition, some people created python software that converts the Acclaim files into BVH files. It means that these files can be imported into the blender for further usage.\\
+ \begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{figures/background/DataAugmentation.png}
+	\captionsetup{labelformat=empty}
+	\caption{\href{https://research.aimultiple.com/wp-content/webp-express/webp-images/uploads/2021/04/data-augmentation-techniques-800x450.png.webp}
+	{Data Augmentation Techniques}}
+\end{figure}
 
-There some other datasets like mixamo, that contains high-quality motion capture but it is not always free. The primary purpose of these motion capture is game construction of video clip animation. In this thesis, it is important to obtain a significant amount of motion capture, something that only CMU can offer for free. Fortunately, we can still modify the mixamo dataset (rig the mixamo skeleton to CMU skeleton) and merge it to the CMU dataset.\\
+In the above figure we show the most common data augmentation techniques. All of the techniques purpose is to increase the current dataset size. We will use some of these techniques to increase our Dataset, but the main goal would be to create a GANs that will create new examples of the training set that we will use, which is consider an advanced method of data augmentation. In general, data augmentation would generate more training samples by introducing some modification to the original training data whilst keeping the
+same semantic labels. Often it is considered as a regularization which can mitigate the notorious over-fitting problem. Data augmentation operations are often randomly applied to a training sample during training. The common augmentation operations include flipping, rotating, scaling, occluding, and color jittering and some other as it is shown in the figure above. \\
 
-This dataset will train a neural network to classify for the training when the skeleton model
-of the dataset is walking. Some approaches train a neural network with the CMU mocap
-clips as the dataset. The CMU skeleton has 31 joints, and each joint is described by the
-position (XYZ) and the rotation (XYZ), a total of 6 variables. That sum up to 186 variables
-for each frame. Each clip has 3198 frames, and we use 1073 clips from the dataset. So the
-dataset final form is a array with  these dimensions (1073,3198,186).\\
-
-In addition to these clips, we added some noise z using a normal or uniform distribution to some of the clips in order to classify some of them as fake. This was necessary for the network, in order to understand, during the training what a  false sample looks like. So, the now has a form of (1500,3198,186), which means that we were added 427 false samples. \\
-
-However, it is still a small dataset. There a machine learning strategy, that allows you to increase your dataset, it is called data augmentation. More specifically, data augmentation is a strategy that enables practitioners to significantly increase the diversity of data available for training models, without actually collecting new data. The data augmentation in our case includes random rotation ([-$45^o$, $45^o$]) and random scale ([0.5, 1.5]). So the final form of the dataset was (10000,3198,186).
+However, there are some limitations to this method. The main issue is that augmented data contain biases if the real dataset contains the same, and that confuses the model during the training. Moreover, data augmentation techniques like GANs are quite challenging since GANs generations also have some limitations, (some noticeable differences from the real data).

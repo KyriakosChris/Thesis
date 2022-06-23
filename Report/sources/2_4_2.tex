@@ -1,23 +1,16 @@
- 
- \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/background/GAN.png}
-	\caption{\href{https://bolster.ai/blog/content/images/2020/04/GAN-1.png}
-	{A simple GAN architecture}}
-\end{figure}
+There are not many different walking datasets that can be used for this work. More specifically, Carnegie Mellon University which was created a huge motion capture dataset a decade ago that will be used in this Thesis. Moreover, It is possible for the skeleton that CMU proposed, to be rigged to a mixamo or another more modern skeleton through the blender and eventually import to game engines like Unity. This also means that we can increase the quantity of the CMU dataset by adding some mixamo or other well-known motion capture datasets (in BVH format) clips.\\
 
+The CMU Graphics Lab Motion Capture Database (CMU) is by far the most extensive dataset of publicly available motion capture data. Many researchers within the community have used it to build prior models of human motion. This dataset was in Acclaim format. In particular, the Acclaim format is made up of two files, a skeleton file and a motion file. This was done knowing that a single skeleton works for many different motions most of the time and rather than storing the same skeleton in each of the motion files, it should be stored just once in another file. The skeleton file is the ASF file (Acclaim Skeleton File). The motion file is the AMC file (Acclaim Motion Capture data). In addition, some people created python software that converts the Acclaim files into BVH files. It means that these files can be imported into the blender for further usage.\\
 
-As we said before, a Generative adversarial network are two different neural networks, the discriminator and the generator .The goal of the discriminator is to learn the correlation of the data in each of the frames,and the dependencies between them that comprise a real gait. Recurrent Neural Networks (RNNs) and Long Short Term Memory Networks (LSTMs) have shown considerable performance in this area. However, they have difficulties in handling the vanishing and the exploding gradient problems. The goal of the second neural network, the generator, that will generate movements of motion to this skeleton to create a walk. This neural network will send the results to the first network, and the goal would be for this generated motion to be classified as walking. \\
+There some other datasets like mixamo, that contains high-quality motion capture but it is not always free. The primary purpose of these motion capture is game construction of video clip animation. In this thesis, it is important to obtain a significant amount of motion capture, something that only CMU can offer for free. Fortunately, we can still modify the mixamo dataset (rig the mixamo skeleton to CMU skeleton) and merge it to the CMU dataset.\\
 
+This dataset will train a neural network to classify for the training when the skeleton model
+of the dataset is walking. Some approaches train a neural network with the CMU mocap
+clips as the dataset. The CMU skeleton has 31 joints, and each joint is described by the
+position (XYZ) and the rotation (XYZ), a total of 6 variables. That sum up to 186 variables
+for each frame. Each clip has 3198 frames, and we use 1073 clips from the dataset. So the
+dataset final form is a array with  these dimensions (1073,3198,186).\\
 
-In the initial phase, we sample some noise z using a normal or uniform distribution to the generator's input, and during the training the noise slowly is transforming to look like a sample from the training set. When the transformation exceed a threshold, then we assume that the generator created a sample that could be real. Therefore, the generator's task is to learn the distribution of input videos based on human actions, generate realistic samples, and fool a real/fake discriminator.\\
+In addition to these clips, we added some noise z using a normal or uniform distribution to some of the clips in order to classify some of them as fake. This was necessary for the network, in order to understand, during the training what a  false sample looks like. So, the now has a form of (1500,3198,186), which means that we were added 427 false samples. \\
 
-Subsequently, just consider that the GAN training as min-max game \cite{Human Action Generation with Generative Adversarial Networks}. A Mini-max game is domain of Game theory where two or more agents play a game against each other. These conflicting games both players try to find the Nash equilibrium of the game, which in GAN's case is a very hard to find. 
-
-More specifically, given a data distribution $P_d$ whose p.d.f is $P_d$(x) where x $ \in R^d$, the aim of GAN is to train a neural network based generator G such that G(z)(s) fed by z ~ $P_z$ (i.e., the noise distribution) induce the generated distribution $P_g$ with the p.d.f $P_g$(x) coinciding the data distribution $P_d$ by minimizing the divergence between $P_g$ and $P_d$, which can be equivalently obtained via solving the following mini-max optimization problem:
-
-$$min_Gmax_D (E_{P_d}[log(D(x))] + E_{P_z}[log (1 - D (G (z)))])$$
-
-\noindent
-where D is a neural-network based discriminator and for a given x and D (x) specifies the
-probability x drawn from $P_d$ rather than $P_g$
+However, it is still a small dataset. There a machine learning strategy, that allows you to increase your dataset, it is called data augmentation. More specifically, data augmentation is a strategy that enables practitioners to significantly increase the diversity of data available for training models, without actually collecting new data. The data augmentation in our case includes random rotation ([-$45^o$, $45^o$]) and random scale ([0.5, 1.5]). So the final form of the dataset was (10000,3198,186).
