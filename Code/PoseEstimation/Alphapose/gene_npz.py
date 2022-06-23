@@ -91,11 +91,6 @@ def handle_video(video_file):
     # Load pose model
     pose_dataset = Mscoco()
     pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
-    # if args.fast_inference:
-    #     pose_model = InferenNet(4 * 1 + 1, pose_dataset)
-    # else:
-    #     pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
-    #pose_model.cpu()
 
     print('\n\t\t       2D Model Summary...')
     summary(pose_model)
