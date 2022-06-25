@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import random
-def filterEvaluate(file):
 
+def filterEvaluate(file):
     data = open(file, 'r')
     Lines = data.readlines()
     motion = False
@@ -32,27 +32,28 @@ def filterEvaluate(file):
     # frequency label
     plt.ylabel('Average joint location and orientantion')
     # plot title
-    plt.title('Gaussian Filter')
+    plt.title('Original Data')
     plt.plot(range(0,len(avg)),avg)
     name = video_name + '.png'
     plt.savefig(name)   
-    
-         
     print(np.average(avg))
+
 def AddNoise(file):
 
     data = open(file, 'r')
     Lines = data.readlines()
     motion = False
     Edited = []
-    basename = os.path.basename(file)
-    
-    video_name = basename[:basename.rfind('.')]
+    T_pose = False
     for line in Lines:
 
         if 'Frame Time:' in line:
             motion = True
             Edited.append(line)
+            T_pose = True
+            continue
+        if T_pose:
+            T_pose = False
             continue
         if motion :
             pos = line.split(" ")
@@ -80,10 +81,11 @@ def AddNoise(file):
         save_file.close()
     except:
         pass
- 
-# filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\1_no_filter.bvh")
-# filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\1_mean_7.bvh")
-# filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\1_butterworth.bvh")
-#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\1_Gaussian_1000_3000.bvh")
 
-AddNoise("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\original.bvh")
+filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\original.bvh")
+#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\noised.bvh")
+#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\mean.bvh")
+#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\butterworth.bvh")
+#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\gaussian.bvh")
+
+#AddNoise("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\noised.bvh")
