@@ -1,7 +1,7 @@
 \documentclass[12pt,oneside,a4paper,english]{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin2]{inputenc}
-\usepackage[margin=2.25cm,headheight=26pt,includeheadfoot]{geometry}
+\usepackage[margin=2.75cm,headheight=26pt,includeheadfoot]{geometry}
 
 \usepackage{listings}
 \usepackage{color}
@@ -56,7 +56,7 @@ numbersep=0.5cm
 %\lhead{\Title}
 \rhead{\nouppercase{\rightmark}}
 \lhead{\Title}
-%\rfoot{\includegraphics[height=1.25cm]{root/logo.pdf}} % right header logo
+\rfoot{\includegraphics[height=1.25cm]{figures/root/tuc_image.png}} % right header logo
 \setlength\headheight{16pt}
 \setlength{\footskip}{50pt}
 \lhead{\Title} %rightH title
@@ -68,7 +68,7 @@ numbersep=0.5cm
 
 \begin{document}
 \pagenumbering{roman} 
-\input{sources/0_frontpage}
+\input{sources/0}
 \newpage
 \doublespacing
 
@@ -90,9 +90,11 @@ numbersep=0.5cm
 \newpage
 \addtocounter{section}{-1}
 \section{Abstract}
+\input{sources/0_Abstract} 
 \addtocounter{section}{-1}
 \newpage
 \section{Acknowledgments}
+\input{sources/0_Acknowledgments} 
 
 \newpage
 \section*{Chapter 1 \\}
@@ -109,10 +111,8 @@ numbersep=0.5cm
 \section{Background}
 \subsection{Mocap clips}
 \input{sources/2_1} 
-\pagebreak
 \subsubsection{Optical Motion Capture}
 \input{sources/2_1_1} 
-\pagebreak
 \subsubsection{Non-Optical Motion Capture}
 \input{sources/2_1_2} 
 \subsection{Neural Networks}
@@ -182,9 +182,10 @@ numbersep=0.5cm
 \input{sources/5}
 \subsection{AlphaPose Model Evaluation}
 \input{sources/5_1}
-\subsection{2D to 3D Pose Model Evaluation}
+\subsection{VideoPose3D Model Evaluation}
 \input{sources/5_2}
 \subsection{BVH Filters Evaluation}
+\input{sources/5_3}
 
 \newpage
 \section*{Chapter 6 \\}
@@ -199,8 +200,6 @@ numbersep=0.5cm
 
 \newpage
 \input{sources/references.tex} 
-% \section{Introduction} \label{ch1}
-% \input{sources/1_introduction.tex} 
 
 \label{EndOfText}
 

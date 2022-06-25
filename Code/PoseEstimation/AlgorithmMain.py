@@ -74,7 +74,7 @@ def main(args):
         Zestimate = np.log2(A)
         XYZ.append((Xavg,Zestimate,Yavg))
 
-    saveVideo(args,poly,XYZ)
+    #saveVideo(args,poly,XYZ)
 
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
@@ -98,9 +98,9 @@ def main(args):
     print('Loading 3D Model...')
     checkpoint = torch.load(chk_filename, map_location=torch.device('cuda'))  
     
-    print('\n\t\t       3D Model Summary...')
-    summary(model_3D)
-    print()
+    # print('\n\t\t       3D Model Summary...')
+    # summary(model_3D)
+    # print()
     
     model_3D.load_state_dict(checkpoint['model_pos'])
     ckpt, time2 = ckpt_time(time1)
@@ -147,7 +147,8 @@ def main(args):
     prediction[:, 0, 1] -= np.min(prediction[:, 0, 1]) - base_Y
     CorrectionOfPositions(bvh_file,prediction)
     video_file = os.path.join( args.new_folder,"3d_pose.mp4")
-    create_video(bvh_file, video_file)
+    if not os.path.exists(video_file):
+        create_video(bvh_file, video_file)
     ckpt, time3 = ckpt_time(time2)
     cv2.destroyAllWindows()
     try :

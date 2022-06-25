@@ -92,9 +92,9 @@ def handle_video(video_file):
     pose_dataset = Mscoco()
     pose_model = InferenNet_fast(4 * 1 + 1, pose_dataset)
 
-    print('\n\t\t       2D Model Summary...')
-    summary(pose_model)
-    print()
+    # print('\n\t\t       2D Model Summary...')
+    # summary(pose_model)
+    # print()
 
     pose_model.cuda()
     pose_model.eval()

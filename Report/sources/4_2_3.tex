@@ -27,11 +27,6 @@ One of the major problems with the mean filter is that it is relatively expensiv
 In our algorithm, we ask the animator to give us the size of the kernel that he wants to use in order to filter the motion data. We suggest they use a kernel with a size smaller than 9x9, but they are free to use whatever they want that will increase the quality of the motion data and decrease their further editing on it.
 
 \subsubsection*{Gaussian Filter}
-The Gaussian smoothing operator is a 2-D convolution operator that is used to 'blur' images and remove detail and noise. In this sense it is similar to the mean filter, but it uses a different kernel that represents the shape of a Gaussian ('bell-shaped') hump. This kernel has some special properties which are detailed below.\\
-The Gaussian distribution in 1-D has the form:
-$$ G(x) = \dfrac{1}{\sqrt{2\pi\sigma}} e^{-\dfrac{(x-\mu)^2}{2\sigma^2}}$$
-
-where $\sigma$ is the standard deviation of the distribution. We have also assumed that the distribution has a mean of zero (i.e. it is centered on the line x=0). 
 
 \begin{figure}[h]
 	\centering
@@ -40,6 +35,12 @@ where $\sigma$ is the standard deviation of the distribution. We have also assum
 	\caption{\href{https://fiveko.com/assets/pics/math/gauss1d_shape.jpg}
 	{ 1-D Gaussian distribution with mean 0 and $\sigma$=1}}
 \end{figure}
+
+The Gaussian smoothing operator is a 2-D convolution operator that is used to 'blur' images and remove detail and noise. In this sense it is similar to the mean filter, but it uses a different kernel that represents the shape of a Gaussian ('bell-shaped') hump. This kernel has some special properties which are detailed below.\\
+The Gaussian distribution in 1-D has the form:
+$$ G(x) = \dfrac{1}{\sqrt{2\pi\sigma}} e^{-\dfrac{(x-\mu)^2}{2\sigma^2}}$$
+
+where $\sigma$ is the standard deviation of the distribution. We have also assumed that the distribution has a mean of zero (i.e. it is centered on the line x=0). \\
 
 In our case we need a 2-D Gaussian Filter. Therefore, the idea of Gaussian smoothing is to use this 2-D distribution as a `point-spread' function, and this is achieved by convolution. Since the image is stored as a collection of discrete pixels we need to produce a discrete approximation to the Gaussian function before we can perform the convolution. In theory, the Gaussian distribution is non-zero everywhere, which would require an infinitely large convolution kernel, but in practice it is effectively zero more than about three standard deviations from the mean, and so we can truncate the kernel at this point. Figure 3 shows a suitable integer-valued convolution kernel that approximates a Gaussian with a $\sigma$ of 1.0. It is not obvious how to pick the values of the mask to approximate a Gaussian. One could use the value of the Gaussian at the centre of a pixel in the mask, but this is not accurate because the value of the Gaussian varies non-linearly across the pixel.\\
 
@@ -77,7 +78,7 @@ The first two filter were digital filters that many researchers use to clear the
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{figures/Implementation/butterworthfilter.png}
+	\includegraphics[width=0.6\textwidth]{figures/Implementation/butterworthfilter.png}
 	\captionsetup{labelformat=empty}
 	\caption{\href{https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Butterworth_response.svg/2560px-Butterworth_response.svg.png}
 	{A low-pass Butterworth Filter}}

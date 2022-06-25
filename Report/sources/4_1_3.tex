@@ -16,8 +16,6 @@ However, we still are missing the Z dimension of the position. Estimating the De
 
 Therefore, the solution that we came up with is very fast O(N) (N is the number of the frames from the input video), but the accuracy in some cases is not great. Again, using the 17 keypoints of the AlphaPose model, we segmented the human inside a box, that contains all the keypoints. In order to estimate the depth of the image, we calculate the $log(area)_2$ of this box, and we normalize this number depending on the video resolution. Due to the log, small changes due to some limb motion do not affect the results. The animators can fix some errors in the humanoid position later, but we will also offer a tool that will help them in this procedure. In the figure below we can the human box segmentation.
 
-\pagebreak
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.65\textwidth]{figures/Implementation/position3D.png}

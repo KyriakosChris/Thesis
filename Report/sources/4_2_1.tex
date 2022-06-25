@@ -10,13 +10,12 @@ You can see that the order of the rotation channels appears a bit odd, it goes Z
 
 The motion section begins with the keyword "MOTION" on a line by itself. This line is followed by a line indicating the number of frames, this line uses the "Frames:" keyword (the colon is part of the keyword) and a number indicating the number of frames, or motion samples that are in the file. On the line after the frame definition is the "Frame Time:" definition, this indicates the sampling rate of the data. The rest of the file contains the actual motion data. Each line is one sample of motion data. The numbers appear in the order of the channel specifications as the skeleton hierarchy was parsed. In the figure below, we can see the hierarchy as well as the motion format of our Skeleton that we discussed in this section.
 
-\pagebreak
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=7.5cm]{figures/Implementation/bvh1.png}%
+    \includegraphics[width=6.5cm]{figures/Implementation/bvh1.png}%
     \qquad
-    \includegraphics[width=7.5cm]{figures/Implementation/bvh2.png}%
+    \includegraphics[width=6.5cm]{figures/Implementation/bvh2.png}%
     \qquad
     \includegraphics[width=1\textwidth]{figures/Implementation/bvh3.png}%
     \captionsetup{labelformat=empty}

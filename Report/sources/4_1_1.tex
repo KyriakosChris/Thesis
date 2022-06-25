@@ -2,15 +2,17 @@ As we discussed in the previous section, we decided that we would try to find so
 
 All the models use the same technique to estimate the 2D pose from the images. They try to estimate some points in the image (x,y) for each joint that they try to find. Therefore, the models predict 18 key points per human that they find in the image, and then with a python library cv2, we connect the dots to create the humanoid. Simpler, having a skeleton with 18 bones, the skeleton from COCO Dataset, the models try to adjust it in every human that they detect in the image. The figures below, demonstrate this procedure.
 
-
-\begin{figure}[htp]
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=1\textwidth]{figures/Implementation/skeleton.png}
+	\includegraphics[width=0.8\textwidth]{figures/Implementation/skeleton.png}
 	\captionsetup{labelformat=empty}
-    \caption{\href{https://i.stack.imgur.com/sdwNy.jpg}
+	\caption{\href{https://i.stack.imgur.com/sdwNy.jpg}
 	{COCO Skeleton that all the models use}}
-	\hspace{1em}%
-	\includegraphics[width=1\textwidth]{figures/Implementation/MultiPerson.png}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/Implementation/MultiPerson.png}
 	\captionsetup{labelformat=empty}
 	\caption{\href{https://github.com/CMU-Perceptual-Computing-Lab/openpose}
 	{2D Multi-Human pose Estimation Example}}
@@ -41,13 +43,12 @@ This SPPE that we discussed about, is a CNN-based method to estimate human poses
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{figures/Implementation/2DModelAr.png}
+	\includegraphics[width=0.6\textwidth]{figures/Implementation/2DModelAr.png}
 	\captionsetup{labelformat=empty}
 	\caption{2D model summary}
 \end{figure}
 
 \pagebreak
-
 
 \begin{figure}[htp]
     \centering
