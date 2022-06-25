@@ -196,8 +196,6 @@ class MainMenu():
                 vid_player.destroy()
                 resetbtn.config(state="disabled")
                 sumbit.config(state="disabled")
-                #filter.config(state="disabled")
-                #change.config(state="disabled")
                 for widgets in frame8.winfo_children():
                     widgets.destroy()
                 frame8.destroy()
@@ -209,8 +207,6 @@ class MainMenu():
             play_video()
             resetbtn.config(state="normal")
             sumbit.config(state="normal")
-            #filter.config(state="normal")
-            #change.config(state="normal")
 
         def buttonSmooth():
             win = Toplevel(window)
@@ -265,10 +261,12 @@ class MainMenu():
         frame = Frame(window)
         frame.pack()
 
-        basename = os.path.basename(self.file_name)
-        video_name = basename[:basename.rfind('.')] 
-        self.file = f'{self.folder_name}\{video_name}\{"3d_pose"}.mp4'
-        self.bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
+
+        if self.edit:
+            basename = os.path.basename(self.file_name)
+            video_name = basename[:basename.rfind('.')] 
+            self.file = f'{self.folder_name}/{video_name}/{"3d_pose"}.mp4'
+            self.bvhName = f'{self.folder_name}/{video_name}/{video_name}.bvh'
         # window.geometry("%dx%d+-8+0" % (window.winfo_screenwidth() , window.winfo_screenheight()))
         # window.title("BVH Editor")
         # window.resizable(True, True)
@@ -393,18 +391,19 @@ class MainMenu():
         def select_bvh():
             filetypes = (('video files', '*.bvh'),('All files', '*.*'))
             self.bvhName = fd.askopenfilename(title='Browse a file',initialdir='/',filetypes=filetypes)
-
             if len(self.bvhName) == 0:
                 messagebox.showwarning("File Warning", "The file failed to load")
             else:
-                print('File ', self.bvhName, ' ,was loaded successfully!')
                 
-                basename = os.path.basename(self.bvhName)
-                self.file_name = self.bvhName
-                video_name = basename[:basename.rfind('.')] 
-                self.folder_name = self.bvhName.split(video_name)[0]
-                self.file = f'{self.folder_name}\{video_name}\{"3d_pose"}.mp4'
-                self.EditBvh()
+                temp()
+
+        def temp():
+            basename = os.path.basename(self.bvhName)
+            self.file_name = self.bvhName
+            video_name = basename[:basename.rfind('.')] 
+            self.folder_name = self.bvhName.split(video_name)[0]
+            self.file = f'{self.folder_name}{"3d_pose"}.mp4'
+            self.EditBvh()
 
         def select_folder():
             window.update()
