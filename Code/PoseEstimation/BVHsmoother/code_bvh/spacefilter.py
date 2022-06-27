@@ -8,7 +8,7 @@ def apply_border(v, M):
 def remove_border(v,M):
     return v[int(M/2):-int(M/2)]
 
-def apply_average(v, M):
+def apply_mean(v, M):
     v = apply_border(v,M)
     for i in range(int(M/2),len(v)-int(M/2)):
         aux = 0

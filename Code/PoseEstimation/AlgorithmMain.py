@@ -74,7 +74,7 @@ def main(args):
         Zestimate = np.log2(A)
         XYZ.append((Xavg,Zestimate,Yavg))
 
-    #saveVideo(args,poly,XYZ)
+    saveVideo(args,poly,XYZ)
 
     keypoints_symmetry = metadata['keypoints_symmetry']
     kps_left, kps_right = list(keypoints_symmetry[0]), list(keypoints_symmetry[1])
@@ -211,9 +211,9 @@ def saveVideo(args,poly,xyz):
         
         if ret == True:
             try:
-                # for i in range(args.points.shape[1]):
-                #     image = cv2.circle(frame, (int(args.points[count][i][0]),int(args.points[count][i][1])), radius=4, color=colors[i], thickness=-1)
-                # image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=6, color=(255, 255, 255), thickness=-1)
+                for i in range(args.points.shape[1]):
+                    image = cv2.circle(frame, (int(args.points[count][i][0]),int(args.points[count][i][1])), radius=4, color=colors[i], thickness=-1)
+                image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=6, color=(255, 255, 255), thickness=-1)
                 image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =3)
                 # Display the resulting frame
                 out.write(image)
@@ -280,5 +280,5 @@ def write_smartbody_bvh(outbvhfilepath,prediction3dpoint):
     return bvhfileName
 
 if __name__ == '__main__':
-    input_video('inputvideo/kunkun_cut_one_second.mp4',"D:\\tuc\\Github\\Thesis\\BVH")
+    input_video('inputvideo/1.mp4',"D:\\tuc\\Github\\Thesis\\BVH")
 

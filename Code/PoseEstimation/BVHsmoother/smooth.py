@@ -22,8 +22,8 @@ class smooth:
         bvh_file = bvh.read_file(INPUT)
         for i in range(0, 3):
             v = bvh_file["POSITIONS"][:,i]
-            if FILTER == "average": bvh_file["POSITIONS"][:,i] = spacefilter.apply_average(v,M)
-            #if FILTER == "average": bvh_file["POSITIONS"][:,i] =cv2.medianBlur(v, M)
+            if FILTER == "mean": bvh_file["POSITIONS"][:,i] = spacefilter.apply_mean(v,M)
+            #if FILTER == "mean": bvh_file["POSITIONS"][:,i] =cv2.medianBlur(v, M)
             else:
                 f = freqfilter.fft(v,BORDER)
                 if FILTER == "gaussian": fil = freqfilter.gaussian_filter(len(f),SIGMA)
@@ -38,7 +38,7 @@ class smooth:
             for i in range(3):
                 v = angle.floats_to_degrees(bvh_file["ROTATIONS"][:,j,i])
                 p = angle.degrees_to_polars(v)
-                if FILTER == "average": f_filtered = spacefilter.apply_average(p, M)
+                if FILTER == "mean": f_filtered = spacefilter.apply_mean(p, M)
                 else:
                     f = freqfilter.fft(p,BORDER)
                     if FILTER == "gaussian": fil = freqfilter.gaussian_filter(len(f), SIGMA)
