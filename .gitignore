@@ -53,8 +53,7 @@ __pycache__/
 *.so
 
 # Videos
-*.avi
-*.mp4
+inputvideo/
 
 # Distribution / packaging
 .Python
