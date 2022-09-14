@@ -32,7 +32,7 @@ def filterEvaluate(file):
     # frequency label
     plt.ylabel('Average joint location and orientantion')
     # plot title
-    plt.title('Original Data')
+    plt.title('Gaussian')
     plt.plot(range(0,len(avg)),avg)
     name = video_name + '.png'
     plt.savefig(name)   
@@ -82,10 +82,8 @@ def AddNoise(file):
     except:
         pass
 
-filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\original.bvh")
-#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\noised.bvh")
-#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\mean.bvh")
-#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\butterworth.bvh")
-#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\gaussian.bvh")
+#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\no_filter.bvh")
+#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\mean.bvh")
+#filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\butterworth.bvh")
+filterEvaluate("D:\\tuc\\Github\\Thesis\\BVH\\filter_test\\gaussian.bvh")
 
-#AddNoise("D:\\tuc\\Github\\Thesis\\BVH\\Mixamo\\noised.bvh")

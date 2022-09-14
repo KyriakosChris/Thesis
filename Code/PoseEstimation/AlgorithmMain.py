@@ -213,8 +213,8 @@ def saveVideo(args,poly,xyz):
             try:
                 for i in range(args.points.shape[1]):
                     image = cv2.circle(frame, (int(args.points[count][i][0]),int(args.points[count][i][1])), radius=4, color=colors[i], thickness=-1)
-                image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=6, color=(255, 255, 255), thickness=-1)
-                image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =3)
+                #image = cv2.circle(frame, (int(xyz[count][0]),int(xyz[count][2])), radius=6, color=(255, 255, 255), thickness=-1)
+                #image  = cv2.rectangle(frame, (int(poly[count][0]),int(poly[count][1])), (int(poly[count][2]),int(poly[count][3])), color=(0, 255, 0), thickness =3)
                 # Display the resulting frame
                 out.write(image)
                 count+=1
