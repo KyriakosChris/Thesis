@@ -3,6 +3,9 @@ Motion capture methods are either very expensive to acquire or of poorer quality
 
 # How to run 
 Install all the necessary python libraries.
+
 Install cuda in your system.
+
 You are all set-up, just run the .exe file to open the application.
+
 If it does not work, run the .bat file, or the main.py file to display the error messages.
